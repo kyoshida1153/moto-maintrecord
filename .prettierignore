@@ -1,0 +1,10 @@
+# ビルド出力
+.next
+out
+build
+dist
+
+# その他
+.cache
+coverage
+public
