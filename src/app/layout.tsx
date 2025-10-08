@@ -20,20 +20,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const loginStatus = false;
+  const loginStatus = true;
 
   return (
     <html lang="ja">
-      <body className={`${notoSansJp.variable} relative antialiased`}>
-        {loginStatus === false ? (
-          // 非ログインユーザー
-          <>
-            <Header loginStatus={loginStatus} />
-            <div className="block md:grid md:grid-cols-[1fr]">
-              <main className="p-4 md:col-span-1 md:p-6">{children}</main>
-            </div>
-          </>
-        ) : (
+      <body
+        className={`${notoSansJp.variable} relative antialiased ${loginStatus ? "bg-white" : "bg-[#f0f2f5]"}`}
+      >
+        {loginStatus ? (
           // ログインユーザー
           <>
             <Header loginStatus={loginStatus} />
@@ -41,8 +35,14 @@ export default function RootLayout({
               <div className="hidden md:col-span-1 md:block">
                 <Sidebar />
               </div>
-              <main className="p-4 md:col-span-1 md:p-6">{children}</main>
+              <main className="p-4 md:col-span-1 md:p-8">{children}</main>
             </div>
+          </>
+        ) : (
+          // 非ログインユーザー
+          <>
+            <Header loginStatus={loginStatus} />
+            <main className="p-4 md:p-8">{children}</main>
           </>
         )}
       </body>
