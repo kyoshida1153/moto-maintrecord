@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
@@ -20,16 +20,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const loginStatus = false;
+
   return (
     <html lang="ja">
       <body className={`${notoSansJp.variable} relative antialiased`}>
-        <Header />
-        <div className="block md:grid md:grid-cols-[220px_1fr]">
-          <div className="hidden md:col-span-1 md:block">
-            <Sidebar />
-          </div>
-          <main className="md:col-span-1">{children}</main>
-        </div>
+        {loginStatus === false ? (
+          // 非ログインユーザー
+          <>
+            <Header loginStatus={loginStatus} />
+            <div className="block md:grid md:grid-cols-[1fr]">
+              <main className="p-4 md:col-span-1 md:p-6">{children}</main>
+            </div>
+          </>
+        ) : (
+          // ログインユーザー
+          <>
+            <Header loginStatus={loginStatus} />
+            <div className="block md:grid md:grid-cols-[var(--sidebar-width)_1fr]">
+              <div className="hidden md:col-span-1 md:block">
+                <Sidebar />
+              </div>
+              <main className="p-4 md:col-span-1 md:p-6">{children}</main>
+            </div>
+          </>
+        )}
       </body>
     </html>
   );
