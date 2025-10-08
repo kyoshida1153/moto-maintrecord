@@ -30,3 +30,73 @@ body {
 @theme {
   --font-alphanumeric: "Helvetica Neue", "Helvetica", sans-serif;
 }
+
+/* ###################################################################### */
+
+/* ドロワーメニュー用 */
+
+@theme {
+  --animate-drawer-open: drawer-open 0.15s linear forwards;
+  @keyframes drawer-open {
+    0% {
+      display: none;
+      transform: translateX(250px);
+    }
+    1% {
+      display: block;
+      transform: translateX(250px);
+    }
+    100% {
+      display: block;
+      transform: translateX(0);
+    }
+  }
+
+  --animate-drawer-close: drawer-close 0.15s linear forwards;
+  @keyframes drawer-close {
+    0% {
+      display: block;
+      transform: translateX(0);
+    }
+    99% {
+      display: block;
+      transform: translateX(250px);
+    }
+    100% {
+      display: none;
+      transform: translateX(250px);
+    }
+  }
+
+  --animate-drawer-open-backdrop: drawer-open-backdrop 0.15s linear forwards;
+  @keyframes drawer-open-backdrop {
+    0% {
+      display: none;
+      opacity: 0;
+    }
+    1% {
+      display: block;
+      opacity: 0;
+    }
+    100% {
+      display: block;
+      opacity: 1;
+    }
+  }
+
+  --animate-drawer-close-backdrop: drawer-close-backdrop 0.15s linear forwards;
+  @keyframes drawer-close-backdrop {
+    0% {
+      display: block;
+      opacity: 1;
+    }
+    99% {
+      display: block;
+      opacity: 0;
+    }
+    100% {
+      display: none;
+      opacity: 0;
+    }
+  }
+}
