@@ -12,21 +12,21 @@ export default function LoginForm() {
         <h1 className="mb-6 text-center text-xl md:mb-8 md:text-2xl">
           ログイン
         </h1>
-        <Box component="form" className="my-6 md:my-8">
-          <div className="flex flex-col gap-6 md:gap-8">
+        <Box component="form" className="mt-6 md:mt-8">
+          <div className="flex flex-col gap-4 md:gap-6">
             <TextField id="email" label="メールアドレス" type="text" />
             <TextField id="password" label="パスワード" type="password" />
             <Button
               variant="contained"
               disableElevation
-              className="!ml-auto max-w-fit"
+              className="mt-6 !ml-auto max-w-fit !px-[1.5em] md:mt-8 md:!text-[16px]"
               type="submit"
             >
               ログイン
             </Button>
           </div>
         </Box>
-        <div className="text-right">
+        <div className="mt-6 text-right md:mt-8">
           <Link href="/signup" className="text-sm underline">
             アカウントの新規作成はこちら
           </Link>
