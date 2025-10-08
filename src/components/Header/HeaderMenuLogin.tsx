@@ -3,10 +3,10 @@
 import Link from "next/link";
 import HeaderIcon from "./HeaderIcon";
 
-export default function HeaderPcMenu() {
+export default function HeaderMenuLogin() {
   return (
     <nav>
-      <ul className="hidden gap-[16px] text-[14px] md:flex">
+      <ul className="hidden gap-4 text-[14px] md:flex">
         <li>
           <Link
             href="/account"
