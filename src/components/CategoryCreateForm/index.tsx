@@ -10,15 +10,23 @@ export default function CategoryCreateForm() {
       <div className="w-full max-w-lg">
         <Box component="form" className="mt-6 md:mt-8">
           <div className="flex flex-col gap-4 md:gap-6">
-            <TextField id="name" label="カテゴリー名" type="text" name="name" />
-            <Button
-              variant="contained"
-              disableElevation
-              className="mt-6 !ml-auto max-w-fit !px-[1.5em] md:mt-8 md:!text-[16px]"
-              type="submit"
-            >
-              登録
-            </Button>
+            <TextField
+              id="name"
+              label="カテゴリー名"
+              type="text"
+              name="name"
+              sx={{ backgroundColor: "#fff" }}
+            />
+            <div className="my-3 flex justify-center gap-3 md:my-4 md:justify-end">
+              <Button
+                variant="contained"
+                disableElevation
+                className="max-w-fit !px-[1.5em] !text-[16px]"
+                type="submit"
+              >
+                登録
+              </Button>
+            </div>
           </div>
         </Box>
       </div>
