@@ -16,29 +16,39 @@ export default function BikeCreateForm() {
               multiple={false}
               label="バイクの写真"
             />
-            <TextField id="name" label="バイクの名前" type="text" name="name" />
+            <TextField
+              id="name"
+              label="バイクの名前"
+              type="text"
+              name="name"
+              sx={{ backgroundColor: "#fff" }}
+            />
             <TextField
               id="mileage_km"
               label="毎月の走行距離（km）"
               type="number"
               name="mileage_km"
+              sx={{ backgroundColor: "#fff" }}
             />
             <TextField
               id="memo"
               label="メモ"
               multiline
-              rows={4}
+              rows={6}
               name="memo"
               defaultValue=""
+              sx={{ backgroundColor: "#fff" }}
             />
-            <Button
-              variant="contained"
-              disableElevation
-              className="mt-6 !ml-auto max-w-fit !px-[1.5em] md:mt-8 md:!text-[16px]"
-              type="submit"
-            >
-              登録
-            </Button>
+            <div className="my-3 flex justify-center gap-3 md:my-4 md:justify-end">
+              <Button
+                variant="contained"
+                disableElevation
+                className="max-w-fit !px-[1.5em] !text-[16px]"
+                type="submit"
+              >
+                登録
+              </Button>
+            </div>
           </div>
         </Box>
       </div>

@@ -31,6 +31,7 @@ export default function InputFileImage({
       tabIndex={-1}
       startIcon={<AddPhotoAlternateIcon />}
       className="max-w-fit"
+      disableElevation
     >
       {label}
       <VisuallyHiddenInput
