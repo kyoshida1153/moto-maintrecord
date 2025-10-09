@@ -3,6 +3,7 @@
 :root {
   --header-height: 50px;
   --sidebar-width: 220px;
+  --border-color-gray: #e9ecef;
 }
 
 body {
