@@ -9,10 +9,12 @@ export default function DatePicker({
   name = "date",
   label = "日付",
   className = "",
+  date = undefined,
 }: {
   name: string;
   label: string;
   className?: string;
+  date?: string | undefined;
 }) {
   return (
     // あとでやる: 文言調整
@@ -22,6 +24,8 @@ export default function DatePicker({
         name={name}
         sx={{ backgroundColor: "#fff" }}
         className={`!w-full !max-w-[170px] ${className}`}
+        defaultValue={date ? new Date(date) : undefined}
+        // defaultValue={new Date("2025-10-01")}
       />
     </LocalizationProvider>
   );
