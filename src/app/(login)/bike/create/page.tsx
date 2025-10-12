@@ -1,5 +1,5 @@
-import BikeCreateForm from "@/components/BikeCreateForm";
 import Heading from "@/components/Heading";
+import BikeCreateForm from "./_components/BikeCreateForm";
 
 export default function BikeCreatePage() {
   return (

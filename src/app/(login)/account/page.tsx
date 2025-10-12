@@ -4,7 +4,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import { Button } from "@mui/material";
 import MuiLink from "@mui/material/Link";
 import Heading from "@/components/Heading";
-import AccountNameEditForm from "@/components/AccountNameEditForm";
+import AccountNameEditForm from "./_components/AccountNameEditForm";
 
 export default function AccountPage() {
   return (

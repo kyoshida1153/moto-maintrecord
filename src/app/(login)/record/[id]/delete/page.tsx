@@ -1,11 +1,11 @@
 import Heading from "@/components/Heading";
-import RecordDeleteForm from "@/components/RecordDeleteForm";
+import MaintenanceRecordDeleteForm from "./_components/MaintenanceRecordDeleteForm";
 
-export default function RecordDeletePage() {
+export default function MaintenanceRecordDeletePage() {
   return (
-    <div className="w-full">
+    <>
       <Heading level={1}>整備・出費記録の削除</Heading>
-      <RecordDeleteForm />
-    </div>
+      <MaintenanceRecordDeleteForm />
+    </>
   );
 }

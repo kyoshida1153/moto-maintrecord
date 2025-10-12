@@ -1,10 +1,10 @@
+import Heading from "@/components/Heading";
+import MaintenanceRecordList from "@/components/MaintenanceRecordList";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import MuiLink from "@mui/material/Link";
-import Heading from "@/components/Heading";
-import RecordList from "@/components/RecordList";
 
-export default function RecordPage() {
+export default function MaintenanceRecordPage() {
   const dummyRecords = [
     {
       id: "1",
@@ -61,22 +61,26 @@ export default function RecordPage() {
   console.log(dummyRecords);
 
   return (
-    <>
+    <div className="w-full max-w-3xl">
       <Heading level={1}>整備・出費記録</Heading>
-      <div className="my-4 text-center md:my-6 md:text-left">
+      <div className="my-6 text-center md:my-8 md:text-left">
         <Button
           component={MuiLink}
           variant="contained"
           disableElevation
           startIcon={<AddIcon />}
           href="/record/create"
+          sx={{
+            maxWidth: "fit-content",
+            whiteSpace: "nowrap",
+          }}
         >
           整備・出費記録の登録
         </Button>
       </div>
-      <div className="my-4 flex w-full max-w-3xl flex-col gap-4 md:my-6">
-        <RecordList records={dummyRecords} />
+      <div className="my-4 flex flex-col gap-4 md:my-6">
+        <MaintenanceRecordList records={dummyRecords} />
       </div>
-    </>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
-import BikeEditForm from "@/components/BikeEditForm";
 import Heading from "@/components/Heading";
+import BikeEditForm from "./_components/BikeEditForm";
 
 export default function BikeEditPage() {
   return (

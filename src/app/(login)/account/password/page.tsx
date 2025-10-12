@@ -1,5 +1,5 @@
 import Heading from "@/components/Heading";
-import AccountPasswordEditForm from "@/components/AccountPasswordEditForm";
+import AccountPasswordEditForm from "./_components/AccountPasswordEditForm";
 
 export default function AccountPasswordEditPage() {
   return (

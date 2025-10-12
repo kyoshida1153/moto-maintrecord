@@ -25,7 +25,7 @@ export default function HeaderSpDrawer() {
   };
 
   const tvBackdrop = tv({
-    base: "z-200 absolute top-0 left-0 h-screen w-screen bg-black/50",
+    base: "z-200 absolute top-0 left-0 h-screen w-screen bg-black/50 backdrop-blur-[1px]",
     variants: {
       drawerStatus: {
         initial: "hidden",

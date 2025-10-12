@@ -22,10 +22,10 @@ export default function DatePicker({
       <MuixDatePicker
         label={label}
         name={name}
-        sx={{ backgroundColor: "#fff" }}
-        className={`!w-full !max-w-[170px] ${className}`}
         defaultValue={date ? new Date(date) : undefined}
         // defaultValue={new Date("2025-10-01")}
+        className={className}
+        sx={{ backgroundColor: "#fff", width: "100%", maxWidth: "170px" }}
       />
     </LocalizationProvider>
   );

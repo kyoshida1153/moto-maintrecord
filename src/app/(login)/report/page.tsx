@@ -1,11 +1,11 @@
 import Heading from "@/components/Heading";
-import ReportBarChart from "@/components/ReportBarChart";
-import ReportDonutChart from "@/components/ReportDonutChart";
-import ReportTable from "@/components/ReportTable";
 import YearPicker from "@/components/YearPicker";
+import ReportBarChart from "./_components/ReportBarChart";
+import ReportDonutChart from "./_components/ReportDonutChart";
+import ReportTable from "./_components/ReportTable";
 
 export default function ReportPage() {
-  const BarChartData = [
+  const RecordsData = [
     { key: "1月", value: 3400 },
     { key: "2月", value: 6300 },
     { key: "3月", value: 7500 },
@@ -35,7 +35,7 @@ export default function ReportPage() {
   ];
 
   return (
-    <div>
+    <>
       <div className="flex flex-row items-center gap-6 md:gap-8">
         <Heading level={1}>レポート</Heading>
         <section className="mb-4 max-w-[120px] md:mb-6">
@@ -46,7 +46,7 @@ export default function ReportPage() {
         <div className="flex flex-col gap-6 md:gap-8 xl:flex-row">
           <div className="flex w-full max-w-[1000px] flex-col gap-6 md:gap-8">
             <section className="display rounded border border-solid border-[var(--border-color-gray)] bg-white py-6 md:py-8">
-              <ReportBarChart data={BarChartData} />
+              <ReportBarChart data={RecordsData} />
             </section>
             <section className="flex w-full flex-col items-center gap-4 rounded border border-solid border-[var(--border-color-gray)] bg-white pb-6 md:pb-8 xl:flex-row xl:items-start xl:justify-evenly">
               <ReportDonutChart
@@ -60,10 +60,10 @@ export default function ReportPage() {
             </section>
           </div>
           <section className="display flex h-fit justify-center rounded border border-solid border-[var(--border-color-gray)] bg-white px-6 py-6 md:px-8 md:py-8">
-            <ReportTable data={BarChartData} />
+            <ReportTable data={RecordsData} />
           </section>
         </div>
       </div>
-    </div>
+    </>
   );
 }

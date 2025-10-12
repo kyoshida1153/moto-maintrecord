@@ -1,5 +1,5 @@
 import Heading from "@/components/Heading";
-import AccountDeleteForm from "@/components/AccountDeleteForm";
+import AccountDeleteForm from "./_components/AccountDeleteForm";
 
 export default function AccountDeletePage() {
   return (

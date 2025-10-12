@@ -1,11 +1,11 @@
 import Heading from "@/components/Heading";
-import CategoryDeleteForm from "@/components/CategoryDeleteForm";
+import MaintenanceCategoryDeleteForm from "./_components/MaintenanceCategoryDeleteForm";
 
-export default function CategoryDeletePage() {
+export default function MaintenanceCategoryDeletePage() {
   return (
-    <div className="w-full">
+    <>
       <Heading level={1}>カテゴリーの削除</Heading>
-      <CategoryDeleteForm />
-    </div>
+      <MaintenanceCategoryDeleteForm />
+    </>
   );
 }

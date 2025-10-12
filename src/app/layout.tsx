@@ -21,11 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const loginStatus = true;
-
   return (
     <html lang="ja">
       <body
-        className={`${notoSansJp.variable} relative antialiased ${loginStatus ? "bg-white" : "bg-[#f0f2f5]"}`}
+        className={`${notoSansJp.variable} relative bg-[#f0f2f5] antialiased`}
       >
         {loginStatus ? (
           // ログインユーザー

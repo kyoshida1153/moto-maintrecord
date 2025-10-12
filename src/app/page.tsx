@@ -1,10 +1,17 @@
+import { redirect } from "next/navigation";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import MuiLink from "@mui/material/Link";
-import RecordCalendar from "@/components/RecordCalendar";
-import RecordList from "@/components/RecordList";
+import MaintenanceRecordCalendar from "./(login)/_components/MaintenanceRecordCalendar";
+import MaintenanceRecordList from "@/components/MaintenanceRecordList";
 
 export default function TopPage() {
+  const loginStatus = true;
+
+  if (!loginStatus) {
+    redirect("/login");
+  }
+
   const dummyRecords = [
     {
       id: "1",
@@ -97,17 +104,17 @@ export default function TopPage() {
               新しい整備・出費記録を追加
             </Button>
           </div>
-          <RecordCalendar events={dummyRecordsCalendar} />
+          <MaintenanceRecordCalendar events={dummyRecordsCalendar} />
         </div>
         <div className="flex flex-col gap-4 xl:w-[50%]">
-          <h2 className="border-b border-gray-800 text-xl font-[500] md:text-2xl">
+          <h1 className="border-b border-gray-800 text-xl font-[500] md:text-2xl">
             2025年10月の合計：{" "}
             <span className="font-alphanumeric mr-0.5 text-3xl md:text-4xl">
               19,000
             </span>
             円
-          </h2>
-          <RecordList records={dummyRecordsList} />
+          </h1>
+          <MaintenanceRecordList records={dummyRecordsList} />
         </div>
       </div>
     </>

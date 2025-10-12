@@ -1,5 +1,5 @@
 import Heading from "@/components/Heading";
-import AccountEmailEditForm from "@/components/AccountEmailEditForm";
+import AccountEmailEditForm from "./_components/AccountEmailEditForm";
 
 export default function AccountEmailEditPage() {
   return (

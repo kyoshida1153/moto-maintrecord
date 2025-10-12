@@ -30,8 +30,11 @@ export default function InputFileImage({
       variant="contained"
       tabIndex={-1}
       startIcon={<AddPhotoAlternateIcon />}
-      className="max-w-fit"
       disableElevation
+      sx={{
+        maxWidth: "fit-content",
+        whiteSpace: "nowrap",
+      }}
     >
       {label}
       <VisuallyHiddenInput
