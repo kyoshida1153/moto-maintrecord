@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ユーザーアカウント
+model User {
+  id             String    @id @default(uuid()) @db.Uuid
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime? @map("email_verified") @db.Timestamptz()
+  image          String?
+  hashedPassword String?   @map("hashed_password")
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz()
+
+  accounts              Account[]
+  bikes                 Bike[]
+  maintenanceRecords    MaintenanceRecord[]
+  maintenanceCategories MaintenanceCategory[]
+
+  @@map("users")
+}
+
+// 認証プロバイダ
+model Account {
+  id                String  @id @default(uuid()) @db.Uuid
+  userId            String  @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+// 所有バイク
+model Bike {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  name      String    @db.VarChar(20)
+  mileage   Int?
+  memo      String?   @db.VarChar(500)
+  imageUrl  String    @map("image_url")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  maintenanceRecords MaintenanceRecord[]
+
+  @@index([userId])
+  @@map("bikes")
+}
+
+// 整備・出費記録
+model MaintenanceRecord {
+  id                    String    @id @default(uuid()) @db.Uuid
+  userId                String    @map("user_id") @db.Uuid
+  bikeId                String    @map("bike_id") @db.Uuid
+  maintenanceCategoryId String?   @map("maintenance_category_id") @db.Uuid
+  calenderDate          DateTime  @default(now()) @map("calender_date") @db.Timestamptz()
+  isDone                Boolean   @default(false) @map("is_done")
+  title                 String    @db.VarChar(500)
+  cost                  Int
+  memo                  String?   @db.VarChar(500)
+  mileage               Int?      @map("mileage")
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt             DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt             DateTime? @map("deleted_at") @db.Timestamptz()
+
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bike                Bike                 @relation(fields: [bikeId], references: [id])
+  maintenanceCategory MaintenanceCategory? @relation(fields: [maintenanceCategoryId], references: [id])
+
+  maintenanceRecordImages maintenanceRecordImage[]
+
+  @@index([userId, bikeId, maintenanceCategoryId, calenderDate, cost])
+  @@map("maintenance_records")
+}
+
+// 整備・出費記録の画像
+model maintenanceRecordImage {
+  id                  String    @id @default(uuid()) @db.Uuid
+  maintenanceRecordId String    @map("maintenance_record_id") @db.Uuid
+  imageUrl            String    @map("image_url")
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt           DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt           DateTime? @map("deleted_at") @db.Timestamptz()
+
+  maintenanceRecord MaintenanceRecord? @relation(fields: [maintenanceRecordId], references: [id], onDelete: Cascade)
+
+  @@index([maintenanceRecordId])
+  @@map("maintenance_record_images")
+}
+
+// 整備・出費記録のカテゴリー
+model MaintenanceCategory {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  name   String @db.VarChar(20)
+
+  User User @relation(fields: [userId], references: [id])
+
+  maintenanceRecords MaintenanceRecord[]
+
+  @@index([userId])
+  @@map("maintenance_categories")
+}

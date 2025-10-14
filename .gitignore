@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Prisma
+/src/generated/prisma
+
+# DBや画像のダミーデータ
+/dummy-data
