@@ -8,6 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import HeaderIcon from "./HeaderIcon";
 import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
 import { useWindowSize } from "./hooks";
+import { signOut } from "next-auth/react";
 
 export default function HeaderSpDrawer() {
   const [drawerStatus, setDrawerStatus] = useState<
@@ -80,16 +81,18 @@ export default function HeaderSpDrawer() {
           <HeaderSpDrawerMainMenu handleDrawerClose={handleDrawerClose} />
 
           <div className="mt-5 flex justify-center border-t border-gray-200 pt-5">
-            <Link
-              href="/logout"
+            <span
               className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] text-[#333] duration-200 hover:bg-[#f6f7f9]"
+              onClick={() => {
+                signOut({ callbackUrl: "/" });
+              }}
             >
               <HeaderIcon
                 iconName="LogoutIcon"
                 className="aspect-square !text-[20px] text-[#333]"
               />
               ログアウト
-            </Link>
+            </span>
           </div>
         </div>
       </div>

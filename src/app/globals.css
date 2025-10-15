@@ -4,6 +4,10 @@
   --header-height: 50px;
   --sidebar-width: 220px;
   --border-color-gray: #e9ecef;
+  --icon-color-success: #57bf9c;
+  --icon-color-error: #de4c44;
+  --icon-color-warning: #eda133;
+  --icon-color-info: #3792e9;
 }
 
 body {

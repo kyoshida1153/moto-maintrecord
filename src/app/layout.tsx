@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
+import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import getCurrentUser from "@/actions/getCurrentUser";
+import CommonLayout from "@/components/CommonLayout";
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
@@ -15,35 +16,22 @@ export const metadata: Metadata = {
   description: "バイクの整備記録と維持費を管理するアプリ",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const loginStatus = true;
+  const currentUser = await getCurrentUser();
+  const sessionExist: boolean = currentUser ? true : false;
+
   return (
     <html lang="ja">
       <body
         className={`${notoSansJp.variable} relative bg-[#f0f2f5] antialiased`}
       >
-        {loginStatus ? (
-          // ログインユーザー
-          <>
-            <Header loginStatus={loginStatus} />
-            <div className="block md:grid md:grid-cols-[var(--sidebar-width)_1fr]">
-              <div className="hidden md:col-span-1 md:block">
-                <Sidebar />
-              </div>
-              <main className="p-4 md:col-span-1 md:p-8">{children}</main>
-            </div>
-          </>
-        ) : (
-          // 非ログインユーザー
-          <>
-            <Header loginStatus={loginStatus} />
-            <main className="p-4 md:p-8">{children}</main>
-          </>
-        )}
+        <SessionProviderWrapper>
+          <CommonLayout sessionExist={sessionExist}>{children}</CommonLayout>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

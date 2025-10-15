@@ -4,11 +4,12 @@ import AddIcon from "@mui/icons-material/Add";
 import MuiLink from "@mui/material/Link";
 import MaintenanceRecordCalendar from "./(login)/_components/MaintenanceRecordCalendar";
 import MaintenanceRecordList from "@/components/MaintenanceRecordList";
+import getCurrentUser from "@/actions/getCurrentUser";
 
-export default function TopPage() {
-  const loginStatus = true;
-
-  if (!loginStatus) {
+export default async function TopPage() {
+  // ログアウト状態の時は、ログインページにリダイレクト
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
     redirect("/login");
   }
 
@@ -90,33 +91,31 @@ export default function TopPage() {
   }));
 
   return (
-    <>
-      <div className="mb-8 flex flex-col gap-8 md:mb-0 xl:flex-row">
-        <div className="xl:w-[50%]">
-          <div className="mt-4 mb-8 text-center md:mt-0 md:mb-6 md:text-left">
-            <Button
-              component={MuiLink}
-              variant="contained"
-              disableElevation
-              startIcon={<AddIcon />}
-              href="/record/create"
-            >
-              新しい整備・出費記録を追加
-            </Button>
-          </div>
-          <MaintenanceRecordCalendar events={dummyRecordsCalendar} />
+    <div className="mb-8 flex flex-col gap-8 md:mb-0 xl:flex-row">
+      <div className="xl:w-[50%]">
+        <div className="mt-4 mb-8 text-center md:mt-0 md:mb-6 md:text-left">
+          <Button
+            component={MuiLink}
+            variant="contained"
+            disableElevation
+            startIcon={<AddIcon />}
+            href="/record/create"
+          >
+            新しい整備・出費記録を追加
+          </Button>
         </div>
-        <div className="flex flex-col gap-4 xl:w-[50%]">
-          <h1 className="border-b border-gray-800 text-xl font-[500] md:text-2xl">
-            2025年10月の合計：{" "}
-            <span className="font-alphanumeric mr-0.5 text-3xl md:text-4xl">
-              19,000
-            </span>
-            円
-          </h1>
-          <MaintenanceRecordList records={dummyRecordsList} />
-        </div>
+        <MaintenanceRecordCalendar events={dummyRecordsCalendar} />
       </div>
-    </>
+      <div className="flex flex-col gap-4 xl:w-[50%]">
+        <h1 className="border-b border-gray-800 text-xl font-[500] md:text-2xl">
+          2025年10月の合計：{" "}
+          <span className="font-alphanumeric mr-0.5 text-3xl md:text-4xl">
+            19,000
+          </span>
+          円
+        </h1>
+        <MaintenanceRecordList records={dummyRecordsList} />
+      </div>
+    </div>
   );
 }

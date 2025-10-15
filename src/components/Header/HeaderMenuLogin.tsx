@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import HeaderIcon from "./HeaderIcon";
+import { signOut } from "next-auth/react";
 
 export default function HeaderMenuLogin() {
   return (
@@ -23,16 +24,18 @@ export default function HeaderMenuLogin() {
           </Link>
         </li>
         <li>
-          <Link
-            href="/logout"
-            className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] text-[#333] duration-200 hover:bg-[#f6f7f9]"
+          <span
+            className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] text-[#333] duration-200 hover:cursor-pointer hover:bg-[#f6f7f9]"
+            onClick={() => {
+              signOut({ callbackUrl: "/" });
+            }}
           >
             <HeaderIcon
               iconName="LogoutIcon"
               className="aspect-square !text-[20px] text-[#333]"
             />
             ログアウト
-          </Link>
+          </span>
         </li>
       </ul>
     </nav>
