@@ -1,43 +1,76 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Loading from "@/components/Loading";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
+type SubmitResponse = {
+  status: "success" | "error" | undefined;
+  message: string;
+};
+
 export default function LoginForm() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [displayMessage, setDisplayMessage] = useState<string>("");
-  const emailRef = useRef<HTMLTextAreaElement | null>(null);
-  const passwordRef = useRef<HTMLSelectElement | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
+    status: undefined,
+    message: "",
+  });
+  const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setDisplayMessage("");
+  // ログイン
+  const login = async (formData: FormData): Promise<SubmitResponse> => {
+    const data = {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+    };
 
-    const res = await signIn("credentials", {
+    const signinResponse = await signIn("credentials", {
+      ...data,
       redirect: false,
-      email: emailRef.current?.value,
-      password: passwordRef.current?.value,
     });
 
-    if (res?.error) {
-      setDisplayMessage("");
-    } else if (res?.ok) {
-      redirect("/login/success");
+    if (signinResponse?.ok) {
+      return {
+        status: "success",
+        message: "ログインに成功しました。",
+      };
     } else {
-      setDisplayMessage(
-        `エラーが発生しました。再度作成を行っても解消されない場合はお問い合わせください。`,
-      );
+      return {
+        status: "error",
+        message: "ログインに失敗しました。",
+      };
     }
+  };
 
-    setLoading(false);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitResponse({
+      status: undefined,
+      message: "",
+    });
+
+    const formData = new FormData(e.currentTarget);
+
+    const loginResponse = await login(formData);
+    setSubmitResponse(loginResponse);
+    setIsSubmitting(false);
+    if (loginResponse.status === "error") {
+      return false;
+    } else {
+      setIsSubmitSuccessful(true);
+      setTimeout(() => {
+        router.push("/refresh");
+      }, 1500);
+    }
   };
 
   return (
@@ -46,50 +79,57 @@ export default function LoginForm() {
         <h1 className="mb-6 text-center text-xl md:mb-8 md:text-2xl">
           ログイン
         </h1>
-        <Box component="form" className="mt-6 md:mt-8" onSubmit={handleLogin}>
+        <Box component="form" className="mt-6 md:mt-8" onSubmit={onSubmit}>
           <div className="flex flex-col gap-4 md:gap-6">
             <TextField
               id="email"
               label="メールアドレス"
               type="text"
-              inputRef={emailRef}
+              name="email"
+              disabled={isSubmitting || isSubmitSuccessful}
             />
             <TextField
               id="password"
               label="パスワード"
               type="password"
-              inputRef={passwordRef}
+              name="password"
+              disabled={isSubmitting || isSubmitSuccessful}
             />
-            {displayMessage ? (
-              <p className="flex justify-center">
-                <ErrorIcon
-                  sx={{ fontSize: "1.6em", color: "var(--icon-color-error)" }}
-                />
-                <span>{displayMessage}</span>
-              </p>
-            ) : (
-              ""
-            )}
-            <div className="mt-3 flex justify-center md:mt-4 md:justify-end">
-              {loading ? (
-                <div className="text-center">
-                  <Loading />
-                </div>
-              ) : (
-                <Button
-                  variant="contained"
-                  disableElevation
-                  type="submit"
-                  sx={{
-                    maxWidth: "fit-content",
-                    px: "1.5em",
-                    fontSize: "16px",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  ログイン
-                </Button>
+            <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
+              {submitResponse.status === "success" && (
+                <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
+                  <CheckCircleIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
+                </p>
               )}
+              {submitResponse.status === "error" && (
+                <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
+                  <ErrorIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
+                </p>
+              )}
+              <Button
+                variant="contained"
+                disableElevation
+                type="submit"
+                sx={{
+                  fontSize: "16px",
+                  px: "1.5em",
+                  display: "flex",
+                  gap: "0.25em",
+                  whiteSpace: "nowrap",
+                }}
+                disabled={isSubmitting || isSubmitSuccessful}
+              >
+                {isSubmitting ? <Loading size="18px" /> : ""}
+                {isSubmitting ? <>ログイン中</> : ""}
+                {isSubmitSuccessful ? <>ログイン済</> : ""}
+                {!isSubmitting && !isSubmitSuccessful ? <>ログイン</> : ""}
+              </Button>
             </div>
           </div>
         </Box>
