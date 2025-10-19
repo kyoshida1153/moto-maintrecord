@@ -12,7 +12,10 @@ const notoSansJp = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "バイクの整備記録・出費管理アプリ",
+  title: {
+    template: `%s | バイクの整備記録・出費管理アプリ`,
+    default: "バイクの整備記録・出費管理アプリ",
+  },
   description: "バイクの整備記録と維持費を管理するアプリ",
 };
 
