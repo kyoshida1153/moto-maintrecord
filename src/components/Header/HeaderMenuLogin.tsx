@@ -4,7 +4,11 @@ import Link from "next/link";
 import HeaderIcon from "./HeaderIcon";
 import { signOut } from "next-auth/react";
 
-export default function HeaderMenuLogin() {
+type Props = {
+  userName: string;
+};
+
+export default function HeaderMenuLogin({ userName }: Props) {
   return (
     <nav>
       <ul className="hidden gap-4 text-[14px] md:flex">
@@ -18,7 +22,7 @@ export default function HeaderMenuLogin() {
               className="aspect-square !text-[20px] text-[#333]"
             />
             <span className="flex flex-row flex-nowrap gap-1">
-              <span className="line-clamp-1 max-w-[8em]">山田太郎</span>
+              <span className="line-clamp-1 max-w-[8em]">{userName}</span>
               さん
             </span>
           </Link>

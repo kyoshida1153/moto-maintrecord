@@ -10,7 +10,11 @@ import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
 import { useWindowSize } from "./hooks";
 import { signOut } from "next-auth/react";
 
-export default function HeaderSpDrawer() {
+type Props = {
+  userName: string;
+};
+
+export default function HeaderSpDrawer({ userName }: Props) {
   const [drawerStatus, setDrawerStatus] = useState<
     "initial" | "open" | "close"
   >("initial");
@@ -71,7 +75,7 @@ export default function HeaderSpDrawer() {
                 className="aspect-square !text-[24px] text-[#333]"
               />
               <span className="flex flex-row flex-nowrap gap-1 text-[14px]">
-                <span className="line-clamp-1 max-w-[8em]">山田太郎</span>
+                <span className="line-clamp-1 max-w-[8em]">{userName}</span>
                 さん
               </span>
             </Link>

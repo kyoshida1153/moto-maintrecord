@@ -23,6 +23,7 @@ export default async function RootLayout({
 }>) {
   const currentUser = await getCurrentUser();
   const sessionExist: boolean = currentUser ? true : false;
+  const userName: string = currentUser?.name as string;
 
   return (
     <html lang="ja">
@@ -30,7 +31,9 @@ export default async function RootLayout({
         className={`${notoSansJp.variable} relative bg-[#f0f2f5] antialiased`}
       >
         <SessionProviderWrapper>
-          <CommonLayout sessionExist={sessionExist}>{children}</CommonLayout>
+          <CommonLayout sessionExist={sessionExist} userName={userName}>
+            {children}
+          </CommonLayout>
         </SessionProviderWrapper>
       </body>
     </html>
