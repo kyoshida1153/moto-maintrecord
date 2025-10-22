@@ -82,6 +82,7 @@ export default function LoginForm() {
         <Box component="form" className="mt-6 md:mt-8" onSubmit={onSubmit}>
           <div className="flex flex-col gap-4 md:gap-6">
             <TextField
+              required
               id="email"
               label="メールアドレス"
               type="text"
@@ -89,6 +90,7 @@ export default function LoginForm() {
               disabled={isSubmitting || isSubmitSuccessful}
             />
             <TextField
+              required
               id="password"
               label="パスワード"
               type="password"
