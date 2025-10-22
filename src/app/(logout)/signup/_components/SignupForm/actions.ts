@@ -1,7 +1,5 @@
 "use server";
 
-import axios from "axios";
-
 export async function createUser(data: {
   name: string;
   email: string;
@@ -10,9 +8,15 @@ export async function createUser(data: {
   success: boolean;
   message: string;
 }> {
-  const signupResponse = await axios.post(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/signup`,
-    data,
+  const signupResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/signup/`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
   );
 
   if (signupResponse.status === 200) {

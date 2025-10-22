@@ -118,6 +118,7 @@ export default function SignupForm() {
         <Box component="form" className="mt-6 md:mt-8" onSubmit={onSubmit}>
           <div className="flex flex-col gap-4 md:gap-6">
             <TextField
+              required
               id="name"
               label="ユーザー名"
               type="text"
@@ -125,6 +126,7 @@ export default function SignupForm() {
               disabled={isSubmitting || isSubmitSuccessful}
             />
             <TextField
+              required
               id="email"
               label="メールアドレス"
               type="text"
@@ -132,12 +134,14 @@ export default function SignupForm() {
               disabled={isSubmitting || isSubmitSuccessful}
             />
             <TextField
+              required
               id="password"
               label="パスワード"
               type="password"
               disabled={isSubmitting || isSubmitSuccessful}
             />
             <TextField
+              required
               id="password_confirm"
               label="パスワード（確認）"
               type="password"
