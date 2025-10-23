@@ -1,16 +1,17 @@
 import Heading from "@/components/Heading";
-import MaintenanceCategoryCard from "./_components/MaintenanceCategoryCard";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import MuiLink from "@mui/material/Link";
+import MaintenanceCategoryCardList from "./_components/MaintenanceCategoryCardList";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "カテゴリー",
+  };
+}
 
 export default function MaintenanceCategoryPage() {
-  const dummyCategories = [
-    { id: "1", name: "メンテナンス" },
-    { id: "2", name: "カスタム" },
-    { id: "3", name: "ツーリング" },
-  ];
-
   return (
     <div className="w-full max-w-3xl">
       <Heading level={1}>カテゴリー</Heading>
@@ -29,15 +30,7 @@ export default function MaintenanceCategoryPage() {
           カテゴリーの登録
         </Button>
       </div>
-      <div className="my-4 flex flex-col gap-4 md:my-6">
-        {dummyCategories.map((category) => (
-          <MaintenanceCategoryCard
-            key={category.id}
-            id={category.id}
-            name={category.name}
-          />
-        ))}
-      </div>
+      <MaintenanceCategoryCardList />
     </div>
   );
 }
