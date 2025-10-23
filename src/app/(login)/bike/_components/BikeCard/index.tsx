@@ -19,11 +19,11 @@ export default function BikeCard({ id, name, mileage, imageUrl }: Bike) {
       <div className="flex w-full flex-row items-center gap-2 md:gap-4">
         <span className="w-[50px] min-w-[50px]">
           <Image
-            src={imageUrl}
+            src={imageUrl ? imageUrl : "/assets/img/bike-default.svg"}
             alt=""
             width={160}
             height={160}
-            className="aspect-square w-full rounded-full border border-gray-300 object-cover"
+            className="aspect-square w-full rounded-full border border-gray-300 bg-white object-cover"
           />
         </span>
         <div className="flex flex-col gap-1">

@@ -24,7 +24,6 @@ export default function BikePage() {
           href="/bike/create"
           sx={{
             maxWidth: "fit-content",
-            px: "1.5em",
             whiteSpace: "nowrap",
           }}
         >
