@@ -62,7 +62,7 @@ model Bike {
   name      String    @db.VarChar(20)
   mileage   Int?
   memo      String?   @db.VarChar(500)
-  imageUrl  String    @map("image_url")
+  imageUrl  String?   @map("image_url")
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
@@ -83,7 +83,7 @@ model MaintenanceRecord {
   maintenanceCategoryId String?   @map("maintenance_category_id") @db.Uuid
   calenderDate          DateTime  @default(now()) @map("calender_date") @db.Timestamptz()
   isDone                Boolean   @default(false) @map("is_done")
-  title                 String    @db.VarChar(500)
+  title                 String    @db.VarChar(50)
   cost                  Int
   memo                  String?   @db.VarChar(500)
   mileage               Int?      @map("mileage")
@@ -118,11 +118,14 @@ model maintenanceRecordImage {
 
 // 整備・出費記録のカテゴリー
 model MaintenanceCategory {
-  id     String @id @default(uuid()) @db.Uuid
-  userId String @map("user_id") @db.Uuid
-  name   String @db.VarChar(20)
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  name      String    @db.VarChar(20)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
 
-  User User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   maintenanceRecords MaintenanceRecord[]
 
