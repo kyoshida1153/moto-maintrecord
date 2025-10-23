@@ -97,11 +97,16 @@ export default function BikeCreateForm() {
     }
 
     // APIでDB操作
+    const name = formData.get("name");
+    const mileage = formData.get("mileage");
+    const memo = formData.get("memo");
+    const imageUrl = uploadResponse.imageUrl;
+
     const data = {
-      name: formData.get("name") as string,
-      mileage: Number(formData.get("mileage")),
-      memo: formData.get("memo") as string,
-      imageUrl: uploadResponse.imageUrl as string,
+      name: name as string,
+      mileage: mileage ? Number(mileage) : null,
+      memo: memo ? (memo as string) : null,
+      imageUrl: imageUrl ? imageUrl : null,
     };
 
     const bikeResponse = await createBike(data);
@@ -127,7 +132,6 @@ export default function BikeCreateForm() {
             name="imageFile"
             multiple={false}
             label="バイクの写真"
-            maxFileCount={3}
           />
           <TextField
             required

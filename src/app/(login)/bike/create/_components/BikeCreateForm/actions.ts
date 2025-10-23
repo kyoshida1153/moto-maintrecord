@@ -3,7 +3,6 @@
 import path from "node:path";
 import crypto from "node:crypto";
 import { supabase } from "@/lib/supabaseClient";
-import { format } from "date-fns";
 import getCurrentUser from "@/actions/getCurrentUser";
 
 export async function uploadImage(
@@ -24,15 +23,13 @@ export async function uploadImage(
     return {
       success: true,
       message: "デフォルトの画像を設定。",
-      imageUrl: "/assets/img/bike-default.svg",
     };
   }
 
   // アップロード用ファイルパス作成
-  const yearMonth = format(new Date(), "yyyy/MM");
   const imageFileName = crypto.randomUUID();
   const imageFileExtName = path.extname(imageFile.name).toLowerCase();
-  const uploadFilePath = `${userId}/${yearMonth}/${imageFileName}${imageFileExtName}`;
+  const uploadFilePath = `${userId}/bike/${imageFileName}${imageFileExtName}`;
 
   // ストレージにアップロード
   const { error } = await supabase.storage
