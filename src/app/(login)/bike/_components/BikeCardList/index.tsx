@@ -2,22 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
-import { Prisma } from "@prisma/client";
 import BikeCard from "../BikeCard";
+import type { BikeSelect } from "@/app/api/bikes/route";
 
-export type Bike = Prisma.BikeGetPayload<{
-  select: {
-    id: true;
-    name: true;
-    mileage: true;
-    memo: true;
-    imageUrl: true;
-  };
-}>;
-
-async function findBike(): Promise<Bike[] | false> {
+async function findBikes(): Promise<BikeSelect[] | false> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bike/`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/`,
     {
       method: "GET",
       headers: {
@@ -35,17 +25,14 @@ async function findBike(): Promise<Bike[] | false> {
 }
 
 export default function BikeCardList() {
-  const [bikes, setBikes] = useState<Bike[]>([]);
+  const [bikes, setBikes] = useState<BikeSelect[]>([]);
   const [bikesLoading, setBikesLoading] = useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
-      const result = await findBike();
+      const result = await findBikes();
       setBikesLoading(false);
-
-      if (result) {
-        setBikes(result);
-      }
+      if (result) setBikes(result);
     })();
   }, []);
 
