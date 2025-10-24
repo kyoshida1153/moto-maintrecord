@@ -11,7 +11,7 @@ const bikeSelect = Prisma.validator<Prisma.BikeSelect>()({
   imageUrl: true,
 });
 
-type BikeSelect = Prisma.BikeGetPayload<{
+export type BikeSelect = Prisma.BikeGetPayload<{
   select: typeof bikeSelect;
 }>;
 

@@ -9,52 +9,16 @@ import TextField from "@mui/material/TextField";
 import Loading from "@/components/Loading";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
-import { Prisma } from "@prisma/client";
-import { uploadImage } from "./actions";
-
-export type Bike = Prisma.BikeGetPayload<{
-  select: {
-    name: true;
-    mileage: true;
-    memo: true;
-    imageUrl: true;
-  };
-}>;
+import createBike from "./createBike";
+import uploadBikeImageFile from "./uploadBikeImageFile";
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;
   message: string;
 };
 
-async function createBike(data: Bike): Promise<{
-  success: boolean;
-  message: string;
-}> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bike/`,
-    {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
-
-  if (response?.status === 201) {
-    return {
-      success: true,
-      message: "所有バイクの登録に成功しました。",
-    };
-  } else {
-    return {
-      success: false,
-      message: "所有バイクの登録に失敗しました。",
-    };
-  }
-}
-
 export default function BikeCreateForm() {
+  // フォーム送信
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
@@ -71,56 +35,64 @@ export default function BikeCreateForm() {
       message: "",
     });
 
-    const formData = new FormData(e.currentTarget);
+    try {
+      const formData = new FormData(e.currentTarget);
 
-    // 画像アップロード
-    const imageFile = formData.get("imageFile");
+      // 画像アップロード
+      const imageFile = formData.get("imageFile");
 
-    if (!(imageFile instanceof File)) {
+      if (!(imageFile instanceof File)) {
+        setIsSubmitting(false);
+        setSubmitResponse({
+          message: "画像のアップロードに失敗しました。",
+          status: "error",
+        });
+        return;
+      }
+
+      const uploadResponse = await uploadBikeImageFile(imageFile);
+      setSubmitResponse({
+        message: uploadResponse.message,
+        status: uploadResponse.success === true ? "success" : "error",
+      });
+
+      if (uploadResponse.success === false) {
+        setIsSubmitting(false);
+        return;
+      }
+
+      // APIでDB操作
+      const name = formData.get("name");
+      const mileage = formData.get("mileage");
+      const memo = formData.get("memo");
+      const imageUrl = uploadResponse.imageUrl;
+
+      const data = {
+        name: name as string,
+        mileage: mileage ? Number(mileage) : null,
+        memo: memo ? (memo as string) : null,
+        imageUrl: imageUrl ? imageUrl : null,
+      };
+
+      const bikeResponse = await createBike(data);
       setIsSubmitting(false);
       setSubmitResponse({
-        message: "画像のアップロードに失敗しました。",
+        message: bikeResponse.message,
+        status: bikeResponse.success === true ? "success" : "error",
+      });
+
+      if (bikeResponse.success === true) {
+        setIsSubmitSuccessful(true);
+        setTimeout(() => {
+          router.push("/bike");
+        }, 2000);
+      }
+    } catch {
+      setIsSubmitting(false);
+      setSubmitResponse({
+        message: "送信に失敗しました。",
         status: "error",
       });
-      return;
-    }
-
-    const uploadResponse = await uploadImage(imageFile);
-    setSubmitResponse({
-      message: uploadResponse.message,
-      status: uploadResponse.success === true ? "success" : "error",
-    });
-
-    if (uploadResponse.success === false) {
-      setIsSubmitting(false);
-      return;
-    }
-
-    // APIでDB操作
-    const name = formData.get("name");
-    const mileage = formData.get("mileage");
-    const memo = formData.get("memo");
-    const imageUrl = uploadResponse.imageUrl;
-
-    const data = {
-      name: name as string,
-      mileage: mileage ? Number(mileage) : null,
-      memo: memo ? (memo as string) : null,
-      imageUrl: imageUrl ? imageUrl : null,
-    };
-
-    const bikeResponse = await createBike(data);
-    setIsSubmitting(false);
-    setSubmitResponse({
-      message: bikeResponse.message,
-      status: bikeResponse.success === true ? "success" : "error",
-    });
-
-    if (bikeResponse.success === true) {
-      setIsSubmitSuccessful(true);
-      setTimeout(() => {
-        router.push("/bike");
-      }, 2000);
     }
   };
 
@@ -132,6 +104,7 @@ export default function BikeCreateForm() {
             name="imageFile"
             multiple={false}
             label="バイクの写真"
+            disabled={isSubmitting || isSubmitSuccessful}
           />
           <TextField
             required
@@ -143,7 +116,7 @@ export default function BikeCreateForm() {
             disabled={isSubmitting || isSubmitSuccessful}
           />
           <TextField
-            id="mileage_km"
+            id="mileage"
             label="毎月の走行距離（km）"
             type="number"
             name="mileage"

@@ -5,7 +5,7 @@ import crypto from "node:crypto";
 import { supabase } from "@/lib/supabaseClient";
 import getCurrentUser from "@/actions/getCurrentUser";
 
-export async function uploadImage(
+export default async function uploadBikeImageFile(
   imageFile: File,
 ): Promise<{ success: boolean; message: string; imageUrl?: string }> {
   // 認証チェック
@@ -29,7 +29,7 @@ export async function uploadImage(
   // アップロード用ファイルパス作成
   const imageFileName = crypto.randomUUID();
   const imageFileExtName = path.extname(imageFile.name).toLowerCase();
-  const uploadFilePath = `${userId}/bike/${imageFileName}${imageFileExtName}`;
+  const uploadFilePath = `${userId}/bikes/${imageFileName}${imageFileExtName}`;
 
   // ストレージにアップロード
   const { error } = await supabase.storage
