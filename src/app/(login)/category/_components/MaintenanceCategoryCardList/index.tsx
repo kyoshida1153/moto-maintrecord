@@ -2,21 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
-import { Prisma } from "@prisma/client";
 import MaintenanceCategoryCard from "../MaintenanceCategoryCard";
+import type { MaintenanceCategorySelect } from "@/app/api/maintenance-categories/route";
 
-export type MaintenanceCategory = Prisma.MaintenanceCategoryGetPayload<{
-  select: {
-    id: true;
-    name: true;
-  };
-}>;
-
-async function findMaintenanceCategory(): Promise<
-  MaintenanceCategory[] | false
+async function findMaintenanceCategories(): Promise<
+  MaintenanceCategorySelect[] | false
 > {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-category/`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-categories/`,
     {
       method: "GET",
       headers: {
@@ -35,19 +28,16 @@ async function findMaintenanceCategory(): Promise<
 
 export default function MaintenanceCategoryCardList() {
   const [maintenanceCategories, setMaintenanceCategories] = useState<
-    MaintenanceCategory[]
+    MaintenanceCategorySelect[]
   >([]);
   const [maintenanceCategoriesLoading, setMaintenanceCategoriesLoading] =
     useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
-      const result = await findMaintenanceCategory();
+      const result = await findMaintenanceCategories();
       setMaintenanceCategoriesLoading(false);
-
-      if (result) {
-        setMaintenanceCategories(result);
-      }
+      if (result) setMaintenanceCategories(result);
     })();
   }, []);
 
