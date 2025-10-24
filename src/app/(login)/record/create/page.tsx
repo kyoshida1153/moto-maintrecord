@@ -1,5 +1,12 @@
 import Heading from "@/components/Heading";
 import MaintenanceRecordCreateForm from "./_components/MaintenanceRecordCreateForm";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "整備・出費記録の登録",
+  };
+}
 
 export default function MaintenanceRecordCreatePage() {
   return (
