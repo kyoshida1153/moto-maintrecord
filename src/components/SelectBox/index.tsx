@@ -8,15 +8,17 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 export default function SelectBox({
-  name = "select",
+  name,
   label = "選択してください",
-  defaultValue = "",
   itemList = [],
+  defaultValue,
+  disabled,
 }: {
-  name?: string;
+  name: string;
   label?: string;
+  itemList?: { value: string; text: string }[];
   defaultValue?: string;
-  itemList: { value: string; text: string }[];
+  disabled?: boolean;
 }) {
   const [selectValue, setSelectValue] = React.useState(defaultValue);
 
@@ -26,7 +28,7 @@ export default function SelectBox({
 
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth disabled={disabled ? true : false}>
         <InputLabel id={`select-label-${name}`}>{label}</InputLabel>
         <Select
           labelId={`select-label-${name}`}
@@ -38,11 +40,12 @@ export default function SelectBox({
           onChange={handleChange}
           sx={{ backgroundColor: "#fff" }}
         >
-          {itemList.map((item) => (
-            <MenuItem key={item.value} value={item.value}>
-              {item.text}
-            </MenuItem>
-          ))}
+          {itemList.length > 0 &&
+            itemList.map((item) => (
+              <MenuItem key={item.value} value={item.value}>
+                {item.text}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </Box>

@@ -6,26 +6,29 @@ import { DatePicker as MuixDatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ja } from "date-fns/locale";
 
 export default function DatePicker({
-  name = "date",
+  name,
   label = "日付",
-  className = "",
-  date = undefined,
+  className,
+  defaultValue,
+  disabled,
 }: {
   name: string;
-  label: string;
+  label?: string;
   className?: string;
-  date?: string | undefined;
+  defaultValue?: Date;
+  disabled?: boolean;
 }) {
+  const date = defaultValue ? defaultValue : new Date();
+
   return (
-    // あとでやる: 文言調整
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
       <MuixDatePicker
         label={label}
         name={name}
-        defaultValue={date ? new Date(date) : undefined}
-        // defaultValue={new Date("2025-10-01")}
+        defaultValue={date}
         className={className}
         sx={{ backgroundColor: "#fff", width: "100%", maxWidth: "170px" }}
+        disabled={disabled ? true : false}
       />
     </LocalizationProvider>
   );

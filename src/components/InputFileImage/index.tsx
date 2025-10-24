@@ -19,15 +19,17 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function InputFileImage({
-  name = "image",
+  name,
   label = "画像を選択",
   multiple = false,
   maxFileCount = 1,
+  disabled = false,
 }: {
   name: string;
-  label: string;
-  multiple: boolean;
+  label?: string;
+  multiple?: boolean;
   maxFileCount?: number;
+  disabled?: boolean;
 }) {
   const [files, setFiles] = useState<File[] | null>(null);
 
@@ -65,6 +67,7 @@ export default function InputFileImage({
           multiple={multiple ? true : false}
           accept="image/*"
           name={name}
+          disabled={disabled ? true : false}
         />
       </Button>
       {files && files.length > 0 ? (
