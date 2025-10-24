@@ -8,46 +8,12 @@ import TextField from "@mui/material/TextField";
 import Loading from "@/components/Loading";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
-import { Prisma } from "@prisma/client";
-
-export type MaintenanceCategory = Prisma.MaintenanceCategoryGetPayload<{
-  select: {
-    name: true;
-  };
-}>;
+import createMaintenanceCategory from "./createMaintenanceCategory";
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;
   message: string;
 };
-
-async function createMaintenanceCategory(data: MaintenanceCategory): Promise<{
-  success: boolean;
-  message: string;
-}> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-category/`,
-    {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
-
-  if (response?.status === 201) {
-    return {
-      success: true,
-      message: "カテゴリーの登録に成功しました。",
-    };
-  } else {
-    return {
-      success: false,
-      message: "カテゴリーの登録に失敗しました。",
-    };
-  }
-}
 
 export default function MaintenanceCategoryCreateForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);

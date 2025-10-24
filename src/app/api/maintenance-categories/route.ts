@@ -9,7 +9,7 @@ const maintenanceCategorySelect =
     name: true,
   });
 
-type MaintenanceCategorySelect = Prisma.MaintenanceCategoryGetPayload<{
+export type MaintenanceCategorySelect = Prisma.MaintenanceCategoryGetPayload<{
   select: typeof maintenanceCategorySelect;
 }>;
 
