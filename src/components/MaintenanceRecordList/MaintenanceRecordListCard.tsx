@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-// import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
-// import CategoryIcon from "@mui/icons-material/Category";
+import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
+import CategoryIcon from "@mui/icons-material/Category";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -15,20 +15,16 @@ import IconButton from "@mui/material/IconButton";
 
 export default function MaintenanceRecordListCard({
   id,
-  name,
-  category_id,
-  category_name,
-  bike_id,
-  bike_name,
+  title,
+  categoryName,
+  bikeName,
   cost,
 }: {
   id: string;
-  name: string;
-  category_id: string;
-  category_name: string;
-  bike_id: string;
-  bike_name: string;
-  cost: string;
+  title: string;
+  categoryName: string;
+  bikeName: string;
+  cost: number;
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -44,22 +40,24 @@ export default function MaintenanceRecordListCard({
       <div className="flex w-full flex-row items-center gap-2 md:gap-4">
         <div className="flex flex-col gap-1">
           <h3 className="line-clamp-1 text-lg transition-opacity duration-200 hover:opacity-70 md:text-xl">
-            <Link href={`/record/${id}`}>{name}</Link>
+            <Link href={`/record/${id}`}>{title || "(title無し)"}</Link>
           </h3>
           <p className="ml-auto hidden w-full flex-row flex-nowrap items-center justify-end gap-2 text-sm text-[#808080] md:flex md:w-auto md:text-[15px]">
             <span className="flex items-center gap-0.5 whitespace-nowrap">
-              {/* <TwoWheelerIcon sx={{ fontSize: "20px" }} /> */}
-              {bike_name}
+              <TwoWheelerIcon sx={{ fontSize: "20px", mt: "1px" }} />
+              {bikeName || "未選択"}
             </span>
             <span> / </span>
             <span className="flex items-center gap-0.5 whitespace-nowrap">
-              {/* <CategoryIcon sx={{ fontSize: "16px" }} /> */}
-              {category_name}
+              <CategoryIcon sx={{ fontSize: "16px", mt: "1px" }} />
+              {categoryName || "未選択"}
             </span>
           </p>
         </div>
         <div className="ml-auto whitespace-nowrap">
-          <span className="font-alphanumeric text-xl md:text-2xl">{cost}</span>
+          <span className="font-alphanumeric text-xl md:text-2xl">
+            {cost >= 0 ? cost.toLocaleString() : " - "}
+          </span>
           <span className="ml-0.5 text-sm md:text-base">円</span>
         </div>
         <div>
