@@ -28,7 +28,7 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function MaintenanceRecordCreateForm() {
+export default function MaintenanceRecordsCreateForm() {
   // セレクトボックスの内容の読み込み
   const [bikes, setBikes] = useState<BikeSelect[]>([]);
   const [bikesLoading, setBikesLoading] = useState<boolean>(true);
