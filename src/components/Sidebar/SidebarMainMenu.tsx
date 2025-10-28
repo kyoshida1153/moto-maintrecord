@@ -29,7 +29,7 @@ export default function SidebarMainMenu() {
       id: 4,
       text: "カテゴリー",
       href: "/category",
-      iconName: "CategoryIcon",
+      iconName: "BuildIcon",
     },
     {
       id: 5,
