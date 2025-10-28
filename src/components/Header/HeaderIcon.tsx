@@ -1,6 +1,7 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddIcon from "@mui/icons-material/Add";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import BuildIcon from "@mui/icons-material/Build";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CategoryIcon from "@mui/icons-material/Category";
 import LoginIcon from "@mui/icons-material/Login";
@@ -22,6 +23,8 @@ export default function HeaderIcon({
       return <AddIcon className={className || ""} />;
     case "BarChartIcon":
       return <BarChartIcon className={className || ""} />;
+    case "BuildIcon":
+      return <BuildIcon className={className || ""} />;
     case "CalendarMonthIcon":
       return <CalendarMonthIcon className={className || ""} />;
     case "CategoryIcon":

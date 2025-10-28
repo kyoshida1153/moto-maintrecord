@@ -33,7 +33,7 @@ export default function HeaderSpDrawerMainMenu({
       id: 4,
       text: "カテゴリー",
       href: "/category",
-      iconName: "CategoryIcon",
+      iconName: "BuildIcon",
     },
     {
       id: 5,
