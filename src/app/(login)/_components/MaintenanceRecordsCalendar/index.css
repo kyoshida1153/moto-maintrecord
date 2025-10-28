@@ -1,0 +1,64 @@
+/**
+ * FullCalendarのカスタマイズ用
+ */
+
+/* .fc-day-sat {
+  background-color: #e6f0ff;
+} */
+
+/* .fc-day-sun {
+  background-color: #ffe6e6;
+} */
+
+/* .fc-day-holiday {
+  background-color: #6f96ad;
+} */
+
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 0;
+  justify-content: center;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 15px;
+  font-weight: 400;
+  color: #333;
+}
+
+.fc .fc-col-header-cell-cushion {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #e6f6ff;
+}
+
+.fc .fc-daygrid-day-top {
+  justify-content: center;
+}
+
+.fc .fc-daygrid-day-number {
+  font-family: var(--font-alphanumeric);
+}
+
+.fc .fc-event-title-container {
+  text-align: center;
+}
+
+.fc .fc-event-title {
+  font-size: clamp(14px, 2.5vw, 16px);
+  color: #cc0000;
+  letter-spacing: -0.03em;
+}
+
+.fc .fc-event-title::before {
+  /* content: "\00A5"; */
+  display: inline-block;
+  font-size: 0.9em;
+}
+
+.fc .fc-h-event {
+  background-color: transparent !important;
+  border: none !important;
+}
