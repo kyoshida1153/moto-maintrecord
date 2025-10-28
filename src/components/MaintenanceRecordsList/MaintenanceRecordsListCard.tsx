@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
-import CategoryIcon from "@mui/icons-material/Category";
+import BuildIcon from "@mui/icons-material/Build";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -13,7 +13,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 
-export default function MaintenanceRecordListCard({
+export default function MaintenanceRecordsListCard({
   id,
   title,
   categoryName,
@@ -42,14 +42,14 @@ export default function MaintenanceRecordListCard({
           <h3 className="line-clamp-1 text-lg transition-opacity duration-200 hover:opacity-70 md:text-xl">
             <Link href={`/record/${id}`}>{title || "(title無し)"}</Link>
           </h3>
-          <p className="ml-auto hidden w-full flex-row flex-nowrap items-center justify-end gap-2 text-sm text-[#808080] md:flex md:w-auto md:text-[15px]">
+          <p className="mr-auto hidden w-full flex-row flex-nowrap items-center justify-end gap-2 text-sm text-[#808080] md:flex md:w-auto md:text-[15px]">
             <span className="flex items-center gap-0.5 whitespace-nowrap">
               <TwoWheelerIcon sx={{ fontSize: "20px", mt: "1px" }} />
               {bikeName || "未選択"}
             </span>
             <span> / </span>
             <span className="flex items-center gap-0.5 whitespace-nowrap">
-              <CategoryIcon sx={{ fontSize: "16px", mt: "1px" }} />
+              <BuildIcon sx={{ fontSize: "16px", mt: "1px" }} />
               {categoryName || "未選択"}
             </span>
           </p>

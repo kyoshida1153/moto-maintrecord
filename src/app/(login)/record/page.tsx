@@ -1,9 +1,10 @@
 import Heading from "@/components/Heading";
-import MaintenanceRecordList from "@/components/MaintenanceRecordList";
+import MaintenanceRecordsList from "@/components/MaintenanceRecordsList";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import MuiLink from "@mui/material/Link";
 import type { Metadata } from "next";
+import MaintenanceRecordsPageWrapper from "./_components/MaintenanceRecordsPageWrapper";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -11,26 +12,28 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function MaintenanceRecordPage() {
+export default function MaintenanceRecordsPage() {
   return (
-    <div className="w-full max-w-3xl">
-      <Heading level={1}>整備・出費記録</Heading>
-      <div className="my-6 text-center md:my-8 md:text-left">
-        <Button
-          component={MuiLink}
-          variant="contained"
-          disableElevation
-          startIcon={<AddIcon />}
-          href="/record/create"
-          sx={{
-            maxWidth: "fit-content",
-            whiteSpace: "nowrap",
-          }}
-        >
-          整備・出費記録の登録
-        </Button>
+    <MaintenanceRecordsPageWrapper>
+      <div className="w-full max-w-3xl">
+        <Heading level={1}>整備・出費記録</Heading>
+        <div className="my-6 text-center md:my-8 md:text-left">
+          <Button
+            component={MuiLink}
+            variant="contained"
+            disableElevation
+            startIcon={<AddIcon />}
+            href="/record/create"
+            sx={{
+              maxWidth: "fit-content",
+              whiteSpace: "nowrap",
+            }}
+          >
+            整備・出費記録の登録
+          </Button>
+        </div>
+        <MaintenanceRecordsList />
       </div>
-      <MaintenanceRecordList />
-    </div>
+    </MaintenanceRecordsPageWrapper>
   );
 }

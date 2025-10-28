@@ -1,18 +1,16 @@
 "use client";
 
-import type { MaintenanceRecordSelect } from "@/app/api/maintenance-records/route";
-
 type Params = {
-  page?: string;
+  date?: string;
 };
 
-export default async function findMaintenanceRecords(
+export default async function getMaintenanceRecordsCount(
   params: Params,
-): Promise<MaintenanceRecordSelect[] | false> {
+): Promise<number | false> {
   const queryString = new URLSearchParams(params).toString();
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/?${queryString}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/count/?${queryString}`,
     {
       method: "GET",
       headers: {

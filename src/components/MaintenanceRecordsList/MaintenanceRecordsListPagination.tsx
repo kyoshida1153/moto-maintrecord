@@ -1,50 +1,45 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { PaginationItem } from "@mui/material";
+import Link from "next/link";
 import Pagination from "@mui/material/Pagination";
+import { PaginationItem } from "@mui/material";
 import isNumber from "@/utils/isNumber";
 import Loading from "../Loading";
-import getMaintenanceRecordCount from "./getMaintenanceRecordCount";
+import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
 
-export default function MaintenanceRecordListPagination() {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [maintenanceRecordCount, setMaintenanceRecordCount] = useState<
-    number | undefined
-  >(undefined);
+export default function MaintenanceRecordsListPagination() {
+  const { maintenanceRecordsCount, maintenanceRecordsCountLoading } =
+    useMaintenanceRecordsStore();
+  const [pageCount, setPageCount] = useState<number | undefined>(undefined);
 
   const searchParams = useSearchParams();
   const pageString = searchParams.get("page") || "1";
   const page = isNumber(pageString) ? Number(pageString) : 1;
 
   useEffect(() => {
-    (async () => {
-      const result = await getMaintenanceRecordCount();
-      setLoading(false);
-      if (result) {
-        const limit = Number(
-          process.env.NEXT_PUBLIC_MAINTENANCE_RECORD_LIST_LIMIT,
-        );
-        const count = Math.ceil(result / limit);
-        setMaintenanceRecordCount(count);
-      }
-    })();
-  }, []);
+    if (maintenanceRecordsCount === undefined) {
+      setPageCount(0);
+      return;
+    }
+    const limit = Number(process.env.NEXT_PUBLIC_MAINTENANCE_RECORD_LIST_LIMIT);
+    const count = Math.ceil(maintenanceRecordsCount / limit);
+    setPageCount(count);
+  }, [maintenanceRecordsCount]);
 
   return (
     <div className="flex w-full justify-center">
-      {loading ? (
+      {maintenanceRecordsCountLoading ? (
         <div className="flex w-full justify-center py-1">
           <Loading size="24px" />
         </div>
       ) : (
         <>
-          {maintenanceRecordCount && maintenanceRecordCount > 0 ? (
+          {pageCount && pageCount > 0 ? (
             <Pagination
               page={page}
-              count={maintenanceRecordCount}
+              count={pageCount}
               renderItem={(item) => (
                 <PaginationItem
                   component={Link}
