@@ -3,6 +3,9 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import getCurrentUser from "@/actions/getCurrentUser";
 import isNumber from "@/utils/isNumber";
+import { startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns";
+import isDateYyyyMm from "@/utils/isDateYyyyMm";
+import isDateYyyy from "@/utils/isDateYyyy";
 
 const maintenanceRecordSelect =
   Prisma.validator<Prisma.MaintenanceRecordSelect>()({
@@ -36,25 +39,57 @@ export async function GET(
   if (!currentUser && !userId) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
-  // const userId = "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11";
 
   // ここからDB操作
   try {
     const params = request.nextUrl.searchParams;
-    const pageString = params.get("page") || "";
-    const page = isNumber(pageString) ? Number(pageString) : 1;
 
-    const take = Number(
-      process.env.NEXT_PUBLIC_MAINTENANCE_RECORD_LIST_LIMIT || 31,
-    );
-    const skip = take * (page - 1);
+    const where = {};
+    Object.assign(where, { userId: userId });
+    // 年、月での取得範囲
+    const dateString = params.get("date") || "";
+    if (isDateYyyyMm(dateString)) {
+      Object.assign(where, {
+        calenderDate: {
+          gte: startOfMonth(new Date(dateString)),
+          lt: endOfMonth(new Date(dateString)),
+        },
+      });
+    } else if (isDateYyyy(dateString)) {
+      Object.assign(where, {
+        calenderDate: {
+          gte: startOfYear(new Date(dateString)),
+          lt: endOfYear(new Date(dateString)),
+        },
+      });
+    }
+
+    // レコードの取得件数、取得範囲
+    const takeSkip = {};
+    if (params.get("page") !== "all") {
+      const pageString = params.get("page") || "";
+      const page = isNumber(pageString) ? Number(pageString) : 1;
+      const take = Number(
+        process.env.NEXT_PUBLIC_MAINTENANCE_RECORD_LIST_LIMIT || 10,
+      );
+      const skip = take * (page - 1);
+      Object.assign(takeSkip, { take });
+      Object.assign(takeSkip, { skip });
+    }
+
+    // ソート
+    const orderBy = {};
+    if (params.get("order") === "calender_date") {
+      Object.assign(orderBy, { calenderDate: "asc" });
+    } else if (params.get("order") === "calender_date_desc") {
+      Object.assign(orderBy, { calenderDate: "desc" });
+    }
 
     const result = await prisma.maintenanceRecord.findMany({
       select: maintenanceRecordSelect,
-      where: { userId },
-      skip,
-      take,
-      orderBy: { calenderDate: "desc" },
+      where,
+      orderBy,
+      ...takeSkip,
     });
 
     if (result) {
