@@ -1,10 +1,10 @@
 "use client";
 
+import { ChangeEvent, useEffect, useState } from "react";
+import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { ChangeEvent, useState } from "react";
-import Image from "next/image";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -18,32 +18,56 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
+type PreviewImageUrl = {
+  id?: string;
+  imageUrl: string;
+};
+
+// ※アップロードする画像の数を制限する処理はサーバー側で行う
 export default function InputFileImage({
   name,
   label = "画像を選択",
   multiple = false,
   maxFileCount = 1,
   disabled = false,
+  defaultValue = [],
 }: {
   name: string;
   label?: string;
   multiple?: boolean;
   maxFileCount?: number;
   disabled?: boolean;
+  defaultValue?: PreviewImageUrl[];
 }) {
-  const [files, setFiles] = useState<File[] | null>(null);
+  const [previewImageUrls, setPreviewImageUrls] = useState<PreviewImageUrl[]>(
+    [],
+  );
+  const [isChangedInputFileImage, setIsChangedInputFileImage] =
+    useState<boolean>(false);
 
-  const changeFileList = (e: ChangeEvent<HTMLInputElement>) => {
+  const changePreviewImageUrls = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files) return setFiles(null);
-    if (multiple === true) {
-      const limitedFiles = Array.from(files).slice(0, maxFileCount);
-      setFiles(limitedFiles);
-    } else {
-      const limitedFiles = Array.from(files).slice(0, 1);
-      setFiles(limitedFiles);
+    if (!files) return setPreviewImageUrls([]);
+
+    if (isChangedInputFileImage === false) {
+      setIsChangedInputFileImage(true);
     }
+
+    const limitedFiles =
+      multiple === true
+        ? Array.from(files).slice(0, maxFileCount)
+        : Array.from(files).slice(0, 1);
+
+    const newPreviewImageUrls = limitedFiles.map((file) => {
+      return { imageUrl: URL.createObjectURL(file) };
+    });
+
+    setPreviewImageUrls(newPreviewImageUrls);
   };
+
+  useEffect(() => {
+    if (defaultValue.length > 0) setPreviewImageUrls(defaultValue);
+  }, []);
 
   return (
     <div className="flex flex-col gap-2">
@@ -63,20 +87,27 @@ export default function InputFileImage({
         {multiple && maxFileCount > 1 && <span>（{maxFileCount}枚まで）</span>}
         <VisuallyHiddenInput
           type="file"
-          onChange={changeFileList}
+          onChange={changePreviewImageUrls}
           multiple={multiple ? true : false}
           accept="image/*"
           name={name}
           disabled={disabled ? true : false}
         />
       </Button>
-      {files && files.length > 0 ? (
+      <input
+        type="checkbox"
+        name={`isChangedInputFileImage_${name}`}
+        checked={isChangedInputFileImage}
+        className="hidden"
+        readOnly
+      />
+      {previewImageUrls && previewImageUrls.length > 0 ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(calc((100%-1em)/3),1fr))] gap-[0.5em]">
-          {[...files].map((file, i) => {
+          {previewImageUrls.map((previewImageUrl, i) => {
             return (
               <Image
-                key={i}
-                src={URL.createObjectURL(file)}
+                key={previewImageUrl.id ?? i}
+                src={previewImageUrl.imageUrl}
                 width={200}
                 height={200}
                 className="aspect-square h-full w-full object-cover"
@@ -86,7 +117,7 @@ export default function InputFileImage({
           })}
         </div>
       ) : (
-        <p className="text-sm">画像を選択してください。</p>
+        <p className="text-sm">選択中の画像: 無し</p>
       )}
     </div>
   );

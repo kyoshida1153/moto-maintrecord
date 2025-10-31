@@ -16,7 +16,7 @@ export default function SelectBox({
 }: {
   name: string;
   label?: string;
-  itemList?: { value: string; text: string }[];
+  itemList?: { value: string | undefined; text: string }[];
   defaultValue?: string;
   disabled?: boolean;
 }) {
