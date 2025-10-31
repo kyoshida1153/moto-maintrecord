@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -14,14 +15,25 @@ import Loading from "@/components/Loading";
 import DatePicker from "@/components/DatePicker";
 import SelectBox from "@/components/SelectBox";
 import InputFileImage from "@/components/InputFileImage";
-
-import { findBikes } from "./findBikes";
-import { findMaintenanceCategories } from "./findMaintenanceCategories";
+import { getBikes } from "@/lib/getBikes";
+import { getMaintenanceCategories } from "@/lib/getMaintenanceCategories";
+import { uploadMaintenanceRecordImageFiles } from "@/lib/uploadMaintenanceRecordImageFiles";
 import { createMaintenanceRecord } from "./createMaintenanceRecord";
-import { uploadMaintenanceRecordImageFiles } from "./uploadMaintenanceRecordImageFiles";
 
 import type { BikeSelect } from "@/app/api/bikes/route";
 import type { MaintenanceCategorySelect } from "@/app/api/maintenance-categories/route";
+
+type GetBikesResponse = {
+  status: "success" | "error" | undefined;
+  message: string;
+  result?: BikeSelect[];
+};
+
+type GetMaintenanceCategoriesResponse = {
+  status: "success" | "error" | undefined;
+  message: string;
+  result?: MaintenanceCategorySelect[];
+};
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;
@@ -29,31 +41,50 @@ type SubmitResponse = {
 };
 
 export default function MaintenanceRecordsCreateForm() {
-  // セレクトボックスの内容の読み込み
-  const [bikes, setBikes] = useState<BikeSelect[]>([]);
-  const [bikesLoading, setBikesLoading] = useState<boolean>(true);
-  const [maintenanceCategories, setMaintenanceCategories] = useState<
-    MaintenanceCategorySelect[]
-  >([]);
-  const [maintenanceCategoriesLoading, setMaintenanceCategoriesLoading] =
-    useState<boolean>(true);
+  // フォームのセレクトボックスの設定で使うもの
+  const [getBikesResponse, setGetBikesResponse] = useState<GetBikesResponse>({
+    status: undefined,
+    message: "",
+  });
+  const [isLoadingGetBikes, setIsLoadingGetBikes] = useState<boolean>(true);
 
+  const [
+    getMaintenanceCategoriesResponse,
+    setGetMaintenanceCategoriesResponse,
+  ] = useState<GetMaintenanceCategoriesResponse>({
+    status: undefined,
+    message: "",
+  });
+  const [
+    isLoadingGetMaintenanceCategoriesResponse,
+    setIsLoadingGetMaintenanceCategoriesResponse,
+  ] = useState<boolean>(true);
+
+  // セレクトボックスに設定するデータの読み込み
   useEffect(() => {
     Promise.all([
       (async () => {
-        const result = await findBikes();
-        setBikesLoading(false);
-        if (result) setBikes(result);
+        const response = await getBikes();
+        setIsLoadingGetBikes(false);
+        setGetBikesResponse({
+          status: response.success === true ? "success" : "error",
+          message: response.message,
+          result: response.result,
+        });
       })(),
       (async () => {
-        const result = await findMaintenanceCategories();
-        setMaintenanceCategoriesLoading(false);
-        if (result) setMaintenanceCategories(result);
+        const response = await getMaintenanceCategories();
+        setIsLoadingGetMaintenanceCategoriesResponse(false);
+        setGetMaintenanceCategoriesResponse({
+          status: response.success === true ? "success" : "error",
+          message: response.message,
+          result: response.result,
+        });
       })(),
     ]);
   }, []);
 
-  // フォーム送信
+  // フォームの送信開始～終了で使うもの
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
@@ -62,6 +93,7 @@ export default function MaintenanceRecordsCreateForm() {
   });
   const router = useRouter();
 
+  // フォームの送信開始～終了
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -73,8 +105,18 @@ export default function MaintenanceRecordsCreateForm() {
     try {
       const formData = new FormData(e.currentTarget);
 
-      // 画像アップロード
+      // ここから画像アップロード
       const imageFiles = formData.getAll("imageFiles");
+
+      if (imageFiles.some((imageFile) => !(imageFile instanceof File))) {
+        setIsSubmitting(false);
+        setSubmitResponse({
+          message: "画像のアップロードに失敗しました。",
+          status: "error",
+        });
+        return;
+      }
+
       const uploadResponse = await uploadMaintenanceRecordImageFiles(
         imageFiles as File[],
       );
@@ -84,7 +126,7 @@ export default function MaintenanceRecordsCreateForm() {
         status: uploadResponse.success === true ? "success" : "error",
       });
 
-      // APIでDB操作
+      // ここからAPIでDB操作
       const calenderDate = formData.get("calenderDate");
       const isDone = formData.get("isDone");
       const title = formData.get("title");
@@ -94,7 +136,7 @@ export default function MaintenanceRecordsCreateForm() {
       const memo = formData.get("memo");
       const mileage = formData.get("mileage");
 
-      const baseData = {
+      const data = {
         calenderDate: new Date(calenderDate as string),
         isDone: isDone ? true : false,
         title: title as string,
@@ -106,12 +148,14 @@ export default function MaintenanceRecordsCreateForm() {
         memo: memo ? (memo as string) : null,
         mileage: mileage ? Number(mileage) : null,
       };
-      const imageData = uploadResponse.imageUrls;
 
-      const maintenanceRecordResponse = await createMaintenanceRecord(
-        baseData,
-        imageData,
-      );
+      if (uploadResponse && uploadResponse.success === true) {
+        Object.assign(data, {
+          maintenanceRecordImages: uploadResponse.imageUrls,
+        });
+      }
+
+      const maintenanceRecordResponse = await createMaintenanceRecord(data);
       setIsSubmitting(false);
       setSubmitResponse({
         message: maintenanceRecordResponse.message,
@@ -173,17 +217,17 @@ export default function MaintenanceRecordsCreateForm() {
             disabled={isSubmitting || isSubmitSuccessful}
           />
 
-          {bikesLoading ? (
+          {isLoadingGetBikes ? (
             <div className="flex w-full justify-center py-2">
               <Loading size="36px" />
             </div>
-          ) : bikes && bikes.length > 0 ? (
+          ) : getBikesResponse.result && getBikesResponse.result.length > 0 ? (
             <SelectBox
               name="bikeId"
               label="所有バイク"
               itemList={[
                 { value: "", text: "未選択" },
-                ...bikes?.map((bike) => {
+                ...getBikesResponse.result.map((bike) => {
                   return {
                     value: bike.id,
                     text: bike.name,
@@ -192,35 +236,42 @@ export default function MaintenanceRecordsCreateForm() {
               ]}
               disabled={isSubmitting || isSubmitSuccessful}
             />
-          ) : (
+          ) : getBikesResponse.status === "success" ? (
             <SelectBox name="bikeId" label="所有バイク未登録" disabled={true} />
+          ) : (
+            <p className="py-4 text-center">{getBikesResponse.message}</p>
           )}
 
-          {maintenanceCategoriesLoading ? (
+          {isLoadingGetMaintenanceCategoriesResponse ? (
             <div className="flex w-full justify-center py-2">
               <Loading size="36px" />
             </div>
-          ) : maintenanceCategories && maintenanceCategories.length > 0 ? (
+          ) : getMaintenanceCategoriesResponse.result &&
+            getMaintenanceCategoriesResponse.result.length > 0 ? (
             <SelectBox
               name="maintenanceCategoryId"
               label="カテゴリー"
               itemList={[
                 { value: "", text: "未選択" },
-                ...maintenanceCategories?.map((maintenanceCategory) => {
-                  return {
-                    value: maintenanceCategory.id,
-                    text: maintenanceCategory.name,
-                  };
-                }),
+                ...getMaintenanceCategoriesResponse.result.map(
+                  (maintenanceCategory) => {
+                    return {
+                      value: maintenanceCategory.id,
+                      text: maintenanceCategory.name,
+                    };
+                  },
+                ),
               ]}
               disabled={isSubmitting || isSubmitSuccessful}
             />
-          ) : (
+          ) : getMaintenanceCategoriesResponse.status === "success" ? (
             <SelectBox
               name="maintenanceCategoryId"
               label="カテゴリー未登録"
               disabled={true}
             />
+          ) : (
+            <p className="py-4 text-center">{getBikesResponse.message}</p>
           )}
 
           <TextField
