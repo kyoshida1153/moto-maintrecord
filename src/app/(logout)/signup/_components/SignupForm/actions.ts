@@ -19,7 +19,7 @@ export async function createUser(data: {
     },
   );
 
-  if (signupResponse.status === 200) {
+  if (signupResponse.ok) {
     return {
       success: true,
       message: "アカウントの作成に成功しました。",

@@ -44,6 +44,7 @@ export async function GET(
           gte: startDate,
           lt: endDate,
         },
+        deletedAt: null,
       },
     });
 

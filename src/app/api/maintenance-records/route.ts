@@ -15,7 +15,7 @@ import isDateYyyy from "@/utils/isDateYyyy";
 
 /* ###################################################################### */
 
-// 取得
+// 一覧取得
 
 const maintenanceRecordSelect =
   Prisma.validator<Prisma.MaintenanceRecordSelect>()({
@@ -51,7 +51,7 @@ export async function GET(
   try {
     const params = request.nextUrl.searchParams;
 
-    const where = {};
+    const where = { deletedAt: null };
     Object.assign(where, { userId: userId });
     // 年、月での取得範囲
     const dateString = params.get("date") || "";
@@ -116,6 +116,8 @@ export async function GET(
 
 // 登録
 
+export type MaintenanceRecordCreateInput = Prisma.MaintenanceRecordCreateInput;
+
 export async function POST(
   request: Request,
 ): Promise<NextResponse<{ message: string }>> {
@@ -145,16 +147,28 @@ export async function POST(
       return NextResponse.json({ message: "Bad Request" }, { status: 400 });
     }
 
-    const data = {
-      userId,
+    const data: MaintenanceRecordCreateInput = {
       calenderDate,
       isDone,
       title,
       cost,
-      bikeId,
-      maintenanceCategoryId,
       memo,
       mileage,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+      bike: {
+        connect: {
+          id: bikeId,
+        },
+      },
+      maintenanceCategory: {
+        connect: {
+          id: maintenanceCategoryId,
+        },
+      },
     };
 
     let result = null;
