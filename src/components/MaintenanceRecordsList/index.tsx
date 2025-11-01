@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { ja } from "date-fns/locale";
+
 import Loading from "@/components/Loading";
 import MaintenanceRecordsListCard from "./MaintenanceRecordsListCard";
 import MaintenanceRecordsListPagination from "./MaintenanceRecordsListPagination";
@@ -22,9 +25,8 @@ export default function MaintenanceRecordsList({ pagination = true }: Props) {
       setMaintenanceRecordGroups({});
       return;
     }
-    const resultGroup = Object.groupBy(
-      maintenanceRecords,
-      (x) => String(x.calenderDate).split("T")[0],
+    const resultGroup = Object.groupBy(maintenanceRecords, (x) =>
+      format(x.calenderDate, "yyyy年M月d日", { locale: ja }),
     );
     if (resultGroup) setMaintenanceRecordGroups(resultGroup);
   }, [maintenanceRecords]);
@@ -41,14 +43,7 @@ export default function MaintenanceRecordsList({ pagination = true }: Props) {
             {Object.entries(maintenanceRecordGroups).map(([date, records]) => (
               <section key={date}>
                 <div className="my-1 flex justify-between md:my-2">
-                  <h3 className="text-lg font-[500] md:text-xl">
-                    {date.replace(
-                      /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/g,
-                      (match, p1, p2, p3) => {
-                        return `${Number(p1)}年${Number(p2)}月${Number(p3)}日`;
-                      },
-                    )}
-                  </h3>
+                  <h3 className="text-lg font-[500] md:text-xl">{date}</h3>
                   <p className="_font-[500] mr-[3.9em] md:mr-[4.6em]">
                     <span className="text-sm md:text-base">合計: </span>
                     <span className="font-alphanumeric text-lg md:text-xl">

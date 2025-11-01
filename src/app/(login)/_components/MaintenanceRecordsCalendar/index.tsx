@@ -8,7 +8,8 @@ import "./index.css";
 import Loading from "@/components/Loading";
 import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
 import { useEffect, useState } from "react";
-import { format, add, sub } from "date-fns";
+import { format, add, sub, parseISO } from "date-fns";
+import { ja } from "date-fns/locale";
 
 import { useSearchParams } from "next/navigation";
 import isDateYyyyMm from "@/utils/isDateYyyyMm";
@@ -42,8 +43,8 @@ export default function MaintenanceRecordsCalendar() {
     if (isDateYyyyMm(paramDate)) setInitialDate(paramDate);
 
     // 前の月，今月、次の月リンク
-    const targetDay = paramDate ? new Date(paramDate) : new Date();
-    const todayMonth = format(new Date(), "yyyy-MM");
+    const targetDay = paramDate ? parseISO(paramDate) : new Date();
+    const todayMonth = format(new Date(), "yyyy-MM", { locale: ja });
     setTodayMonthUrlParam(todayMonth);
     const nextMonth = format(add(targetDay, { months: 1 }), "yyyy-MM");
     setNextMonthUrlParam(nextMonth);
@@ -51,9 +52,8 @@ export default function MaintenanceRecordsCalendar() {
     setPrevMonthUrlParam(prevMonth);
 
     // 日付セルに出費金額を表示
-    const resultGroup = Object.groupBy(
-      maintenanceRecords,
-      (x) => String(x.calenderDate).split("T")[0],
+    const resultGroup = Object.groupBy(maintenanceRecords, (x) =>
+      format(x.calenderDate, "yyyy-MM-dd", { locale: ja }),
     );
     const newEvents = Object.entries(resultGroup).map(([date, records]) => {
       const sumCost = (records as MaintenanceRecordSelect[]).reduce(
@@ -114,7 +114,6 @@ export default function MaintenanceRecordsCalendar() {
               height="auto"
               dayCellContent={(e) => e.date.getDate()}
               headerToolbar={{
-                // start: "",
                 center: "",
                 end: "",
               }}

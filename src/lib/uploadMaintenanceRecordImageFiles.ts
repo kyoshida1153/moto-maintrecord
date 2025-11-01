@@ -5,6 +5,7 @@ import crypto from "node:crypto";
 import getCurrentUser from "@/actions/getCurrentUser";
 import { supabase } from "@/lib/supabaseClient";
 import { format } from "date-fns";
+import { ja } from "date-fns/locale";
 
 export async function uploadMaintenanceRecordImageFiles(
   imageFiles: File[],
@@ -50,7 +51,7 @@ export async function uploadMaintenanceRecordImageFiles(
     .filter((file, i) => i < maxFileCount)
     .map(async (file): Promise<{ imageUrl: string }> => {
       // アップロード用ファイルパスを作成
-      const yearMonth = format(new Date(), "yyyy/MM");
+      const yearMonth = format(new Date(), "yyyy/MM", { locale: ja });
       const fileName = crypto.randomUUID();
       const fileExtName = path.extname(file.name).toLowerCase();
       const filePath = `${userId}/maintenance-records/${yearMonth}/${fileName}${fileExtName}`;

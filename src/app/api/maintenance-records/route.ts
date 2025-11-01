@@ -3,9 +3,19 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import getCurrentUser from "@/actions/getCurrentUser";
 import isNumber from "@/utils/isNumber";
-import { startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns";
+import {
+  startOfMonth,
+  endOfMonth,
+  startOfYear,
+  endOfYear,
+  parseISO,
+} from "date-fns";
 import isDateYyyyMm from "@/utils/isDateYyyyMm";
 import isDateYyyy from "@/utils/isDateYyyy";
+
+/* ###################################################################### */
+
+// 取得
 
 const maintenanceRecordSelect =
   Prisma.validator<Prisma.MaintenanceRecordSelect>()({
@@ -25,9 +35,6 @@ export type MaintenanceRecordSelect = Prisma.MaintenanceRecordGetPayload<{
   select: typeof maintenanceRecordSelect;
 }>;
 
-/**
- * 一覧取得
- */
 export async function GET(
   request: NextRequest,
 ): Promise<
@@ -51,15 +58,15 @@ export async function GET(
     if (isDateYyyyMm(dateString)) {
       Object.assign(where, {
         calenderDate: {
-          gte: startOfMonth(new Date(dateString)),
-          lt: endOfMonth(new Date(dateString)),
+          gte: startOfMonth(parseISO(dateString)),
+          lt: endOfMonth(parseISO(dateString)),
         },
       });
     } else if (isDateYyyy(dateString)) {
       Object.assign(where, {
         calenderDate: {
-          gte: startOfYear(new Date(dateString)),
-          lt: endOfYear(new Date(dateString)),
+          gte: startOfYear(parseISO(dateString)),
+          lt: endOfYear(parseISO(dateString)),
         },
       });
     }
@@ -105,9 +112,10 @@ export async function GET(
   }
 }
 
-/**
- * 登録
- */
+/* ###################################################################### */
+
+// 登録
+
 export async function POST(
   request: Request,
 ): Promise<NextResponse<{ message: string }>> {
@@ -139,7 +147,7 @@ export async function POST(
 
     const data = {
       userId,
-      calenderDate: new Date(calenderDate),
+      calenderDate,
       isDone,
       title,
       cost,

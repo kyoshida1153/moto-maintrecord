@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import getCurrentUser from "@/actions/getCurrentUser";
-import { endOfMonth, startOfMonth } from "date-fns";
+import { endOfMonth, startOfMonth, parseISO } from "date-fns";
 import isDateYyyyMm from "@/utils/isDateYyyyMm";
 import isDateYyyy from "@/utils/isDateYyyy";
 
-/**
- * costの合計を取得
- */
+/* ###################################################################### */
+
+// costの合計を取得
+
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<{ message: string; result?: number }>> {
@@ -25,10 +26,11 @@ export async function GET(
     // 年、月での取得範囲
     const dateString = params.get("date") || "";
     const targetDate = isDateYyyyMm(dateString)
-      ? new Date(dateString)
+      ? parseISO(dateString)
       : isDateYyyy(dateString)
-        ? new Date(dateString)
+        ? parseISO(dateString)
         : null;
+
     const startDate = targetDate ? startOfMonth(targetDate) : undefined;
     const endDate = targetDate ? endOfMonth(targetDate) : undefined;
 
@@ -44,8 +46,6 @@ export async function GET(
         },
       },
     });
-
-    console.log(result._sum.cost);
 
     if (result._sum.cost !== null && result._sum.cost >= 0) {
       return NextResponse.json(
