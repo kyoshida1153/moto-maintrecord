@@ -30,20 +30,20 @@ export default function MaintenanceCategoryCardList() {
   const [maintenanceCategories, setMaintenanceCategories] = useState<
     MaintenanceCategorySelect[]
   >([]);
-  const [maintenanceCategoriesLoading, setMaintenanceCategoriesLoading] =
+  const [isLoadingMaintenanceCategories, setIsLoadingMaintenanceCategories] =
     useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
       const result = await findMaintenanceCategories();
-      setMaintenanceCategoriesLoading(false);
+      setIsLoadingMaintenanceCategories(false);
       if (result) setMaintenanceCategories(result);
     })();
   }, []);
 
   return (
     <div className="my-4 flex flex-col gap-4 md:my-6">
-      {maintenanceCategoriesLoading ? (
+      {isLoadingMaintenanceCategories ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>

@@ -61,15 +61,14 @@ export default function MaintenanceRecordDeleteForm({
   const onSubmit = async () => {
     setIsSubmitting(true);
 
-    const maintenanceRecordResponse =
-      await deleteMaintenanceRecord(maintenanceRecordId);
+    const response = await deleteMaintenanceRecord(maintenanceRecordId);
     setIsSubmitting(false);
     setSubmitResponse({
-      message: maintenanceRecordResponse.message,
-      status: maintenanceRecordResponse.success === true ? "success" : "error",
+      message: response.message,
+      status: response.success === true ? "success" : "error",
     });
 
-    if (maintenanceRecordResponse.success === true) {
+    if (response.success === true) {
       setIsSubmitSuccessful(true);
       setTimeout(() => {
         router.push("/record");

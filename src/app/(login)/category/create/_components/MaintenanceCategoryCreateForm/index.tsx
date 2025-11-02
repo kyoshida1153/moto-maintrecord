@@ -41,14 +41,14 @@ export default function MaintenanceCategoryCreateForm() {
       name: name as string,
     };
 
-    const bikeResponse = await createMaintenanceCategory(data);
+    const response = await createMaintenanceCategory(data);
     setIsSubmitting(false);
     setSubmitResponse({
-      message: bikeResponse.message,
-      status: bikeResponse.success === true ? "success" : "error",
+      message: response.message,
+      status: response.success === true ? "success" : "error",
     });
 
-    if (bikeResponse.success === true) {
+    if (response.success === true) {
       setIsSubmitSuccessful(true);
       setTimeout(() => {
         router.push("/category");
@@ -70,21 +70,22 @@ export default function MaintenanceCategoryCreateForm() {
             disabled={isSubmitting || isSubmitSuccessful}
           />
           <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:justify-end">
-            {submitResponse.status === "success" && (
+            {submitResponse.status === "success" ? (
               <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
                 <CheckCircleIcon />
                 <span className="whitespace-pre-wrap">
                   {submitResponse.message}
                 </span>
               </p>
-            )}
-            {submitResponse.status === "error" && (
+            ) : submitResponse.status === "error" ? (
               <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
                 <ErrorIcon />
                 <span className="whitespace-pre-wrap">
                   {submitResponse.message}
                 </span>
               </p>
+            ) : (
+              ""
             )}
             <Button
               variant="contained"

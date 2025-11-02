@@ -55,12 +55,12 @@ export default function SignupForm() {
       password: formData.get("password") as string,
     };
 
-    const signinResponse = await signIn("credentials", {
+    const loginResponse = await signIn("credentials", {
       ...data,
       redirect: false,
     });
 
-    if (signinResponse?.ok) {
+    if (loginResponse?.ok) {
       return {
         status: "success",
         message: "ログインに成功しました。",
@@ -149,21 +149,22 @@ export default function SignupForm() {
               disabled={isSubmitting || isSubmitSuccessful}
             />
             <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
-              {submitResponse.status === "success" && (
+              {submitResponse.status === "success" ? (
                 <p className="flex items-center gap-1 text-[var(--icon-color-success)] md:mr-[1em]">
                   <CheckCircleIcon />
                   <span className="whitespace-pre-wrap">
                     {submitResponse.message}
                   </span>
                 </p>
-              )}
-              {submitResponse.status === "error" && (
+              ) : submitResponse.status === "error" ? (
                 <p className="flex items-center gap-1 text-[var(--icon-color-error)] md:mr-[1em]">
                   <ErrorIcon />
                   <span className="whitespace-pre-wrap">
                     {submitResponse.message}
                   </span>
                 </p>
+              ) : (
+                ""
               )}
               <Button
                 variant="contained"
