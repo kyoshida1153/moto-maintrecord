@@ -2,7 +2,8 @@
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+import interactionPlugin from "@fullcalendar/interaction";
+// import  { DateClickArg } from "@fullcalendar/interaction";
 import "./index.css";
 
 import Loading from "@/components/Loading";

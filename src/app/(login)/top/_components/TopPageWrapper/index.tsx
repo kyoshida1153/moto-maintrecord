@@ -98,8 +98,11 @@ export default function TopPageWrapper({
     page,
     date,
     setGetMaintenanceRecordsResponse,
+    setIsLoadingGetMaintenanceRecords,
     setGetMaintenanceRecordsCountResponse,
+    setIsLoadingGetMaintenanceRecordsCount,
     setGetMaintenanceRecordsTotalCostResponse,
+    setIsLoadingGetMaintenanceRecordsTotalCost,
   ]);
 
   return <>{children}</>;

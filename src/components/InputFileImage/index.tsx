@@ -67,7 +67,7 @@ export default function InputFileImage({
 
   useEffect(() => {
     if (defaultValue.length > 0) setPreviewImageUrls(defaultValue);
-  }, []);
+  }, [defaultValue]);
 
   return (
     <div className="flex flex-col gap-2">

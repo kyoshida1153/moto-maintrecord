@@ -47,7 +47,7 @@ export default function MaintenanceRecordDeleteForm({
         result: response.result,
       });
     })();
-  }, []);
+  }, [maintenanceRecordId]);
 
   // フォームの送信開始～終了で使うもの
   const [isSubmitting, setIsSubmitting] = useState(false);

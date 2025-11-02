@@ -66,7 +66,9 @@ export default function MaintenanceRecordsPageWrapper({
     page,
     date,
     setGetMaintenanceRecordsResponse,
+    setIsLoadingGetMaintenanceRecords,
     setGetMaintenanceRecordsCountResponse,
+    setIsLoadingGetMaintenanceRecordsCount,
   ]);
 
   return <>{children}</>;
