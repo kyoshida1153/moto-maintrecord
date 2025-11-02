@@ -8,6 +8,7 @@ import getMaintenanceRecordsCount from "@/lib/getMaintenanceRecordsCount";
 import getMaintenanceRecordsTotalCost from "@/lib/getMaintenanceRecordsTotalCost";
 import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
 import useMaintenanceRecordsTotalCostStore from "@/stores/useMaintenanceRecordsTotalCostStore";
+import isDateYyyyMm from "@/utils/isDateYyyyMm";
 
 export default function TopPageWrapper({
   children,
@@ -26,11 +27,14 @@ export default function TopPageWrapper({
   } = useMaintenanceRecordsTotalCostStore();
 
   const searchParams = useSearchParams();
-  // const page = searchParams.get("page") || "";
+
   const page = "all";
-  const date =
-    searchParams.get("date") ||
-    `${format(new Date(), "yyyy")}-${format(new Date(), "MM")}`;
+
+  const searchParamDate = searchParams.get("date") || "";
+  const date = isDateYyyyMm(searchParamDate)
+    ? searchParamDate
+    : `${format(new Date(), "yyyy")}-${format(new Date(), "MM")}`;
+
   const order = "calender_date_desc";
 
   useEffect(() => {

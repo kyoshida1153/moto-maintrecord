@@ -48,7 +48,9 @@ export default function MaintenanceRecordsCalendar() {
     if (isDateYyyyMm(paramDate)) setInitialDate(paramDate);
 
     // 前の月，今月、次の月リンク
-    const targetDay = paramDate ? parseISO(paramDate) : new Date();
+    const targetDay = isDateYyyyMm(paramDate)
+      ? parseISO(paramDate)
+      : new Date();
     const todayMonth = format(new Date(), "yyyy-MM", { locale: ja });
     setTodayMonthUrlParam(todayMonth);
     const nextMonth = format(add(targetDay, { months: 1 }), "yyyy-MM");
