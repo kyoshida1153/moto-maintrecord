@@ -38,10 +38,10 @@ export async function GET(
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
-  const userId: string = currentUser?.id ?? "";
-  if (!currentUser && !userId) {
+  if (!currentUser) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
+  const userId = currentUser.id;
 
   // ここからDB操作
   try {
@@ -80,10 +80,10 @@ export async function PUT(
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
-  const userId: string = currentUser?.id ?? "";
-  if (!currentUser && !userId) {
+  if (!currentUser) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
+  const userId = currentUser.id;
 
   // ここからDB操作
   try {
@@ -175,10 +175,10 @@ export async function DELETE(
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
-  const userId: string = currentUser?.id ?? "";
-  if (!currentUser && !userId) {
+  if (!currentUser) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
+  const userId = currentUser.id;
 
   // ここからDB操作
   try {

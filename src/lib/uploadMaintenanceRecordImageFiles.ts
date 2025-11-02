@@ -16,13 +16,13 @@ export async function uploadMaintenanceRecordImageFiles(
 }> {
   // 認証チェック
   const currentUser = await getCurrentUser();
-  const userId: string = currentUser?.id ?? "";
-  if (!currentUser && !userId) {
+  if (!currentUser) {
     return {
       success: false,
       message: "画像のアップロードに失敗しました。",
     };
   }
+  const userId = currentUser.id;
 
   // File型チェック
   const imageFilesErrorDetection = imageFiles.filter(

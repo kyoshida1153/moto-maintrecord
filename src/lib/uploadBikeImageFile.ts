@@ -10,13 +10,13 @@ export default async function uploadBikeImageFile(
 ): Promise<{ success: boolean; message: string; imageUrl?: string }> {
   // 認証チェック
   const currentUser = await getCurrentUser();
-  const userId: string = currentUser?.id ?? "";
-  if (!currentUser && !userId) {
+  if (!currentUser) {
     return {
       success: false,
       message: "画像のアップロードに失敗しました。",
     };
   }
+  const userId = currentUser.id;
 
   // 画像が未選択の場合
   if (imageFile.size === 0) {
