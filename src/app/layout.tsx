@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
-import getCurrentUser from "@/actions/getCurrentUser";
-import CommonLayout from "@/components/CommonLayout";
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
@@ -24,20 +22,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentUser = await getCurrentUser();
-  const sessionExist: boolean = currentUser ? true : false;
-  const userName: string = currentUser?.name as string;
-
   return (
     <html lang="ja">
       <body
         className={`${notoSansJp.variable} relative bg-[#f0f2f5] antialiased`}
       >
-        <SessionProviderWrapper>
-          <CommonLayout sessionExist={sessionExist} userName={userName}>
-            {children}
-          </CommonLayout>
-        </SessionProviderWrapper>
+        <SessionProviderWrapper>{children}</SessionProviderWrapper>
       </body>
     </html>
   );

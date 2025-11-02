@@ -14,7 +14,7 @@ export default function HeaderSpDrawerMainMenu({
     {
       id: 1,
       text: "カレンダー",
-      href: "/",
+      href: "/top",
       iconName: "CalendarMonthIcon",
     },
     {

@@ -10,7 +10,7 @@ export default function SidebarMainMenu() {
     {
       id: 1,
       text: "カレンダー",
-      href: "/",
+      href: "/top",
       iconName: "CalendarMonthIcon",
     },
     {

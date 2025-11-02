@@ -68,7 +68,7 @@ export default function LoginForm() {
     } else {
       setIsSubmitSuccessful(true);
       setTimeout(() => {
-        router.push("/refresh");
+        router.push("/top");
       }, 1500);
     }
   };

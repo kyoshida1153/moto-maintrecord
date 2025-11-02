@@ -103,7 +103,7 @@ export default function SignupForm() {
       return false;
     } else {
       setTimeout(() => {
-        router.push("/refresh");
+        router.push("/top");
       }, 1500);
       return true;
     }
