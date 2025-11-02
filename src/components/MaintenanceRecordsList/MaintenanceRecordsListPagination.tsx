@@ -10,8 +10,10 @@ import Loading from "../Loading";
 import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
 
 export default function MaintenanceRecordsListPagination() {
-  const { maintenanceRecordsCount, maintenanceRecordsCountLoading } =
-    useMaintenanceRecordsStore();
+  const {
+    getMaintenanceRecordsCountResponse,
+    isLoadingGetMaintenanceRecordsCount,
+  } = useMaintenanceRecordsStore();
   const [pageCount, setPageCount] = useState<number | undefined>(undefined);
 
   const searchParams = useSearchParams();
@@ -19,18 +21,18 @@ export default function MaintenanceRecordsListPagination() {
   const page = isNumber(pageString) ? Number(pageString) : 1;
 
   useEffect(() => {
-    if (maintenanceRecordsCount === undefined) {
+    if (getMaintenanceRecordsCountResponse.result === undefined) {
       setPageCount(0);
       return;
     }
     const limit = Number(process.env.NEXT_PUBLIC_MAINTENANCE_RECORD_LIST_LIMIT);
-    const count = Math.ceil(maintenanceRecordsCount / limit);
+    const count = Math.ceil(getMaintenanceRecordsCountResponse.result / limit);
     setPageCount(count);
-  }, [maintenanceRecordsCount]);
+  }, [getMaintenanceRecordsCountResponse]);
 
   return (
     <div className="flex w-full justify-center">
-      {maintenanceRecordsCountLoading ? (
+      {isLoadingGetMaintenanceRecordsCount ? (
         <div className="flex w-full justify-center py-1">
           <Loading size="24px" />
         </div>
