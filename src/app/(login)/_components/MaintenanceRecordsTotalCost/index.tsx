@@ -8,8 +8,10 @@ import isDateYyyyMm from "@/utils/isDateYyyyMm";
 import Loading from "@/components/Loading";
 
 export default function MaintenanceRecordsTotalCost() {
-  const { maintenanceRecordsTotalCost, maintenanceRecordsTotalCostLoading } =
-    useMaintenanceRecordsTotalCostStore();
+  const {
+    getMaintenanceRecordsTotalCostResponse,
+    isLoadingGetMaintenanceRecordsTotalCost,
+  } = useMaintenanceRecordsTotalCostStore();
   const [year, setYear] = useState<number>(getYear(new Date()));
   const [month, setMonth] = useState<number>(getMonth(new Date()) + 1);
 
@@ -22,11 +24,11 @@ export default function MaintenanceRecordsTotalCost() {
       setYear(Number(yearString));
       setMonth(Number(monthString));
     }
-  }, [date, maintenanceRecordsTotalCost]);
+  }, [date, getMaintenanceRecordsTotalCostResponse]);
 
   return (
     <>
-      {maintenanceRecordsTotalCostLoading ? (
+      {isLoadingGetMaintenanceRecordsTotalCost ? (
         <div className="flex w-full justify-center py-2">
           <Loading size="24px" />
         </div>
@@ -35,8 +37,8 @@ export default function MaintenanceRecordsTotalCost() {
           {year}年{month}月の合計：{" "}
           <>
             <span className="font-alphanumeric mr-0.5 text-3xl md:text-4xl">
-              {maintenanceRecordsTotalCost !== undefined ? (
-                maintenanceRecordsTotalCost.toLocaleString()
+              {getMaintenanceRecordsTotalCostResponse.result !== undefined ? (
+                getMaintenanceRecordsTotalCostResponse.result.toLocaleString()
               ) : (
                 <> - </>
               )}

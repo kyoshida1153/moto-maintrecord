@@ -1,45 +1,70 @@
 import { create } from "zustand";
 import type { MaintenanceRecordSelect } from "@/app/api/maintenance-records/route";
 
+type GetMaintenanceRecordsResponse = {
+  status: "success" | "error" | undefined;
+  message: string;
+  result?: MaintenanceRecordSelect[];
+};
+
+type GetMaintenanceRecordsCountResponse = {
+  status: "success" | "error" | undefined;
+  message: string;
+  result?: number;
+};
+
 type MaintenanceRecordsState = {
-  maintenanceRecords: MaintenanceRecordSelect[];
-  setMaintenanceRecords: (
-    maintenanceRecords: MaintenanceRecordSelect[],
+  getMaintenanceRecordsResponse: GetMaintenanceRecordsResponse;
+  setGetMaintenanceRecordsResponse: (
+    getMaintenanceRecordsResponse: GetMaintenanceRecordsResponse,
   ) => void;
 
-  maintenanceRecordsLoading: boolean;
-  setMaintenanceRecordsLoading: (maintenanceRecordsLoading: boolean) => void;
-
-  maintenanceRecordsCount: number | undefined;
-  setMaintenanceRecordsCount: (
-    maintenanceRecordsCount: number | undefined,
+  isLoadingGetMaintenanceRecords: boolean;
+  setIsLoadingGetMaintenanceRecords: (
+    isLoadingGetMaintenanceRecords: boolean,
   ) => void;
 
-  maintenanceRecordsCountLoading: boolean;
-  setMaintenanceRecordsCountLoading: (
-    maintenanceRecordsCountLoading: boolean,
+  getMaintenanceRecordsCountResponse: GetMaintenanceRecordsCountResponse;
+  setGetMaintenanceRecordsCountResponse: (
+    getMaintenanceRecordsCountResponse: GetMaintenanceRecordsCountResponse,
+  ) => void;
+
+  isLoadingGetMaintenanceRecordsCount: boolean;
+  setIsLoadingGetMaintenanceRecordsCount: (
+    isLoadingGetMaintenanceRecordsCount: boolean,
   ) => void;
 };
 
 const useMaintenanceRecordsStore = create<MaintenanceRecordsState>((set) => ({
-  maintenanceRecords: [],
-  setMaintenanceRecords: (nextMaintenanceRecords) =>
-    set(() => ({ maintenanceRecords: nextMaintenanceRecords })),
-
-  maintenanceRecordsLoading: true,
-  setMaintenanceRecordsLoading: (nextMaintenanceRecordsLoading) =>
+  getMaintenanceRecordsResponse: { status: undefined, message: "" },
+  setGetMaintenanceRecordsResponse: (nextGetMaintenanceRecordsResponse) =>
     set(() => ({
-      maintenanceRecordsLoading: nextMaintenanceRecordsLoading,
+      getMaintenanceRecordsResponse: nextGetMaintenanceRecordsResponse,
     })),
 
-  maintenanceRecordsCount: undefined,
-  setMaintenanceRecordsCount: (nextMaintenanceRecordsCount) =>
-    set(() => ({ maintenanceRecordsCount: nextMaintenanceRecordsCount })),
-
-  maintenanceRecordsCountLoading: true,
-  setMaintenanceRecordsCountLoading: (nextMaintenanceRecordsCountLoading) =>
+  isLoadingGetMaintenanceRecords: true,
+  setIsLoadingGetMaintenanceRecords: (nextIsLoadingGetMaintenanceRecords) =>
     set(() => ({
-      maintenanceRecordsCountLoading: nextMaintenanceRecordsCountLoading,
+      isLoadingGetMaintenanceRecords: nextIsLoadingGetMaintenanceRecords,
+    })),
+
+  getMaintenanceRecordsCountResponse: { status: undefined, message: "" },
+  setGetMaintenanceRecordsCountResponse: (
+    nextGetMaintenanceRecordsCountResponse,
+  ) =>
+    set(() => ({
+      getMaintenanceRecordsCountResponse:
+        nextGetMaintenanceRecordsCountResponse,
+    })),
+
+  isLoadingGetMaintenanceRecordsCount: true,
+  setIsLoadingGetMaintenanceRecordsCount: (
+    nextIsLoadingGetMaintenanceRecordsCount,
+  ) =>
+    set(() => ({
+      isLoadingGetMaintenanceRecordsCount:
+        nextIsLoadingGetMaintenanceRecordsCount,
     })),
 }));
+
 export default useMaintenanceRecordsStore;

@@ -8,9 +8,11 @@ type Params = {
   order?: string;
 };
 
-export default async function getMaintenanceRecords(
-  params: Params,
-): Promise<MaintenanceRecordSelect[] | false> {
+export default async function getMaintenanceRecords(params: Params): Promise<{
+  success: boolean;
+  message: string;
+  result?: MaintenanceRecordSelect[];
+}> {
   const queryString = new URLSearchParams(params).toString();
 
   const response = await fetch(
@@ -24,9 +26,16 @@ export default async function getMaintenanceRecords(
   );
 
   if (response.ok) {
-    const { result: data } = await response.json();
-    return data;
+    const { result } = await response.json();
+    return {
+      success: true,
+      message: "読み込みに成功しました。",
+      result,
+    };
   } else {
-    return false;
+    return {
+      success: false,
+      message: "読み込みに失敗しました。",
+    };
   }
 }

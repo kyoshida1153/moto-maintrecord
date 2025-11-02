@@ -15,14 +15,14 @@ export default function TopPageWrapper({
   children: React.ReactNode;
 }) {
   const {
-    setMaintenanceRecords,
-    setMaintenanceRecordsLoading,
-    setMaintenanceRecordsCount,
-    setMaintenanceRecordsCountLoading,
+    setGetMaintenanceRecordsResponse,
+    setIsLoadingGetMaintenanceRecords,
+    setGetMaintenanceRecordsCountResponse,
+    setIsLoadingGetMaintenanceRecordsCount,
   } = useMaintenanceRecordsStore();
   const {
-    setMaintenanceRecordsTotalCost,
-    setMaintenanceRecordsTotalCostLoading,
+    setGetMaintenanceRecordsTotalCostResponse,
+    setIsLoadingGetMaintenanceRecordsTotalCost,
   } = useMaintenanceRecordsTotalCostStore();
 
   const searchParams = useSearchParams();
@@ -36,44 +36,66 @@ export default function TopPageWrapper({
   useEffect(() => {
     Promise.all([
       (async () => {
-        setMaintenanceRecordsLoading(true);
-        const result = await getMaintenanceRecords({ page, date, order });
-        if (!result) {
-          setMaintenanceRecords([]);
-          setMaintenanceRecordsLoading(false);
+        setIsLoadingGetMaintenanceRecords(true);
+        const response = await getMaintenanceRecords({ page, date, order });
+        if (response.success === false) {
+          setGetMaintenanceRecordsResponse({
+            status: "error",
+            message: response.message,
+          });
+          setIsLoadingGetMaintenanceRecords(false);
           return;
         }
-        setMaintenanceRecords(result);
-        setMaintenanceRecordsLoading(false);
+        setGetMaintenanceRecordsResponse({
+          status: "success",
+          message: response.message,
+          result: response.result,
+        });
+        setIsLoadingGetMaintenanceRecords(false);
       })(),
       (async () => {
-        setMaintenanceRecordsCountLoading(true);
-        const result = await getMaintenanceRecordsCount({ date });
-        if (result === false) {
-          setMaintenanceRecordsCount(0);
+        setIsLoadingGetMaintenanceRecordsCount(true);
+        const response = await getMaintenanceRecordsCount({ date });
+        if (response.success === false) {
+          setGetMaintenanceRecordsCountResponse({
+            status: "error",
+            message: response.message,
+          });
+          setIsLoadingGetMaintenanceRecordsCount(false);
           return;
         }
-        setMaintenanceRecordsCount(result);
-        setMaintenanceRecordsCountLoading(false);
+        setGetMaintenanceRecordsCountResponse({
+          status: "success",
+          message: response.message,
+          result: response.result,
+        });
+        setIsLoadingGetMaintenanceRecordsCount(false);
       })(),
       (async () => {
-        setMaintenanceRecordsTotalCostLoading(true);
-        const result = await getMaintenanceRecordsTotalCost({ date });
-        if (result === false) {
-          setMaintenanceRecordsTotalCost(undefined);
-          setMaintenanceRecordsTotalCostLoading(false);
+        setIsLoadingGetMaintenanceRecordsTotalCost(true);
+        const response = await getMaintenanceRecordsTotalCost({ date });
+        if (response.success === false) {
+          setGetMaintenanceRecordsTotalCostResponse({
+            status: "error",
+            message: response.message,
+          });
+          setIsLoadingGetMaintenanceRecordsTotalCost(false);
           return;
         }
-        setMaintenanceRecordsTotalCost(result);
-        setMaintenanceRecordsTotalCostLoading(false);
+        setGetMaintenanceRecordsTotalCostResponse({
+          status: "success",
+          message: response.message,
+          result: response.result,
+        });
+        setIsLoadingGetMaintenanceRecordsTotalCost(false);
       })(),
     ]);
   }, [
     page,
     date,
-    setMaintenanceRecords,
-    setMaintenanceRecordsCount,
-    setMaintenanceRecordsTotalCost,
+    setGetMaintenanceRecordsResponse,
+    setGetMaintenanceRecordsCountResponse,
+    setGetMaintenanceRecordsTotalCostResponse,
   ]);
 
   return <>{children}</>;

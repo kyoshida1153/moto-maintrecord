@@ -23,7 +23,7 @@ import type { MaintenanceRecordSelect } from "@/app/api/maintenance-records/rout
 
 export default function MaintenanceRecordsCalendar() {
   const searchParams = useSearchParams();
-  const { maintenanceRecords, maintenanceRecordsLoading } =
+  const { getMaintenanceRecordsResponse, isLoadingGetMaintenanceRecords } =
     useMaintenanceRecordsStore();
   const [initialDate, setInitialDate] = useState<string | undefined>(undefined);
   const [events, setEvents] = useState<object | undefined>(undefined);
@@ -38,6 +38,11 @@ export default function MaintenanceRecordsCalendar() {
   >(undefined);
 
   useEffect(() => {
+    if (!getMaintenanceRecordsResponse.result) {
+      setEvents(undefined);
+      return;
+    }
+
     // カレンダーの月
     const paramDate = searchParams.get("date") || "";
     if (isDateYyyyMm(paramDate)) setInitialDate(paramDate);
@@ -52,8 +57,9 @@ export default function MaintenanceRecordsCalendar() {
     setPrevMonthUrlParam(prevMonth);
 
     // 日付セルに出費金額を表示
-    const resultGroup = Object.groupBy(maintenanceRecords, (x) =>
-      format(x.calenderDate, "yyyy-MM-dd", { locale: ja }),
+    const resultGroup = Object.groupBy(
+      getMaintenanceRecordsResponse.result,
+      (x) => format(x.calenderDate, "yyyy-MM-dd", { locale: ja }),
     );
     const newEvents = Object.entries(resultGroup).map(([date, records]) => {
       const sumCost = (records as MaintenanceRecordSelect[]).reduce(
@@ -65,7 +71,7 @@ export default function MaintenanceRecordsCalendar() {
       return { title, start };
     });
     setEvents(newEvents);
-  }, [maintenanceRecords, searchParams]);
+  }, [getMaintenanceRecordsResponse, searchParams]);
 
   // 日付セルをクリックした時の挙動テスト
   // const handleDateClick = (arg: DateClickArg) => {
@@ -73,7 +79,7 @@ export default function MaintenanceRecordsCalendar() {
   // };
   return (
     <>
-      {maintenanceRecordsLoading ? (
+      {isLoadingGetMaintenanceRecords ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>

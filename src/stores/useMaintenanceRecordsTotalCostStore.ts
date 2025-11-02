@@ -1,32 +1,41 @@
 import { create } from "zustand";
 
+type GetMaintenanceRecordsTotalCostResponse = {
+  status: "success" | "error" | undefined;
+  message: string;
+  result?: number;
+};
+
 type MaintenanceRecordsTotalCostStore = {
-  maintenanceRecordsTotalCost: number | undefined;
-  setMaintenanceRecordsTotalCost: (
-    maintenanceRecordsTotalCost: number | undefined,
+  getMaintenanceRecordsTotalCostResponse: GetMaintenanceRecordsTotalCostResponse;
+  setGetMaintenanceRecordsTotalCostResponse: (
+    getMaintenanceRecordsTotalCostResponse: GetMaintenanceRecordsTotalCostResponse,
   ) => void;
 
-  maintenanceRecordsTotalCostLoading: boolean;
-  setMaintenanceRecordsTotalCostLoading: (
-    maintenanceRecordsTotalCostLoading: boolean,
+  isLoadingGetMaintenanceRecordsTotalCost: boolean;
+  setIsLoadingGetMaintenanceRecordsTotalCost: (
+    isLoadingGetMaintenanceRecordsTotalCost: boolean,
   ) => void;
 };
 
 const useMaintenanceRecordsTotalCostStore =
   create<MaintenanceRecordsTotalCostStore>((set) => ({
-    maintenanceRecordsTotalCost: undefined,
-    setMaintenanceRecordsTotalCost: (nextMaintenanceRecordsTotalCost) =>
-      set(() => ({
-        maintenanceRecordsTotalCost: nextMaintenanceRecordsTotalCost,
-      })),
-
-    maintenanceRecordsTotalCostLoading: true,
-    setMaintenanceRecordsTotalCostLoading: (
-      nextMaintenanceRecordsTotalCostLoading,
+    getMaintenanceRecordsTotalCostResponse: { status: undefined, message: "" },
+    setGetMaintenanceRecordsTotalCostResponse: (
+      nextGetMaintenanceRecordsTotalCostResponse,
     ) =>
       set(() => ({
-        maintenanceRecordsTotalCostLoading:
-          nextMaintenanceRecordsTotalCostLoading,
+        getMaintenanceRecordsTotalCostResponse:
+          nextGetMaintenanceRecordsTotalCostResponse,
+      })),
+
+    isLoadingGetMaintenanceRecordsTotalCost: true,
+    setIsLoadingGetMaintenanceRecordsTotalCost: (
+      nextIsLoadingGetMaintenanceRecordsTotalCost,
+    ) =>
+      set(() => ({
+        isLoadingGetMaintenanceRecordsTotalCost:
+          nextIsLoadingGetMaintenanceRecordsTotalCost,
       })),
   }));
 export default useMaintenanceRecordsTotalCostStore;
