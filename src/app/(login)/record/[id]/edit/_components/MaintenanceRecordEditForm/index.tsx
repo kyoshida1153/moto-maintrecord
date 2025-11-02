@@ -217,7 +217,7 @@ export default function MaintenanceRecordEditForm({
       if (maintenanceRecordResponse.success === true) {
         setIsSubmitSuccessful(true);
         setTimeout(() => {
-          router.push("/record");
+          router.back();
         }, 2000);
       }
     } catch {
@@ -388,21 +388,22 @@ export default function MaintenanceRecordEditForm({
               />
 
               <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
-                {submitResponse.status === "success" && (
+                {submitResponse.status === "success" ? (
                   <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
                     <CheckCircleIcon />
                     <span className="whitespace-pre-wrap">
                       {submitResponse.message}
                     </span>
                   </p>
-                )}
-                {submitResponse.status === "error" && (
+                ) : submitResponse.status === "error" ? (
                   <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
                     <ErrorIcon />
                     <span className="whitespace-pre-wrap">
                       {submitResponse.message}
                     </span>
                   </p>
+                ) : (
+                  ""
                 )}
                 <Button
                   variant="contained"

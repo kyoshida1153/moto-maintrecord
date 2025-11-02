@@ -71,7 +71,7 @@ export default function MaintenanceRecordDeleteForm({
     if (response.success === true) {
       setIsSubmitSuccessful(true);
       setTimeout(() => {
-        router.push("/record");
+        router.back();
       }, 2000);
     }
   };
