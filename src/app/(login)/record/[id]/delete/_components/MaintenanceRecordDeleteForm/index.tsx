@@ -36,7 +36,7 @@ export default function MaintenanceRecordDeleteForm({
   const [isLoadingGetMaintenanceRecord, setIsLoadingGetMaintenanceRecord] =
     useState<boolean>(true);
 
-  // フォームのデータの読み込み
+  // 削除対象の整備・出費記録の読み込み
   useEffect(() => {
     (async () => {
       const response = await getMaintenanceRecord(maintenanceRecordId);
@@ -87,7 +87,7 @@ export default function MaintenanceRecordDeleteForm({
           <div className="flex flex-col gap-4 md:gap-6">
             <p>以下の整備・出費記録を削除しますか？</p>
             <div className="display rounded border border-solid border-[var(--border-color-gray)] bg-white p-6 md:p-8">
-              <div className="flex flex-col gap-4 md:gap-6">
+              <div className="mx-auto flex w-fit flex-col gap-4 md:gap-6">
                 <section className="flex flex-col gap-1 md:gap-2">
                   <p className="text-md md:text-lg">
                     {getMaintenanceRecordResponse.result?.calenderDate &&
@@ -124,7 +124,7 @@ export default function MaintenanceRecordDeleteForm({
                 ) : (
                   <></>
                 )}
-                <div className="flex justify-center gap-3 md:justify-start">
+                <div className="flex justify-center gap-3">
                   <Button
                     variant="outlined"
                     disableElevation

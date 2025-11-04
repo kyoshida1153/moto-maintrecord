@@ -1,13 +1,11 @@
 "use client";
 
-export default async function deleteMaintenanceRecord(
-  maintenanceRecordId: string,
-): Promise<{
+export default async function deleteMaintenanceRecord(id: string): Promise<{
   success: boolean;
   message: string;
 }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/${maintenanceRecordId}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/${id}`,
     {
       method: "DELETE",
     },
