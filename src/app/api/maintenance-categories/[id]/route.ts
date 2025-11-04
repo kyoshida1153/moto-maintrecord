@@ -91,3 +91,44 @@ export async function PUT(
     );
   }
 }
+
+/* ###################################################################### */
+
+// 削除（論理削除）
+
+export async function DELETE(
+  _request: NextRequest,
+  context: RouteContext<"/api/maintenance-categories/[id]">,
+) {
+  // 認証チェック
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+  const userId = currentUser.id;
+
+  // ここからDB操作
+  try {
+    // 型は編集のを使用
+    const data: MaintenanceCategoryUpdateInput = {
+      deletedAt: new Date(),
+    };
+
+    const { id } = await context.params;
+    const result = await prisma.maintenanceCategory.update({
+      data,
+      where: { id, userId },
+    });
+
+    if (result) {
+      return NextResponse.json({ message: "Success", result }, { status: 201 });
+    } else {
+      return NextResponse.json({ message: "Not Found" }, { status: 404 });
+    }
+  } catch {
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}
