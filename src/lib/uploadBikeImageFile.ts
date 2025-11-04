@@ -18,6 +18,14 @@ export default async function uploadBikeImageFile(
   }
   const userId = currentUser.id;
 
+  // File型チェック
+  if (imageFile instanceof File === false) {
+    return {
+      success: false,
+      message: "画像のアップロードに失敗しました。",
+    };
+  }
+
   // 画像が未選択の場合
   if (imageFile.size === 0) {
     return {

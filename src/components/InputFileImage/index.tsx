@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
@@ -39,9 +39,8 @@ export default function InputFileImage({
   disabled?: boolean;
   defaultValue?: PreviewImageUrl[];
 }) {
-  const [previewImageUrls, setPreviewImageUrls] = useState<PreviewImageUrl[]>(
-    [],
-  );
+  const [previewImageUrls, setPreviewImageUrls] =
+    useState<PreviewImageUrl[]>(defaultValue);
   const [isChangedInputFileImage, setIsChangedInputFileImage] =
     useState<boolean>(false);
 
@@ -64,10 +63,6 @@ export default function InputFileImage({
 
     setPreviewImageUrls(newPreviewImageUrls);
   };
-
-  useEffect(() => {
-    if (defaultValue.length > 0) setPreviewImageUrls(defaultValue);
-  }, [defaultValue]);
 
   return (
     <div className="flex flex-col gap-2">
