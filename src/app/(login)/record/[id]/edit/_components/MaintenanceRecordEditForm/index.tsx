@@ -10,6 +10,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
 
 import Loading from "@/components/Loading";
 import DatePicker from "@/components/DatePicker";
@@ -398,6 +399,13 @@ export default function MaintenanceRecordEditForm({
                 ) : submitResponse.status === "error" ? (
                   <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
                     <ErrorIcon />
+                    <span className="whitespace-pre-wrap">
+                      {submitResponse.message}
+                    </span>
+                  </p>
+                ) : submitResponse.status === "info" ? (
+                  <p className="flex items-center gap-1 text-[var(--icon-color-info)]">
+                    <InfoIcon />
                     <span className="whitespace-pre-wrap">
                       {submitResponse.message}
                     </span>
