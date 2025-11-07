@@ -45,3 +45,6 @@ next-env.d.ts
 
 # DBや画像のダミーデータ
 /dummy-data
+
+# VS Code 拡張機能の設定ファイル
+/.vscode/bookmarks.json
