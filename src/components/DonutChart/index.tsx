@@ -4,33 +4,36 @@ import * as React from "react";
 import { DefaultizedPieValueType } from "@mui/x-charts/models";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { legendClasses } from "@mui/x-charts/ChartsLegend";
+import { rainbowSurgePalette } from "@mui/x-charts/colorPalettes";
 
-export default function ReportDonutChart({
-  groupName,
-  groupData,
+export default function DonutChart({
+  chartName,
+  chartData,
 }: {
-  groupName: string;
-  groupData: {
+  chartName: string;
+  chartData: {
     label: string;
     value: number;
   }[];
 }) {
-  const TOTAL = groupData.map((item) => item.value).reduce((a, b) => a + b, 0);
+  const totalValue = chartData
+    .map((item) => item.value)
+    .reduce((a, b) => a + b, 0);
   const getArcLabel = (params: DefaultizedPieValueType) => {
-    const percent = params.value / TOTAL;
+    const percent = params.value / totalValue;
     return `${(percent * 100).toFixed(0)}%`;
   };
 
   return (
     <div className="relative w-[300px]">
       <PieChart
+        colors={rainbowSurgePalette}
         width={300}
         height={300}
         margin={{ right: 0 }}
-        // hideLegend={true}
         series={[
           {
-            data: groupData,
+            data: chartData,
             innerRadius: 70,
             outerRadius: 100,
             arcLabel: getArcLabel,
@@ -85,7 +88,7 @@ export default function ReportDonutChart({
         }}
       ></PieChart>
       <div className="pointer-events-none absolute top-[150px] left-[50%] line-clamp-1 max-w-[40%] -translate-x-1/2 -translate-y-1/2 text-center">
-        <div className="text-[15px] text-[#333]">{groupName}</div>
+        <div className="text-[15px] text-[#333]">{chartName}</div>
       </div>
     </div>
   );

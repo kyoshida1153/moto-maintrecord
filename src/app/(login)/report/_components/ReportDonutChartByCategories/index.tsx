@@ -1,0 +1,55 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import useReportStore from "@/app/(login)/report/_components/useReportStore";
+import Loading from "@/components/Loading";
+import DonutChart from "@/components/DonutChart";
+
+export default function ReportDonutChartByCategories() {
+  const chartName = "カテゴリー";
+
+  const {
+    getMaintenanceRecordsTotalCostByCategoriesResponse,
+    isLoadingGetMaintenanceRecordsTotalCostByCategories,
+  } = useReportStore();
+
+  const [chartData, setChartData] = useState<
+    { label: string; value: number }[]
+  >([]);
+
+  useEffect(() => {
+    setChartData([]);
+
+    const newChartData =
+      getMaintenanceRecordsTotalCostByCategoriesResponse.result &&
+      getMaintenanceRecordsTotalCostByCategoriesResponse.result.map((item) => ({
+        label: item.name,
+        value: Number(item.cost_str),
+      }));
+
+    if (newChartData) setChartData(newChartData);
+  }, [getMaintenanceRecordsTotalCostByCategoriesResponse]);
+
+  return (
+    <>
+      {isLoadingGetMaintenanceRecordsTotalCostByCategories ? (
+        <div className="flex w-full justify-center py-4">
+          <Loading size="36px" />
+        </div>
+      ) : getMaintenanceRecordsTotalCostByCategoriesResponse.status ===
+        "success" ? (
+        getMaintenanceRecordsTotalCostByCategoriesResponse.totalCost === 0 ? (
+          <div className="w-full py-4 text-center">
+            <p>該当データなし</p>
+          </div>
+        ) : (
+          <DonutChart chartName={chartName} chartData={chartData} />
+        )
+      ) : (
+        <div className="w-full py-4 text-center">
+          <p>{getMaintenanceRecordsTotalCostByCategoriesResponse.message}</p>
+        </div>
+      )}
+    </>
+  );
+}

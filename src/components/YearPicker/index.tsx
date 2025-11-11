@@ -15,7 +15,7 @@ export default function YearPicker({
       <DatePicker
         label={"年"}
         openTo="year"
-        views={["year"]}
+        views={["year", "month"]}
         defaultValue={date ? new Date(date) : new Date()}
         sx={{
           backgroundColor: "#fff",

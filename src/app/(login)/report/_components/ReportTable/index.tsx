@@ -1,36 +1,104 @@
-export default function ReportTable({
-  data,
-}: {
-  data: { key: string; value: number }[];
-}) {
-  const totalValue = data.reduce((sum, current) => sum + current.value, 0);
+"use client";
+
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { ja } from "date-fns/locale";
+
+import Loading from "@/components/Loading";
+import useReportStore from "@/app/(login)/report/_components/useReportStore";
+
+export default function ReportTable() {
+  const {
+    getMaintenanceRecordsTotalCostResponse,
+    isLoadingGetMaintenanceRecordsTotalCost,
+  } = useReportStore();
+
+  const [tableData, setTableData] = useState<
+    { during: string; cost: number; week?: string }[]
+  >([]);
+
+  useEffect(() => {
+    setTableData([]);
+
+    // 各期間と費用
+    const newTableData =
+      getMaintenanceRecordsTotalCostResponse.result &&
+      getMaintenanceRecordsTotalCostResponse.result.map((item) => ({
+        during:
+          getMaintenanceRecordsTotalCostResponse.groupBy === "month"
+            ? format(item.date, "M月", { locale: ja })
+            : format(item.date, "M/d", { locale: ja }),
+        cost: Number(item.cost_str),
+        week:
+          getMaintenanceRecordsTotalCostResponse.groupBy === "day"
+            ? format(item.date, "E", { locale: ja })
+            : undefined,
+      }));
+    if (newTableData) setTableData(newTableData);
+  }, [getMaintenanceRecordsTotalCostResponse]);
 
   return (
-    <table className="min-w-[300px]">
-      <thead className="bg-gray-100">
-        <tr className="border-b border-gray-200">
-          <th className="px-6 py-2 text-left">合計</th>
-          <th className="px-6 py-2 text-right">
-            <span className="font-alphanumeric">
-              {totalValue.toLocaleString()}
-            </span>
-            円
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row) => (
-          <tr key={row.key} className="border-b border-gray-200">
-            <td className="px-6 py-2 text-left">{row.key}</td>
-            <td className="px-6 py-2 text-right">
-              <span className="font-alphanumeric">
-                {row.value.toLocaleString()}
-              </span>
-              円
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <>
+      {isLoadingGetMaintenanceRecordsTotalCost ? (
+        <div className="flex w-full justify-center py-4">
+          <Loading size="36px" />
+        </div>
+      ) : getMaintenanceRecordsTotalCostResponse.status === "success" ? (
+        getMaintenanceRecordsTotalCostResponse.totalCost === 0 ? (
+          <div className="w-full text-center">
+            <p>該当データなし</p>
+          </div>
+        ) : (
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="px-4 py-2 text-right font-[400]" colSpan={2}>
+                  <div className="flex w-full flex-nowrap items-baseline justify-between gap-1">
+                    <div className="text-[18px] whitespace-nowrap">合計</div>
+                    <div className="whitespace-nowrap">
+                      <span className="font-alphanumeric mr-0.5 ml-3 text-[24px]">
+                        {getMaintenanceRecordsTotalCostResponse.totalCost.toLocaleString()}
+                      </span>
+                      <span className="text-[14px]">円</span>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((row) => (
+                <tr
+                  key={row.during}
+                  className="border-b border-gray-200 odd:bg-gray-50 even:bg-white"
+                >
+                  <td className="px-4 py-2 text-left">
+                    <div className="whitespace-nowrap">
+                      <span className="mr-0.5 text-[18px]">{row.during}</span>
+                      {row.week ? (
+                        <span className="text-[13px]">({row.week})</span>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-2 text-right">
+                    <div className="whitespace-nowrap">
+                      <span className="font-alphanumeric mr-0.5 text-[18px]">
+                        {row.cost.toLocaleString()}
+                      </span>
+                      <span className="text-[13px]">円</span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      ) : (
+        <div className="w-full text-center">
+          <p>{getMaintenanceRecordsTotalCostResponse.message}</p>
+        </div>
+      )}
+    </>
   );
 }
