@@ -1,15 +1,22 @@
-"use server";
+"use client";
 
-export async function createUser(data: {
-  name: string;
-  email: string;
+import { Prisma } from "@prisma/client";
+
+type User = Prisma.UserGetPayload<{
+  select: {
+    email: true;
+    name: true;
+  };
+}> & {
   password: string;
-}): Promise<{
+};
+
+export default async function createUser(data: User): Promise<{
   success: boolean;
   message: string;
 }> {
-  const signupResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/signup/`,
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/`,
     {
       method: "POST",
       body: JSON.stringify(data),
@@ -19,7 +26,7 @@ export async function createUser(data: {
     },
   );
 
-  if (signupResponse.ok) {
+  if (response.ok) {
     return {
       success: true,
       message: "アカウントの作成に成功しました。",

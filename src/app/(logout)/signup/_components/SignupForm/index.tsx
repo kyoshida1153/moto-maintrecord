@@ -1,15 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { createUser } from "./actions";
-import Loading from "@/components/Loading";
-import { useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import Loading from "@/components/Loading";
+import createUser from "@/lib/api/createUser";
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;

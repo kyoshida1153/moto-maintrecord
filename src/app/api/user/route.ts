@@ -48,6 +48,44 @@ export async function GET() {
 
 /* ###################################################################### */
 
+// 作成
+
+export type UserCreateInput = Prisma.UserCreateInput;
+
+export async function POST(request: NextRequest) {
+  // 認証チェック※ログイン中は作成できないようにする
+  const currentUser = await getCurrentUser();
+  if (currentUser) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { email, name, password } = await request.json();
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const data: UserCreateInput = {
+      email,
+      name,
+      hashedPassword,
+    };
+
+    const result = await prisma.user.create({ data });
+
+    if (result) {
+      return NextResponse.json({ message: "Success" }, { status: 201 });
+    } else {
+      return NextResponse.json({ message: "Not Found" }, { status: 404 });
+    }
+  } catch {
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}
+
+/* ###################################################################### */
+
 // 編集
 
 export type UserUpdateInput = Prisma.UserUpdateInput;
