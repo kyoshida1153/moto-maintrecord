@@ -4,15 +4,22 @@ import KeyIcon from "@mui/icons-material/Key";
 import { Button } from "@mui/material";
 import MuiLink from "@mui/material/Link";
 import Heading from "@/components/Heading";
-import AccountNameEditForm from "./_components/AccountNameEditForm";
+import UserNameEditForm from "./_components/UserNameEditForm";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "アカウント管理",
+  };
+}
 
 export default function AccountPage() {
   return (
     <>
-      <Heading level={1}>アカウント情報</Heading>
+      <Heading level={1}>アカウント管理</Heading>
       <section className="display max-w-lg rounded border border-solid border-[var(--border-color-gray)] bg-white p-6 md:p-8">
         <div className="flex flex-col gap-6 md:gap-8">
-          <AccountNameEditForm />
+          <UserNameEditForm />
 
           <ul className="flex flex-col items-start gap-4 md:gap-2">
             <li>
