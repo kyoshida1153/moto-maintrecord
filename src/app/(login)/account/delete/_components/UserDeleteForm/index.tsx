@@ -53,10 +53,10 @@ export default function AccountDeleteForm() {
 
       if (deleteUserResponse.success === true) {
         setIsSubmitSuccessful(true);
-        signOut({ callbackUrl: "/" });
-        // setTimeout(() => {
-        //   signOut({ callbackUrl: "/" });
-        // }, 2000);
+        // signOut({ callbackUrl: "/" });
+        setTimeout(() => {
+          signOut({ callbackUrl: "/" });
+        }, 2000);
       }
     } catch {
       setIsSubmitting(false);
