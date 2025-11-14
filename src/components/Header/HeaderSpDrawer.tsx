@@ -68,6 +68,7 @@ export default function HeaderSpDrawer({ userName }: Props) {
           <div className="mb-5 flex items-center justify-between gap-2.5 border-b border-gray-200 pb-2">
             <Link
               href="/account"
+              onClick={handleDrawerClose}
               className="line-clamp-1 flex items-center gap-[5px] rounded-[4px] text-[#333] duration-200"
             >
               <HeaderIcon
