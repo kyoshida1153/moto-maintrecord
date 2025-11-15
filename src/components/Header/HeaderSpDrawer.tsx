@@ -1,20 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { tv } from "tailwind-variants";
 import Link from "next/link";
+import Image from "next/image";
+import { signOut } from "next-auth/react";
+import { tv } from "tailwind-variants";
+
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
-import HeaderIcon from "./HeaderIcon";
+
 import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
+import HeaderIcon from "./HeaderIcon";
+import Loading from "../Loading";
 import { useWindowSize } from "./hooks";
-import { signOut } from "next-auth/react";
+import useSessionStore from "@/app/(login)/_components/useSessionStore";
 
-type Props = {
-  userName: string;
-};
-
-export default function HeaderSpDrawer({ userName }: Props) {
+export default function HeaderSpDrawer() {
   const [drawerStatus, setDrawerStatus] = useState<
     "initial" | "open" | "close"
   >("initial");
@@ -52,9 +53,12 @@ export default function HeaderSpDrawer({ userName }: Props) {
   });
 
   const [windowSizeWidth] = useWindowSize();
+
   useEffect(() => {
     if (windowSizeWidth > 768) setDrawerStatus("initial");
   }, [windowSizeWidth]);
+
+  const { getSessionResponse, isLoadingGetSession } = useSessionStore();
 
   return (
     <nav className="block max-w-full md:hidden">
@@ -71,14 +75,32 @@ export default function HeaderSpDrawer({ userName }: Props) {
               onClick={handleDrawerClose}
               className="line-clamp-1 flex items-center gap-[5px] rounded-[4px] text-[#333] duration-200"
             >
-              <HeaderIcon
-                iconName="AccountCircleIcon"
-                className="aspect-square !text-[24px] text-[#333]"
-              />
-              <span className="flex flex-row flex-nowrap gap-1 text-[14px]">
-                <span className="line-clamp-1 max-w-[8em]">{userName}</span>
-                さん
-              </span>
+              {isLoadingGetSession ? (
+                <Loading size="18px" />
+              ) : (
+                <>
+                  {getSessionResponse.result?.user?.image ? (
+                    <Image
+                      src={getSessionResponse.result.user.image}
+                      alt=""
+                      width={20}
+                      height={20}
+                      className="w-5 rounded-full object-cover"
+                    />
+                  ) : (
+                    <HeaderIcon
+                      iconName="AccountCircleIcon"
+                      className="aspect-square !text-[24px] text-[#333]"
+                    />
+                  )}
+                  <span className="flex flex-row flex-nowrap gap-1 text-[14px]">
+                    <span className="line-clamp-1 max-w-[8em]">
+                      {getSessionResponse.result?.user?.name ?? "???"}
+                    </span>
+                    さん
+                  </span>
+                </>
+              )}
             </Link>
             <CloseIcon onClick={handleDrawerClose} />
           </div>

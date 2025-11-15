@@ -4,12 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Loading from "@/components/Loading";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+
+import Loading from "@/components/Loading";
+import OAuthButtonGoogle from "@/components/OAuthButtonGoogle";
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;
@@ -97,7 +100,7 @@ export default function LoginForm() {
               name="password"
               disabled={isSubmitting || isSubmitSuccessful}
             />
-            <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
+            <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:justify-end">
               {submitResponse.status === "success" ? (
                 <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
                   <CheckCircleIcon />
@@ -136,6 +139,18 @@ export default function LoginForm() {
             </div>
           </div>
         </Box>
+
+        <div className="relative flex items-center justify-center">
+          <span className="z-1 inline-block bg-white px-4 py-6 text-sm">
+            または
+          </span>
+          <span className="absolute right-0 left-0 h-[1px] bg-gray-200"></span>
+        </div>
+
+        <div className="mx-auto flex max-w-[300px] flex-col justify-center gap-4 md:gap-4">
+          <OAuthButtonGoogle />
+        </div>
+
         <div className="mt-6 text-center md:mt-8 md:text-right">
           <Link href="/signup" className="text-sm underline">
             アカウントの新規作成はこちら

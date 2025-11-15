@@ -6,13 +6,7 @@ import HeaderSpDrawer from "./HeaderSpDrawer";
 import HeaderMenuLogin from "./HeaderMenuLogin";
 import HeaderMenuLogout from "./HeaderMenuLogout";
 
-export default function Header({
-  sessionExist,
-  userName,
-}: {
-  sessionExist: boolean;
-  userName: string;
-}) {
+export default function Header({ isLogin }: { isLogin: boolean }) {
   return (
     <header className="sticky top-0 z-100 flex w-full flex-row items-center justify-between !overflow-x-clip bg-[#fff] px-[16px] py-[8px] [border-bottom:solid_1px_var(--border-color-gray)]">
       <Link href="/">
@@ -24,12 +18,8 @@ export default function Header({
           priority
         />
       </Link>
-      {sessionExist ? (
-        <HeaderMenuLogin userName={userName} />
-      ) : (
-        <HeaderMenuLogout />
-      )}
-      {sessionExist && <HeaderSpDrawer userName={userName} />}
+      {isLogin ? <HeaderMenuLogin /> : <HeaderMenuLogout />}
+      {isLogin && <HeaderSpDrawer />}
     </header>
   );
 }

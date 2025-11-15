@@ -9,7 +9,9 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+
 import Loading from "@/components/Loading";
+import OAuthButtonGoogle from "@/components/OAuthButtonGoogle";
 import createUser from "@/lib/api/createUser";
 
 type SubmitResponse = {
@@ -188,6 +190,17 @@ export default function SignupForm() {
             </div>
           </div>
         </Box>
+
+        <div className="relative flex items-center justify-center">
+          <span className="z-1 inline-block bg-white px-4 py-6 text-sm">
+            または
+          </span>
+          <span className="absolute right-0 left-0 h-[1px] bg-gray-200"></span>
+        </div>
+
+        <div className="mx-auto flex max-w-[300px] flex-col justify-center gap-4 md:gap-4">
+          <OAuthButtonGoogle />
+        </div>
       </div>
     </div>
   );

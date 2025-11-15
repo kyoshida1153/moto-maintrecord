@@ -2,7 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import CredentialsProvider from "next-auth/providers/credentials";
-// import GoogleProvider from "next-auth/providers/google";
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
 
@@ -13,10 +13,10 @@ export const authOptions: NextAuthOptions = {
   // 認証プロバイダーの設定
   providers: [
     // Google認証
-    // GoogleProvider({
-    //   clientId: process.env.GOOGLE_CLIENT_ID!,
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    // }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     // メールアドレス認証
     CredentialsProvider({
       name: "credentials",
@@ -68,6 +68,23 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/login",
+  },
+
+  callbacks: {
+    async signIn({ user }) {
+      if (!user?.email) return false;
+
+      // DBに該当ユーザーが存在するかチェック
+      const dbUser = await prisma.user.findUnique({
+        where: {
+          email: user.email,
+          deletedAt: null,
+        },
+      });
+      if (!dbUser) return false;
+
+      return true;
+    },
   },
 };
 

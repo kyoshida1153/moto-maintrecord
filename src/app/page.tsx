@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
-import getCurrentUser from "@/actions/getCurrentUser";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export default async function RootPage() {
-  const currentUser = await getCurrentUser();
-  if (currentUser) {
+  const session = await getServerSession(authOptions);
+  if (session) {
     redirect("/top");
   } else {
     redirect("/login");
