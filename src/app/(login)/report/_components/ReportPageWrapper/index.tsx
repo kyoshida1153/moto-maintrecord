@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import useReportStore from "@/app/(login)/report/_components/useReportStore";
+
 import {
   getMaintenanceRecordsTotalCostByMonthly,
   getMaintenanceRecordsTotalCostByDays,
@@ -12,6 +12,12 @@ import {
 } from "@/lib/api";
 import { isDateYyyyMm } from "@/utils";
 
+import useReportBarChartStore from "../ReportBarChart/store";
+import useReportTableStore from "../ReportTable/store";
+import useReportDonutChartByBikesStore from "../ReportDonutChartByBikes/store";
+import useReportDonutChartByCategoriesStore from "../ReportDonutChartByCategories/store";
+import useReportNavigationStore from "../ReportNavigation/store";
+
 export default function ReportPageWrapper({
   children,
 }: {
@@ -20,22 +26,35 @@ export default function ReportPageWrapper({
   const {
     setGetMaintenanceRecordsTotalCostResponse,
     setIsLoadingGetMaintenanceRecordsTotalCost,
+  } = useReportBarChartStore();
+  const {
+    setGetMaintenanceRecordsTotalCostResponse:
+      setGetMaintenanceRecordsTotalCostResponseTable,
+    setIsLoadingGetMaintenanceRecordsTotalCost:
+      setIsLoadingGetMaintenanceRecordsTotalCostTable,
+  } = useReportTableStore();
+  const {
     setGetMaintenanceRecordsTotalCostByBikesResponse,
     setIsLoadingGetMaintenanceRecordsTotalCostByBikes,
+  } = useReportDonutChartByBikesStore();
+  const {
     setGetMaintenanceRecordsTotalCostByCategoriesResponse,
     setIsLoadingGetMaintenanceRecordsTotalCostByCategories,
+  } = useReportDonutChartByCategoriesStore();
+  const {
     setGetMaintenanceRecordsCalenderDateByYearsResponse,
     setIsLoadingGetMaintenanceRecordsCalenderDateByYears,
-  } = useReportStore();
+  } = useReportNavigationStore();
 
   const searchParams = useSearchParams();
   const date = searchParams.get("date") || "";
 
   useEffect(() => {
     Promise.all([
-      // 月別 or 日別の出費
+      // 月別 or 日別の出費（棒グラフ、表）
       (async () => {
         setIsLoadingGetMaintenanceRecordsTotalCost(true);
+        setIsLoadingGetMaintenanceRecordsTotalCostTable(true);
 
         const groupBy = isDateYyyyMm(date) ? "day" : "month";
 
@@ -52,6 +71,14 @@ export default function ReportPageWrapper({
             totalCost: 0,
           });
           setIsLoadingGetMaintenanceRecordsTotalCost(false);
+
+          setGetMaintenanceRecordsTotalCostResponseTable({
+            status: "error",
+            message: response.message,
+            result: undefined,
+            totalCost: 0,
+          });
+          setIsLoadingGetMaintenanceRecordsTotalCostTable(false);
           return;
         }
 
@@ -61,6 +88,7 @@ export default function ReportPageWrapper({
               0,
             )
           : 0;
+
         setGetMaintenanceRecordsTotalCostResponse({
           status: "success",
           message: response.message,
@@ -68,8 +96,16 @@ export default function ReportPageWrapper({
           groupBy,
           totalCost,
         });
-
         setIsLoadingGetMaintenanceRecordsTotalCost(false);
+
+        setGetMaintenanceRecordsTotalCostResponseTable({
+          status: "success",
+          message: response.message,
+          result: response.result,
+          groupBy,
+          totalCost,
+        });
+        setIsLoadingGetMaintenanceRecordsTotalCostTable(false);
       })(),
 
       // 所有バイク別の出費
@@ -163,6 +199,8 @@ export default function ReportPageWrapper({
     date,
     setGetMaintenanceRecordsTotalCostResponse,
     setIsLoadingGetMaintenanceRecordsTotalCost,
+    setGetMaintenanceRecordsTotalCostResponseTable,
+    setIsLoadingGetMaintenanceRecordsTotalCostTable,
     setGetMaintenanceRecordsTotalCostByBikesResponse,
     setIsLoadingGetMaintenanceRecordsTotalCostByBikes,
     setGetMaintenanceRecordsTotalCostByCategoriesResponse,

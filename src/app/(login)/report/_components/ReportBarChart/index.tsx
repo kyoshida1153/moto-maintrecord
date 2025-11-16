@@ -8,13 +8,13 @@ import { useMediaQuery } from "@mui/material";
 import { Loading } from "@/components";
 import BarChartHorizontal from "./BarChartHorizontal";
 import BarChartVertical from "./BarChartVertical";
-import useReportStore from "@/app/(login)/report/_components/useReportStore";
+import useReportBarChartStore from "./store";
 
 export default function ReportBarChart() {
   const {
     getMaintenanceRecordsTotalCostResponse,
     isLoadingGetMaintenanceRecordsTotalCost,
-  } = useReportStore();
+  } = useReportBarChartStore();
 
   // const isPc = useMediaQuery("(min-width:768px)");
   const isPc = useMediaQuery("(min-width:1024px)");

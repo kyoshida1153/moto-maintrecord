@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useReportStore from "@/app/(login)/report/_components/useReportStore";
+import useReportDonutChartByBikesStore from "./store";
 import { Loading } from "@/components";
 import DonutChart from "../DonutChart";
 
@@ -11,7 +11,7 @@ export default function ReportDonutChartByBikes() {
   const {
     getMaintenanceRecordsTotalCostByBikesResponse,
     isLoadingGetMaintenanceRecordsTotalCostByBikes,
-  } = useReportStore();
+  } = useReportDonutChartByBikesStore();
 
   const [chartData, setChartData] = useState<
     { label: string; value: number }[]

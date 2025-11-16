@@ -5,13 +5,13 @@ import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
 import { Loading } from "@/components";
-import useReportStore from "@/app/(login)/report/_components/useReportStore";
+import useReportTableStore from "./store";
 
 export default function ReportTable() {
   const {
     getMaintenanceRecordsTotalCostResponse,
     isLoadingGetMaintenanceRecordsTotalCost,
-  } = useReportStore();
+  } = useReportTableStore();
 
   const [tableData, setTableData] = useState<
     { during: string; cost: number; week?: string }[]

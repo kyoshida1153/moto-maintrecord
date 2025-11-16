@@ -7,13 +7,13 @@ import Pagination from "@mui/material/Pagination";
 import { PaginationItem } from "@mui/material";
 import { Loading } from "@/components";
 import { isNumber } from "@/utils";
-import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
+import useMaintenanceRecordsListStore from "./store";
 
 export default function MaintenanceRecordsListPagination() {
   const {
     getMaintenanceRecordsCountResponse,
     isLoadingGetMaintenanceRecordsCount,
-  } = useMaintenanceRecordsStore();
+  } = useMaintenanceRecordsListStore();
   const [pageCount, setPageCount] = useState<number | undefined>(undefined);
 
   const searchParams = useSearchParams();

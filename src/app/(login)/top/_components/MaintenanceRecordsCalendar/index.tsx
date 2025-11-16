@@ -17,14 +17,14 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import { Loading } from "@/components";
-import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
+import useMaintenanceRecordsCalendarStore from "./store";
 import { isDateYyyyMm } from "@/utils";
 import type { MaintenanceRecordSelect } from "@/app/api/maintenance-records/route";
 
 export default function MaintenanceRecordsCalendar() {
   const searchParams = useSearchParams();
   const { getMaintenanceRecordsResponse, isLoadingGetMaintenanceRecords } =
-    useMaintenanceRecordsStore();
+    useMaintenanceRecordsCalendarStore();
   const [initialDate, setInitialDate] = useState<string | undefined>(undefined);
   const [events, setEvents] = useState<object | undefined>(undefined);
   const [todayMonthUrlParam, setTodayMonthUrlParam] = useState<

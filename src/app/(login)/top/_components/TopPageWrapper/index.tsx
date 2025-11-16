@@ -8,10 +8,10 @@ import {
   getMaintenanceRecordsCount,
   getMaintenanceRecordsTotalCost,
 } from "@/lib/api";
-
-import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
-import useMaintenanceRecordsTotalCostStore from "@/stores/useMaintenanceRecordsTotalCostStore";
 import { isDateYyyyMm } from "@/utils";
+import useMaintenanceRecordsListStore from "@/components/MaintenanceRecordsList/store";
+import useMaintenanceRecordsCalendarStore from "../MaintenanceRecordsCalendar/store";
+import useMaintenanceRecordsTotalCostStore from "../MaintenanceRecordsTotalCost/store";
 
 export default function TopPageWrapper({
   children,
@@ -23,7 +23,12 @@ export default function TopPageWrapper({
     setIsLoadingGetMaintenanceRecords,
     setGetMaintenanceRecordsCountResponse,
     setIsLoadingGetMaintenanceRecordsCount,
-  } = useMaintenanceRecordsStore();
+  } = useMaintenanceRecordsListStore();
+  const {
+    setGetMaintenanceRecordsResponse: setGetMaintenanceRecordsResponseCalendar,
+    setIsLoadingGetMaintenanceRecords:
+      setIsLoadingGetMaintenanceRecordsCalendar,
+  } = useMaintenanceRecordsCalendarStore();
   const {
     setGetMaintenanceRecordsTotalCostResponse,
     setIsLoadingGetMaintenanceRecordsTotalCost,
@@ -44,6 +49,8 @@ export default function TopPageWrapper({
     Promise.all([
       (async () => {
         setIsLoadingGetMaintenanceRecords(true);
+        setIsLoadingGetMaintenanceRecordsCalendar(true);
+
         const response = await getMaintenanceRecords({ page, date, order });
         if (response.success === false) {
           setGetMaintenanceRecordsResponse({
@@ -51,17 +58,32 @@ export default function TopPageWrapper({
             message: response.message,
           });
           setIsLoadingGetMaintenanceRecords(false);
+
+          setGetMaintenanceRecordsResponseCalendar({
+            status: "error",
+            message: response.message,
+          });
+          setIsLoadingGetMaintenanceRecordsCalendar(false);
           return;
         }
+
         setGetMaintenanceRecordsResponse({
           status: "success",
           message: response.message,
           result: response.result,
         });
         setIsLoadingGetMaintenanceRecords(false);
+
+        setGetMaintenanceRecordsResponseCalendar({
+          status: "success",
+          message: response.message,
+          result: response.result,
+        });
+        setIsLoadingGetMaintenanceRecordsCalendar(false);
       })(),
       (async () => {
         setIsLoadingGetMaintenanceRecordsCount(true);
+
         const response = await getMaintenanceRecordsCount({ date });
         if (response.success === false) {
           setGetMaintenanceRecordsCountResponse({
@@ -71,6 +93,7 @@ export default function TopPageWrapper({
           setIsLoadingGetMaintenanceRecordsCount(false);
           return;
         }
+
         setGetMaintenanceRecordsCountResponse({
           status: "success",
           message: response.message,
@@ -102,6 +125,8 @@ export default function TopPageWrapper({
     date,
     setGetMaintenanceRecordsResponse,
     setIsLoadingGetMaintenanceRecords,
+    setGetMaintenanceRecordsResponseCalendar,
+    setIsLoadingGetMaintenanceRecordsCalendar,
     setGetMaintenanceRecordsCountResponse,
     setIsLoadingGetMaintenanceRecordsCount,
     setGetMaintenanceRecordsTotalCostResponse,

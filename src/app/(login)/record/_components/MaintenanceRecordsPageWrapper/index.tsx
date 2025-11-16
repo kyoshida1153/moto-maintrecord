@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getMaintenanceRecords, getMaintenanceRecordsCount } from "@/lib/api";
-import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
+import useMaintenanceRecordsListStore from "@/components/MaintenanceRecordsList/store";
 
 export default function MaintenanceRecordsPageWrapper({
   children,
@@ -15,7 +15,7 @@ export default function MaintenanceRecordsPageWrapper({
     setIsLoadingGetMaintenanceRecords,
     setGetMaintenanceRecordsCountResponse,
     setIsLoadingGetMaintenanceRecordsCount,
-  } = useMaintenanceRecordsStore();
+  } = useMaintenanceRecordsListStore();
 
   const searchParams = useSearchParams();
   const page = searchParams.get("page") || "";

@@ -21,21 +21,16 @@ type MaintenanceRecordsTotalCostStore = {
 const useMaintenanceRecordsTotalCostStore =
   create<MaintenanceRecordsTotalCostStore>((set) => ({
     getMaintenanceRecordsTotalCostResponse: { status: undefined, message: "" },
-    setGetMaintenanceRecordsTotalCostResponse: (
-      nextGetMaintenanceRecordsTotalCostResponse,
-    ) =>
+    setGetMaintenanceRecordsTotalCostResponse: (nextValue) =>
       set(() => ({
-        getMaintenanceRecordsTotalCostResponse:
-          nextGetMaintenanceRecordsTotalCostResponse,
+        getMaintenanceRecordsTotalCostResponse: nextValue,
       })),
 
     isLoadingGetMaintenanceRecordsTotalCost: true,
-    setIsLoadingGetMaintenanceRecordsTotalCost: (
-      nextIsLoadingGetMaintenanceRecordsTotalCost,
-    ) =>
+    setIsLoadingGetMaintenanceRecordsTotalCost: (nextValue) =>
       set(() => ({
-        isLoadingGetMaintenanceRecordsTotalCost:
-          nextIsLoadingGetMaintenanceRecordsTotalCost,
+        isLoadingGetMaintenanceRecordsTotalCost: nextValue,
       })),
   }));
+
 export default useMaintenanceRecordsTotalCostStore;

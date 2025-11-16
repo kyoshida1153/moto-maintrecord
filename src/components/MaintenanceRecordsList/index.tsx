@@ -7,7 +7,7 @@ import { ja } from "date-fns/locale";
 import { Loading } from "@/components";
 import MaintenanceRecordsListCard from "./MaintenanceRecordsListCard";
 import MaintenanceRecordsListPagination from "./MaintenanceRecordsListPagination";
-import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
+import useMaintenanceRecordsListStore from "./store";
 import type { MaintenanceRecordSelect } from "@/app/api/maintenance-records/route";
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
 
 export function MaintenanceRecordsList({ pagination = true }: Props) {
   const { getMaintenanceRecordsResponse, isLoadingGetMaintenanceRecords } =
-    useMaintenanceRecordsStore();
+    useMaintenanceRecordsListStore();
   const [maintenanceRecordGroups, setMaintenanceRecordGroups] =
     useState<object>({});
 

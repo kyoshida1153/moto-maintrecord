@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { getMonth, getYear } from "date-fns";
 import { Loading } from "@/components";
 import { isDateYyyyMm } from "@/utils";
-import useMaintenanceRecordsTotalCostStore from "@/stores/useMaintenanceRecordsTotalCostStore";
+import useMaintenanceRecordsTotalCostStore from "./store";
 
 export default function MaintenanceRecordsTotalCost() {
   const {

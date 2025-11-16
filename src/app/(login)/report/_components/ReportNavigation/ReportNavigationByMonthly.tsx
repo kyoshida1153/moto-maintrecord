@@ -8,7 +8,7 @@ import { ja } from "date-fns/locale";
 import { isDateYyyy, isDateYyyyMm } from "@/utils";
 import { Loading } from "@/components";
 import SelectBoxLink from "./SelectBoxLink";
-import useReportStore from "../useReportStore";
+import useReportNavigationStore from "./store";
 
 export default function ReportNavigationByMonthly() {
   // URLパラメーターを元にセレクトボックスのdefaultValueを作成
@@ -33,7 +33,7 @@ export default function ReportNavigationByMonthly() {
   const {
     getMaintenanceRecordsCalenderDateByYearsResponse,
     isLoadingGetMaintenanceRecordsCalenderDateByYears,
-  } = useReportStore();
+  } = useReportNavigationStore();
 
   const [itemList, setItemList] =
     useState<{ value: string | undefined; text: string }[]>();
