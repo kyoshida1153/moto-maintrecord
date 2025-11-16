@@ -9,6 +9,9 @@ import { Loading } from "@/components";
 import { getUser, updateUser } from "@/lib/api";
 import type { UserUniqueSelect } from "@/app/api/user/route";
 
+import { useSession } from "next-auth/react";
+import useHeaderStore from "@/app/_components/Header/store";
+
 type GetUserResponse = {
   status: "success" | "error" | undefined;
   message: string;
@@ -28,6 +31,8 @@ export default function UserNameEditForm() {
     status: undefined,
     message: "",
   });
+  const { update } = useSession();
+  const { getLoginUserResponse, setGetLoginUserResponse } = useHeaderStore();
 
   // フォームの送信開始～終了
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,6 +61,19 @@ export default function UserNameEditForm() {
       });
 
       if (updateUserResponse.success === true) {
+        // セッションを更新
+        await update({ name });
+
+        // ヘッダーのユーザー名を更新
+        setGetLoginUserResponse({
+          status: "success",
+          message: "更新に成功しました。",
+          result: {
+            name: name as string,
+            image: getLoginUserResponse.result?.image,
+          },
+        });
+
         setIsSubmitSuccessful(true);
         setTimeout(() => {
           setIsSubmitting(false);

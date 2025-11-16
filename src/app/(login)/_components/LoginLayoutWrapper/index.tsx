@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import useSessionStore from "../useSessionStore";
 import type { Session } from "next-auth";
+import useHeaderStore from "@/app/_components/Header/store";
 
 export default function LoginLayoutWrapper({
   children,
@@ -11,29 +11,33 @@ export default function LoginLayoutWrapper({
   children: React.ReactNode;
   session: Session;
 }) {
-  const { setGetSessionResponse, setIsLoadingGetSession } = useSessionStore();
+  const { setGetLoginUserResponse, setIsLoadingGetLoginUser } =
+    useHeaderStore();
 
   useEffect(() => {
     console.log("useEffect", session);
-    setIsLoadingGetSession(true);
+    setIsLoadingGetLoginUser(true);
+
     if (!session?.user?.email) {
-      setGetSessionResponse({
+      setGetLoginUserResponse({
         status: "error",
         message: "取得に失敗しました。",
         result: undefined,
       });
-
-      setIsLoadingGetSession(false);
+      setIsLoadingGetLoginUser(false);
       return;
     }
 
-    setGetSessionResponse({
+    setGetLoginUserResponse({
       status: "success",
       message: "取得に成功しました。",
-      result: session,
+      result: {
+        name: session.user.name,
+        image: session.user.image,
+      },
     });
-    setIsLoadingGetSession(false);
-  }, [setGetSessionResponse, setIsLoadingGetSession, session]);
+    setIsLoadingGetLoginUser(false);
+  }, [setGetLoginUserResponse, setIsLoadingGetLoginUser, session]);
 
   return <>{children}</>;
 }

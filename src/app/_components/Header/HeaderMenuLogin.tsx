@@ -5,10 +5,10 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import HeaderIcon from "./HeaderIcon";
 import { Loading } from "@/components";
-import useSessionStore from "@/app/(login)/_components/useSessionStore";
+import useHeaderStore from "./store";
 
 export default function HeaderMenuLogin() {
-  const { getSessionResponse, isLoadingGetSession } = useSessionStore();
+  const { getLoginUserResponse, isLoadingGetLoginUser } = useHeaderStore();
 
   return (
     <nav>
@@ -18,13 +18,13 @@ export default function HeaderMenuLogin() {
             href="/account"
             className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] text-[#333] duration-200 hover:bg-[#f6f7f9]"
           >
-            {isLoadingGetSession ? (
+            {isLoadingGetLoginUser ? (
               <Loading size="18px" />
             ) : (
               <>
-                {getSessionResponse.result?.user?.image ? (
+                {getLoginUserResponse.result?.image ? (
                   <Image
-                    src={getSessionResponse.result.user.image}
+                    src={getLoginUserResponse.result.image}
                     alt=""
                     width={20}
                     height={20}
@@ -38,7 +38,7 @@ export default function HeaderMenuLogin() {
                 )}
                 <span className="flex flex-row flex-nowrap gap-1">
                   <span className="line-clamp-1 max-w-[8em]">
-                    {getSessionResponse.result?.user?.name ?? "???"}
+                    {getLoginUserResponse.result?.name ?? "???"}
                   </span>
                   さん
                 </span>

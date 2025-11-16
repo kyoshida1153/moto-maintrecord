@@ -13,7 +13,7 @@ import { Loading } from "@/components";
 import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
 import HeaderIcon from "./HeaderIcon";
 import { useWindowSize } from "./hooks";
-import useSessionStore from "@/app/(login)/_components/useSessionStore";
+import useHeaderStore from "./store";
 
 export default function HeaderSpDrawer() {
   const [drawerStatus, setDrawerStatus] = useState<
@@ -58,7 +58,7 @@ export default function HeaderSpDrawer() {
     if (windowSizeWidth > 768) setDrawerStatus("initial");
   }, [windowSizeWidth]);
 
-  const { getSessionResponse, isLoadingGetSession } = useSessionStore();
+  const { getLoginUserResponse, isLoadingGetLoginUser } = useHeaderStore();
 
   return (
     <nav className="block max-w-full md:hidden">
@@ -75,13 +75,13 @@ export default function HeaderSpDrawer() {
               onClick={handleDrawerClose}
               className="line-clamp-1 flex items-center gap-[5px] rounded-[4px] text-[#333] duration-200"
             >
-              {isLoadingGetSession ? (
+              {isLoadingGetLoginUser ? (
                 <Loading size="18px" />
               ) : (
                 <>
-                  {getSessionResponse.result?.user?.image ? (
+                  {getLoginUserResponse.result?.image ? (
                     <Image
-                      src={getSessionResponse.result.user.image}
+                      src={getLoginUserResponse.result.image}
                       alt=""
                       width={20}
                       height={20}
@@ -95,7 +95,7 @@ export default function HeaderSpDrawer() {
                   )}
                   <span className="flex flex-row flex-nowrap gap-1 text-[14px]">
                     <span className="line-clamp-1 max-w-[8em]">
-                      {getSessionResponse.result?.user?.name ?? "???"}
+                      {getLoginUserResponse.result?.name ?? "???"}
                     </span>
                     さん
                   </span>
