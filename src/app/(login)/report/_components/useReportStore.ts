@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { MaintenanceRecordAggregateCostByBike } from "@/app/api/maintenance-records/aggregate/cost/by-bikes/route";
-import { MaintenanceRecordAggregateCostByCategory } from "@/app/api/maintenance-records/aggregate/cost/by-categories/route";
-import { MaintenanceRecordAggregateCalenderDateByYears } from "@/app/api/maintenance-records/aggregate/calender-date/by-years/route";
+import type { MaintenanceRecordAggregateCostByBike } from "@/app/api/maintenance-records/aggregate/cost/by-bikes/route";
+import type { MaintenanceRecordAggregateCostByCategory } from "@/app/api/maintenance-records/aggregate/cost/by-categories/route";
+import type { MaintenanceRecordAggregateCalenderDateByYears } from "@/app/api/maintenance-records/aggregate/calender-date/by-years/route";
 
 type GetMaintenanceRecordsTotalCostResponse = {
   status: "success" | "error" | undefined;

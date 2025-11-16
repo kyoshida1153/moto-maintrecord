@@ -5,7 +5,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker as MuixDatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ja } from "date-fns/locale";
 
-export default function DatePicker({
+export function DatePicker({
   name,
   label = "日付",
   className,

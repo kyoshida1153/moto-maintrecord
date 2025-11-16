@@ -3,14 +3,12 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { BarChart } from "@mui/x-charts/BarChart";
-
-import Loading from "@/components/Loading";
-import useReportStore from "@/app/(login)/report/_components/useReportStore";
-
-import BarChartHorizontal from "./BarChartHorizontal";
 import { useMediaQuery } from "@mui/material";
+
+import { Loading } from "@/components";
+import BarChartHorizontal from "./BarChartHorizontal";
 import BarChartVertical from "./BarChartVertical";
+import useReportStore from "@/app/(login)/report/_components/useReportStore";
 
 export default function ReportBarChart() {
   const {

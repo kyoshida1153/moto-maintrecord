@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
-import Loading from "@/components/Loading";
+import { Loading } from "@/components";
 import MaintenanceRecordsListCard from "./MaintenanceRecordsListCard";
 import MaintenanceRecordsListPagination from "./MaintenanceRecordsListPagination";
 import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
@@ -14,7 +14,7 @@ type Props = {
   pagination?: boolean;
 };
 
-export default function MaintenanceRecordsList({ pagination = true }: Props) {
+export function MaintenanceRecordsList({ pagination = true }: Props) {
   const { getMaintenanceRecordsResponse, isLoadingGetMaintenanceRecords } =
     useMaintenanceRecordsStore();
   const [maintenanceRecordGroups, setMaintenanceRecordGroups] =

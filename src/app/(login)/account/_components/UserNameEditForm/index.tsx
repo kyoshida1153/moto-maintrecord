@@ -5,9 +5,8 @@ import { Box, Button, TextField } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import Loading from "@/components/Loading";
-import getUser from "@/lib/api/getUser";
-import updateUser from "@/lib/api/updateUser";
+import { Loading } from "@/components";
+import { getUser, updateUser } from "@/lib/api";
 import type { UserUniqueSelect } from "@/app/api/user/route";
 
 type GetUserResponse = {

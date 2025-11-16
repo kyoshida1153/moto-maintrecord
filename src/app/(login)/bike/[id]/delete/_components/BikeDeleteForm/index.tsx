@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
-import Loading from "@/components/Loading";
-import getBike from "@/lib/getBike";
-import deleteBike from "./deleteBike";
+
+import { Loading } from "@/components";
+import { getBike, deleteBike } from "@/lib/api";
 import type { BikeUniqueSelect } from "@/app/api/bikes/[id]/route";
-import Image from "next/image";
 
 type GetBikeResponse = {
   status: "success" | "error" | undefined;

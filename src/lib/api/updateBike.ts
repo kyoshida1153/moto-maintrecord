@@ -2,7 +2,7 @@
 
 import type { BikeUpdateInput } from "@/app/api/bikes/[id]/route";
 
-export default async function updateBike(
+export async function updateBike(
   data: BikeUpdateInput,
   id: string,
 ): Promise<{

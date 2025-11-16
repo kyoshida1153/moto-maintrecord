@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import BikeDeleteForm from "./_components/BikeDeleteForm";
 import type { Metadata } from "next";
 

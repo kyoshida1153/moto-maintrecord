@@ -10,9 +10,8 @@ import TextField from "@mui/material/TextField";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import Loading from "@/components/Loading";
-import OAuthButtonGoogle from "@/components/OAuthButtonGoogle";
-import createUser from "@/lib/api/createUser";
+import { Loading, OAuthButtonGoogle } from "@/components";
+import { createUser } from "@/lib/api";
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;

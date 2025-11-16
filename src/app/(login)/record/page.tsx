@@ -1,10 +1,9 @@
-import Heading from "@/components/Heading";
-import MaintenanceRecordsList from "@/components/MaintenanceRecordsList";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import MuiLink from "@mui/material/Link";
-import type { Metadata } from "next";
+import { Heading, MaintenanceRecordsList } from "@/components";
 import MaintenanceRecordsPageWrapper from "./_components/MaintenanceRecordsPageWrapper";
+import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

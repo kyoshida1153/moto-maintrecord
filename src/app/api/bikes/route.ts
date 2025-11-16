@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
-import getCurrentUser from "@/actions/getCurrentUser";
+import { getCurrentUser } from "@/actions";
 
 /* ###################################################################### */
 

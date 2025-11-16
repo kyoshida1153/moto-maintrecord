@@ -8,9 +8,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import WarningIcon from "@mui/icons-material/Warning";
 
-import Loading from "@/components/Loading";
-import getUser from "@/lib/api/getUser";
-import deleteUser from "@/lib/api/deleteUser";
+import { Loading } from "@/components";
+import { getUser, deleteUser } from "@/lib/api";
 import type { UserUniqueSelect } from "@/app/api/user/route";
 
 type GetUserResponse = {

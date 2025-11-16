@@ -2,7 +2,7 @@
 
 import { MaintenanceCategoryUpdateInput } from "@/app/api/maintenance-categories/[id]/route";
 
-export default async function updateMaintenanceCategory(
+export async function updateMaintenanceCategory(
   data: MaintenanceCategoryUpdateInput,
   id: string,
 ): Promise<{

@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
-import Loading from "@/components/Loading";
-import getMaintenanceCategory from "@/lib/getMaintenanceCategory";
-import deleteCategory from "./deleteCategory";
+import { Loading } from "@/components";
+import { getMaintenanceCategory, deleteMaintenanceCategory } from "@/lib/api";
 import type { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
 
 type GetMaintenanceCategoryResponse = {
@@ -59,7 +58,7 @@ export default function MaintenanceCategoryDeleteForm({
   const onSubmit = async () => {
     setIsSubmitting(true);
 
-    const response = await deleteCategory(maintenanceCategoryId);
+    const response = await deleteMaintenanceCategory(maintenanceCategoryId);
     setIsSubmitting(false);
     setSubmitResponse({
       message: response.message,

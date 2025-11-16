@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Loading from "@/components/Loading";
+import { Loading } from "@/components";
 import MaintenanceCategoryCard from "../MaintenanceCategoryCard";
 import type { MaintenanceCategorySelect } from "@/app/api/maintenance-categories/route";
 

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import getCurrentUser from "@/actions/getCurrentUser";
+import { prisma } from "@/lib";
+import { getCurrentUser } from "@/actions";
 import { endOfMonth, startOfMonth, parseISO } from "date-fns";
-import isDateYyyyMm from "@/utils/isDateYyyyMm";
-import isDateYyyy from "@/utils/isDateYyyy";
+import { isDateYyyyMm, isDateYyyy } from "@/utils";
 
 /* ###################################################################### */
 

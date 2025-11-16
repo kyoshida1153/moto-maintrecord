@@ -9,11 +9,9 @@ import TextField from "@mui/material/TextField";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import Loading from "@/components/Loading";
-import updateMaintenanceCategory from "./updateMaintenanceCategory";
-import getMaintenanceCategory from "@/lib/getMaintenanceCategory";
-
-import { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
+import { Loading } from "@/components";
+import { updateMaintenanceCategory, getMaintenanceCategory } from "@/lib/api";
+import type { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
 
 type GetMaintenanceCategoryResponse = {
   status: "success" | "error" | undefined;

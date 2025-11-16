@@ -9,9 +9,9 @@ import { tv } from "tailwind-variants";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 
+import { Loading } from "@/components";
 import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
 import HeaderIcon from "./HeaderIcon";
-import Loading from "../Loading";
 import { useWindowSize } from "./hooks";
 import useSessionStore from "@/app/(login)/_components/useSessionStore";
 

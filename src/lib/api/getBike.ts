@@ -1,20 +1,14 @@
 "use client";
 
-type Params = {
-  date?: string;
-};
+import type { BikeSelect } from "@/app/api/bikes/route";
 
-export default async function getMaintenanceRecordsCount(
-  params: Params,
-): Promise<{
+export async function getBike(id: string): Promise<{
   success: boolean;
   message: string;
-  result?: number;
+  result?: BikeSelect;
 }> {
-  const queryString = new URLSearchParams(params).toString();
-
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/count/?${queryString}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/${id}`,
     {
       method: "GET",
       headers: {

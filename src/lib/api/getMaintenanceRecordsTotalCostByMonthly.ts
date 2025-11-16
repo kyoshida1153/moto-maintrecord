@@ -1,22 +1,22 @@
 "use client";
 
-import { MaintenanceRecordAggregateCostByBike } from "@/app/api/maintenance-records/aggregate/cost/by-bikes/route";
+import { MaintenanceRecordAggregateCostByMonth } from "@/app/api/maintenance-records/aggregate/cost/by-monthly/route";
 
 type Params = {
   date?: string;
 };
 
-export default async function getMaintenanceRecordsTotalCostByBikes(
+export async function getMaintenanceRecordsTotalCostByMonthly(
   params: Params,
 ): Promise<{
   success: boolean;
   message: string;
-  result?: MaintenanceRecordAggregateCostByBike[];
+  result?: MaintenanceRecordAggregateCostByMonth[];
 }> {
   const queryString = new URLSearchParams(params).toString();
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/cost/by-bikes?${queryString}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/cost/by-monthly?${queryString}`,
     {
       method: "GET",
       headers: {

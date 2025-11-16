@@ -1,4 +1,4 @@
-export default function Heading({
+export function Heading({
   children,
   level = 1,
 }: {

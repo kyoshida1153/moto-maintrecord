@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
-import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
-import LoginLayoutWrapper from "./_components/LoginLayoutWrapper";
-
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+import Header from "@/app/_components/Header";
+import Sidebar from "@/app/_components/Sidebar";
+import LoginLayoutWrapper from "./_components/LoginLayoutWrapper";
 
 export default async function LoginLayout({
   children,

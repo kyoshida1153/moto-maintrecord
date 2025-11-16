@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import ReportPageWrapper from "./_components/ReportPageWrapper";
 import ReportNavigation from "./_components/ReportNavigation";
 import ReportBarChart from "./_components/ReportBarChart";

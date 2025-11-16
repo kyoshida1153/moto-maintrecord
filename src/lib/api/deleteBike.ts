@@ -1,6 +1,6 @@
 "use client";
 
-export default async function deleteBike(bikeId: string): Promise<{
+export async function deleteBike(bikeId: string): Promise<{
   success: boolean;
   message: string;
 }> {

@@ -11,7 +11,7 @@ type User = Prisma.UserGetPayload<{
   password: string;
 };
 
-export default async function createUser(data: User): Promise<{
+export async function createUser(data: User): Promise<{
   success: boolean;
   message: string;
 }> {

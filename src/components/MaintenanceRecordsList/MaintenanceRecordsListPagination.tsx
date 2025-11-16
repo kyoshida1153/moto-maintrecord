@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Pagination from "@mui/material/Pagination";
 import { PaginationItem } from "@mui/material";
-import isNumber from "@/utils/isNumber";
-import Loading from "../Loading";
+import { Loading } from "@/components";
+import { isNumber } from "@/utils";
 import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
 
 export default function MaintenanceRecordsListPagination() {

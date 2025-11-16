@@ -1,22 +1,22 @@
 "use client";
 
-import { MaintenanceRecordAggregateCostByMonth } from "@/app/api/maintenance-records/aggregate/cost/by-monthly/route";
+import { MaintenanceRecordAggregateCostByCategory } from "@/app/api/maintenance-records/aggregate/cost/by-categories/route";
 
 type Params = {
   date?: string;
 };
 
-export default async function getMaintenanceRecordsTotalCostByMonthly(
+export async function getMaintenanceRecordsTotalCostByCategories(
   params: Params,
 ): Promise<{
   success: boolean;
   message: string;
-  result?: MaintenanceRecordAggregateCostByMonth[];
+  result?: MaintenanceRecordAggregateCostByCategory[];
 }> {
   const queryString = new URLSearchParams(params).toString();
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/cost/by-monthly?${queryString}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/cost/by-categories?${queryString}`,
     {
       method: "GET",
       headers: {

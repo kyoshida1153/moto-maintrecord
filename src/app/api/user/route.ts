@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
-import getCurrentUser from "@/actions/getCurrentUser";
+import { getCurrentUser } from "@/actions";
 
 /* ###################################################################### */
 

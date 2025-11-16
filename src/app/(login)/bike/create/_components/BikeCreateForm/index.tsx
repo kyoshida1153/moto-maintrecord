@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import InputFileImage from "@/components/InputFileImage";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Loading from "@/components/Loading";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
-import createBike from "./createBike";
-import uploadBikeImageFile from "@/lib/uploadBikeImageFile";
+import { InputFileImage, Loading } from "@/components";
+import { uploadBikeImageFile } from "@/lib";
+import { createBike } from "@/lib/api";
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;

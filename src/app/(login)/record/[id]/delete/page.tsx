@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import MaintenanceRecordDeleteForm from "./_components/MaintenanceRecordDeleteForm";
 import type { Metadata } from "next";
 

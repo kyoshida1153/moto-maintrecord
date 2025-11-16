@@ -1,14 +1,14 @@
 "use client";
 
-import { MaintenanceRecordAggregateCalenderDateByYears } from "@/app/api/maintenance-records/aggregate/calender-date/by-years/route";
+import { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
 
-export default async function getMaintenanceRecordsCalenderDateByYears(): Promise<{
+export async function getMaintenanceCategory(id: string): Promise<{
   success: boolean;
   message: string;
-  result?: MaintenanceRecordAggregateCalenderDateByYears[];
+  result?: MaintenanceCategoryUniqueSelect;
 }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/calender-date/by-years`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-categories/${id}`,
     {
       method: "GET",
       headers: {

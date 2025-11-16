@@ -1,7 +1,7 @@
-import Heading from "@/components/Heading";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import MuiLink from "@mui/material/Link";
+import { Heading } from "@/components";
 import MaintenanceCategoryCardList from "./_components/MaintenanceCategoryCardList";
 import type { Metadata } from "next";
 

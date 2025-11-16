@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import useReportStore from "@/app/(login)/report/_components/useReportStore";
-import Loading from "@/components/Loading";
-import DonutChart from "@/components/DonutChart";
+import { Loading } from "@/components";
+import DonutChart from "../DonutChart";
 
 export default function ReportDonutChartByBikes() {
   const chartName = "所有バイク";

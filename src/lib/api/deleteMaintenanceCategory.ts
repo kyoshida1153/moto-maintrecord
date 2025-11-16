@@ -1,6 +1,6 @@
 "use client";
 
-export default async function deleteCategory(id: string): Promise<{
+export async function deleteMaintenanceCategory(id: string): Promise<{
   success: boolean;
   message: string;
 }> {

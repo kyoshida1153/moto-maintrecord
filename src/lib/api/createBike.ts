@@ -11,7 +11,7 @@ type Bike = Prisma.BikeGetPayload<{
   };
 }>;
 
-export default async function createBike(data: Bike): Promise<{
+export async function createBike(data: Bike): Promise<{
   success: boolean;
   message: string;
 }> {

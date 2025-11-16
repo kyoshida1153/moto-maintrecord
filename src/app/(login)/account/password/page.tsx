@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import UserPasswordEditForm from "./_components/UserPasswordEditForm";
 import type { Metadata } from "next";
 

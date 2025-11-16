@@ -1,8 +1,8 @@
 "use client";
 
-import { MaintenanceRecordUpdateInput } from "@/app/api/maintenance-records/[id]/route";
+import type { MaintenanceRecordUpdateInput } from "@/app/api/maintenance-records/[id]/route";
 
-export default async function updateMaintenanceRecord(
+export async function updateMaintenanceRecord(
   data: MaintenanceRecordUpdateInput,
   maintenanceRecordId: string,
   isChangedImages: boolean,

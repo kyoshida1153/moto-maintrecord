@@ -5,7 +5,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ja } from "date-fns/locale";
 
-export default function YearPicker({
+export function YearPicker({
   date = undefined,
 }: {
   date?: string | undefined;

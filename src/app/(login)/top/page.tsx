@@ -1,5 +1,5 @@
+import { MaintenanceRecordsList } from "@/components";
 import MaintenanceRecordsCalendar from "./_components/MaintenanceRecordsCalendar";
-import MaintenanceRecordsList from "@/components/MaintenanceRecordsList";
 import TopPageWrapper from "./_components/TopPageWrapper";
 import MaintenanceRecordsTotalCost from "./_components/MaintenanceRecordsTotalCost";
 import type { Metadata } from "next";

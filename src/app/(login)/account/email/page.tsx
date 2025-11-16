@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import UserEmailEditForm from "./_components/UserEmailEditForm";
 import type { Metadata } from "next";
 

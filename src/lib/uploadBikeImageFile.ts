@@ -2,10 +2,10 @@
 
 import path from "node:path";
 import crypto from "node:crypto";
-import { supabase } from "@/lib/supabaseClient";
-import getCurrentUser from "@/actions/getCurrentUser";
+import { supabase } from "@/lib";
+import { getCurrentUser } from "@/actions";
 
-export default async function uploadBikeImageFile(
+export async function uploadBikeImageFile(
   imageFile: File,
 ): Promise<{ success: boolean; message: string; imageUrl?: string }> {
   // 認証チェック

@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import MuiLink from "@mui/material/Link";
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import BikeCardList from "./_components/BikeCardList";
 import type { Metadata } from "next";
 

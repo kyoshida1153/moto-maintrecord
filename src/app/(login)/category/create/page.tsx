@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import MaintenanceCategoryCreateForm from "./_components/MaintenanceCategoryCreateForm";
 import type { Metadata } from "next";
 

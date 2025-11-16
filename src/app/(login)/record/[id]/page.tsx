@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import MaintenanceRecordDetail from "./_components/MaintenanceRecordDetail";
 
 export default function MaintenanceRecordDetailPage() {

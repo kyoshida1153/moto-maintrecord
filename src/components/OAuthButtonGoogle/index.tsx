@@ -1,6 +1,6 @@
 import { signIn } from "next-auth/react";
 
-export default function OAuthButtonGoogle() {
+export function OAuthButtonGoogle() {
   return (
     <div
       className="transition-bg flex justify-center rounded border border-gray-300 bg-gray-100 px-4 py-2 duration-200 hover:cursor-pointer hover:bg-gray-200"

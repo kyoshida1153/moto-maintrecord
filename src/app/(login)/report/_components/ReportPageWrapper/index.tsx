@@ -3,12 +3,14 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import useReportStore from "@/app/(login)/report/_components/useReportStore";
-import getMaintenanceRecordsTotalCostByMonth from "@/lib/getMaintenanceRecordsTotalCostByMonthly";
-import getMaintenanceRecordsTotalCostByDay from "@/lib/getMaintenanceRecordsTotalCostByDays";
-import getMaintenanceRecordsTotalCostByBikes from "@/lib/getMaintenanceRecordsTotalCostByBikes";
-import getMaintenanceRecordsTotalCostByCategories from "@/lib/getMaintenanceRecordsTotalCostByCategories";
-import isDateYyyyMm from "@/utils/isDateYyyyMm";
-import getMaintenanceRecordsCalenderDateByYears from "@/lib/getMaintenanceRecordsCalenderDateByYears";
+import {
+  getMaintenanceRecordsTotalCostByMonthly,
+  getMaintenanceRecordsTotalCostByDays,
+  getMaintenanceRecordsTotalCostByBikes,
+  getMaintenanceRecordsTotalCostByCategories,
+  getMaintenanceRecordsCalenderDateByYears,
+} from "@/lib/api";
+import { isDateYyyyMm } from "@/utils";
 
 export default function ReportPageWrapper({
   children,
@@ -39,8 +41,8 @@ export default function ReportPageWrapper({
 
         const response =
           groupBy === "day"
-            ? await getMaintenanceRecordsTotalCostByDay({ date })
-            : await getMaintenanceRecordsTotalCostByMonth({ date });
+            ? await getMaintenanceRecordsTotalCostByDays({ date })
+            : await getMaintenanceRecordsTotalCostByMonthly({ date });
 
         if (response.success === false) {
           setGetMaintenanceRecordsTotalCostResponse({

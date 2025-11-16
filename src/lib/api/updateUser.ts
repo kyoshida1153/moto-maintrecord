@@ -6,7 +6,7 @@ type UserUpdateInputPre = Omit<UserUpdateInput, "hashedPassword"> & {
   password?: string | null;
 };
 
-export default async function updateUser(data: UserUpdateInputPre): Promise<{
+export async function updateUser(data: UserUpdateInputPre): Promise<{
   success: boolean;
   message: string;
 }> {

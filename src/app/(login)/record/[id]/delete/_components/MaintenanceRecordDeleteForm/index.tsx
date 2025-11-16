@@ -7,9 +7,9 @@ import { ja } from "date-fns/locale";
 import { Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
-import Loading from "@/components/Loading";
-import getMaintenanceRecord from "@/lib/getMaintenanceRecord";
-import deleteMaintenanceRecord from "./deleteMaintenanceRecord";
+
+import { Loading } from "@/components";
+import { getMaintenanceRecord, deleteMaintenanceRecord } from "@/lib/api";
 import type { MaintenanceRecordUniqueSelect } from "@/app/api/maintenance-records/[id]/route";
 
 type GetMaintenanceRecordResponse = {

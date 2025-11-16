@@ -2,8 +2,8 @@
 
 import path from "node:path";
 import crypto from "node:crypto";
-import getCurrentUser from "@/actions/getCurrentUser";
-import { supabase } from "@/lib/supabaseClient";
+import { getCurrentUser } from "@/actions";
+import { supabase } from "@/lib";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 

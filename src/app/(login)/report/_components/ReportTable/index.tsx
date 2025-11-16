@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
-import Loading from "@/components/Loading";
+import { Loading } from "@/components";
 import useReportStore from "@/app/(login)/report/_components/useReportStore";
 
 export default function ReportTable() {

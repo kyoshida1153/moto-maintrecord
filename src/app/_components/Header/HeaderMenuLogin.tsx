@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 import HeaderIcon from "./HeaderIcon";
-import Loading from "../Loading";
+import { Loading } from "@/components";
 import useSessionStore from "@/app/(login)/_components/useSessionStore";
 
 export default function HeaderMenuLogin() {

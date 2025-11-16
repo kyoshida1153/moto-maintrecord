@@ -3,7 +3,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
 import { Button } from "@mui/material";
 import MuiLink from "@mui/material/Link";
-import Heading from "@/components/Heading";
+import { Heading } from "@/components";
 import UserNameEditForm from "./_components/UserNameEditForm";
 import type { Metadata } from "next";
 

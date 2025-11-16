@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import getMaintenanceRecords from "@/lib/getMaintenanceRecords";
-import getMaintenanceRecordsCount from "@/lib/getMaintenanceRecordsCount";
+import { getMaintenanceRecords, getMaintenanceRecordsCount } from "@/lib/api";
 import useMaintenanceRecordsStore from "@/stores/useMaintenanceRecordsStore";
 
 export default function MaintenanceRecordsPageWrapper({

@@ -1,6 +1,6 @@
 "use client";
 
-export default async function deleteMaintenanceRecord(id: string): Promise<{
+export async function deleteMaintenanceRecord(id: string): Promise<{
   success: boolean;
   message: string;
 }> {

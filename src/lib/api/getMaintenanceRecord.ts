@@ -1,14 +1,14 @@
 "use client";
 
-import { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
+import { MaintenanceRecordUniqueSelect } from "@/app/api/maintenance-records/[id]/route";
 
-export default async function getMaintenanceCategory(id: string): Promise<{
+export async function getMaintenanceRecord(id: string): Promise<{
   success: boolean;
   message: string;
-  result?: MaintenanceCategoryUniqueSelect;
+  result?: MaintenanceRecordUniqueSelect;
 }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-categories/${id}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/${id}`,
     {
       method: "GET",
       headers: {

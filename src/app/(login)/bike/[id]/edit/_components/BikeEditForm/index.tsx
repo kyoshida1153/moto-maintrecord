@@ -10,13 +10,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 
-import Loading from "@/components/Loading";
-import InputFileImage from "@/components/InputFileImage";
-import updateBike from "./updateBike";
-import getBike from "@/lib/getBike";
-import uploadBikeImageFile from "@/lib/uploadBikeImageFile";
-
-import { BikeUniqueSelect } from "@/app/api/bikes/[id]/route";
+import { Loading, InputFileImage } from "@/components";
+import { getBike, updateBike } from "@/lib/api";
+import { uploadBikeImageFile } from "@/lib";
+import type { BikeUniqueSelect } from "@/app/api/bikes/[id]/route";
 
 type GetBikeResponse = {
   status: "success" | "error" | undefined;

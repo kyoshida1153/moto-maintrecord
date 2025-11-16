@@ -2,7 +2,7 @@
 
 import type { UserUniqueSelect } from "@/app/api/user/route";
 
-export default async function getUser(): Promise<{
+export async function getUser(): Promise<{
   success: boolean;
   message: string;
   result?: UserUniqueSelect;

@@ -12,19 +12,19 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 
-import Loading from "@/components/Loading";
-import DatePicker from "@/components/DatePicker";
-import SelectBox from "@/components/SelectBox";
-import InputFileImage from "@/components/InputFileImage";
-import { getBikes } from "@/lib/getBikes";
-import { getMaintenanceCategories } from "@/lib/getMaintenanceCategories";
-import { uploadMaintenanceRecordImageFiles } from "@/lib/uploadMaintenanceRecordImageFiles";
-import updateMaintenanceRecord from "./updateMaintenanceRecord";
+import { Loading, DatePicker, SelectBox, InputFileImage } from "@/components";
+
+import { uploadMaintenanceRecordImageFiles } from "@/lib";
+import {
+  getBikes,
+  getMaintenanceCategories,
+  getMaintenanceRecord,
+  updateMaintenanceRecord,
+} from "@/lib/api";
 
 import type { MaintenanceRecordUniqueSelect } from "@/app/api/maintenance-records/[id]/route";
 import type { BikeSelect } from "@/app/api/bikes/route";
 import type { MaintenanceCategorySelect } from "@/app/api/maintenance-categories/route";
-import getMaintenanceRecord from "@/lib/getMaintenanceRecord";
 
 type GetBikesResponse = {
   status: "success" | "error" | undefined;

@@ -24,7 +24,7 @@ type PreviewImageUrl = {
 };
 
 // ※アップロードする画像の数を制限する処理はサーバー側で行う
-export default function InputFileImage({
+export function InputFileImage({
   name,
   label = "画像を選択",
   multiple = false,

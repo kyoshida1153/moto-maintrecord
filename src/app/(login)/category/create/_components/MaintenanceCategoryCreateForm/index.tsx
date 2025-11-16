@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Loading from "@/components/Loading";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import { Loading } from "@/components";
 import createMaintenanceCategory from "./createMaintenanceCategory";
 
 type SubmitResponse = {

@@ -1,14 +1,18 @@
 "use client";
 
-import { MaintenanceRecordUniqueSelect } from "@/app/api/maintenance-records/[id]/route";
+type Params = {
+  date?: string;
+};
 
-export default async function getMaintenanceRecord(id: string): Promise<{
+export async function getMaintenanceRecordsTotalCost(params: Params): Promise<{
   success: boolean;
   message: string;
-  result?: MaintenanceRecordUniqueSelect;
+  result?: number;
 }> {
+  const queryString = new URLSearchParams(params).toString();
+
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/${id}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/cost/?${queryString}`,
     {
       method: "GET",
       headers: {

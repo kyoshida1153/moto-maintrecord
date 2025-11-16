@@ -1,20 +1,14 @@
 "use client";
 
-type Params = {
-  date?: string;
-};
+import { MaintenanceRecordAggregateCalenderDateByYears } from "@/app/api/maintenance-records/aggregate/calender-date/by-years/route";
 
-export default async function getMaintenanceRecordsTotalCost(
-  params: Params,
-): Promise<{
+export async function getMaintenanceRecordsCalenderDateByYears(): Promise<{
   success: boolean;
   message: string;
-  result?: number;
+  result?: MaintenanceRecordAggregateCalenderDateByYears[];
 }> {
-  const queryString = new URLSearchParams(params).toString();
-
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/cost/?${queryString}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/calender-date/by-years`,
     {
       method: "GET",
       headers: {

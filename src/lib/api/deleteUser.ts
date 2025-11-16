@@ -1,6 +1,6 @@
 "use client";
 
-export default async function deleteUser(): Promise<{
+export async function deleteUser(): Promise<{
   success: boolean;
   message: string;
 }> {

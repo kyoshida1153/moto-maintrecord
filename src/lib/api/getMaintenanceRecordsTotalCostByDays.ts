@@ -1,14 +1,22 @@
 "use client";
 
-import type { BikeSelect } from "@/app/api/bikes/route";
+import { MaintenanceRecordAggregateCostByDay } from "@/app/api/maintenance-records/aggregate/cost/by-days/route";
 
-export default async function getBike(id: string): Promise<{
+type Params = {
+  date?: string;
+};
+
+export async function getMaintenanceRecordsTotalCostByDays(
+  params: Params,
+): Promise<{
   success: boolean;
   message: string;
-  result?: BikeSelect;
+  result?: MaintenanceRecordAggregateCostByDay[];
 }> {
+  const queryString = new URLSearchParams(params).toString();
+
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/${id}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-records/aggregate/cost/by-days?${queryString}`,
     {
       method: "GET",
       headers: {
