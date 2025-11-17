@@ -2,12 +2,14 @@
 
 export default function Error() {
   return (
-    <div className="flex h-[calc(100vh-var(--header-height)-32px)] items-center justify-center">
+    <div className="flex h-[100vh] items-center justify-center">
       <h2 className="flex flex-col items-center">
-        <span className="text-[70px] leading-none font-bold text-[#b3b3b3]">
+        <span className="font-alphanumeric text-[100px] leading-none font-bold text-[#b3b3b3]">
           500
         </span>
-        <span className="text-[24px] text-[#b3b3b3]">Server Error</span>
+        <span className="text-[34px] leading-none text-[#b3b3b3]">
+          Server Error
+        </span>
       </h2>
     </div>
   );
