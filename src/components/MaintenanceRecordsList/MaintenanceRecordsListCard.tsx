@@ -39,8 +39,13 @@ export default function MaintenanceRecordsListCard({
     <div className="flex w-full min-w-fit flex-row flex-wrap items-center gap-2 rounded border border-solid border-[var(--border-color-gray)] bg-white px-3 py-2 text-[#333] md:flex-nowrap md:gap-4 md:px-4 md:py-3">
       <div className="flex w-full flex-row items-center gap-2 md:gap-4">
         <div className="flex flex-col gap-1">
-          <h3 className="line-clamp-1 text-lg transition-opacity duration-200 hover:opacity-70 md:text-xl">
-            <Link href={`/record/${id}`}>{title || "(title無し)"}</Link>
+          <h3 className="line-clamp-1 text-lg md:text-xl">
+            <Link
+              href={`/record/${id}`}
+              className="hover: text-[var(--link-color)] transition-opacity duration-200 hover:opacity-70"
+            >
+              {title || "(title無し)"}
+            </Link>
           </h3>
           <p className="mr-auto hidden w-full flex-row flex-nowrap items-center justify-end gap-2 text-sm text-[#808080] md:flex md:w-auto md:text-[15px]">
             <span className="flex items-center gap-0.5 whitespace-nowrap">
