@@ -12,7 +12,9 @@ export default function MaintenanceRecordCreatePage() {
   return (
     <>
       <Heading level={1}>整備・出費記録の登録</Heading>
-      <MaintenanceRecordsCreateForm />
+      <div className="max-w-lg">
+        <MaintenanceRecordsCreateForm />
+      </div>
     </>
   );
 }

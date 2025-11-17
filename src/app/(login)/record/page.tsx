@@ -14,8 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function MaintenanceRecordsPage() {
   return (
     <MaintenanceRecordsPageWrapper>
-      <div className="w-full max-w-3xl">
-        <Heading level={1}>整備・出費記録</Heading>
+      <Heading level={1}>整備・出費記録</Heading>
+      <div className="max-w-3xl">
         <div className="my-6 text-center md:my-8 md:text-left">
           <Button
             component={MuiLink}

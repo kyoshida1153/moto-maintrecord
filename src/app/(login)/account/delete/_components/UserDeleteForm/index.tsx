@@ -90,7 +90,7 @@ export default function AccountDeleteForm() {
   return (
     <>
       {isLoadingGetUser ? (
-        <div className="flex w-full max-w-lg justify-center py-4">
+        <div className="w-ful flex justify-center py-4">
           <Loading size="36px" />
         </div>
       ) : getUserResponse.status === "success" ? (

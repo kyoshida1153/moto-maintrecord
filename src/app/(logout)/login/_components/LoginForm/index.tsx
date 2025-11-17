@@ -19,8 +19,8 @@ type SubmitResponse = {
 };
 
 export default function LoginForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
@@ -52,7 +52,7 @@ export default function LoginForm() {
     }
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitResponse({
@@ -76,85 +76,82 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-var(--header-height)-48px)] items-center justify-center md:h-[calc(100vh-var(--header-height)-64px)]">
-      <div className="m-4 mx-auto w-full max-w-lg rounded bg-white p-6 shadow-md shadow-gray-300/50 md:p-8">
-        <h1 className="mb-6 text-center text-xl md:mb-8 md:text-2xl">
-          ログイン
-        </h1>
-        <Box component="form" className="mt-6 md:mt-8" onSubmit={onSubmit}>
-          <div className="flex flex-col gap-4 md:gap-6">
-            <TextField
-              required
-              id="email"
-              label="メールアドレス"
-              type="text"
-              name="email"
+    <div className="w-full rounded bg-white p-6 shadow-md shadow-gray-300/50 md:p-8">
+      <h1 className="mb-6 text-center text-xl md:mb-8 md:text-2xl">ログイン</h1>
+
+      <Box component="form" className="mt-6 md:mt-8" onSubmit={handleSubmit}>
+        <div className="flex flex-col gap-4 md:gap-6">
+          <TextField
+            required
+            id="email"
+            label="メールアドレス"
+            type="text"
+            name="email"
+            disabled={isSubmitting || isSubmitSuccessful}
+          />
+          <TextField
+            required
+            id="password"
+            label="パスワード"
+            type="password"
+            name="password"
+            disabled={isSubmitting || isSubmitSuccessful}
+          />
+          <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:justify-end">
+            {submitResponse.status === "success" ? (
+              <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
+                <CheckCircleIcon />
+                <span className="whitespace-pre-wrap">
+                  {submitResponse.message}
+                </span>
+              </p>
+            ) : submitResponse.status === "error" ? (
+              <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
+                <ErrorIcon />
+                <span className="whitespace-pre-wrap">
+                  {submitResponse.message}
+                </span>
+              </p>
+            ) : (
+              ""
+            )}
+            <Button
+              variant="contained"
+              disableElevation
+              type="submit"
+              sx={{
+                fontSize: "16px",
+                px: "1.5em",
+                display: "flex",
+                gap: "0.25em",
+                whiteSpace: "nowrap",
+              }}
               disabled={isSubmitting || isSubmitSuccessful}
-            />
-            <TextField
-              required
-              id="password"
-              label="パスワード"
-              type="password"
-              name="password"
-              disabled={isSubmitting || isSubmitSuccessful}
-            />
-            <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:justify-end">
-              {submitResponse.status === "success" ? (
-                <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
-                  <CheckCircleIcon />
-                  <span className="whitespace-pre-wrap">
-                    {submitResponse.message}
-                  </span>
-                </p>
-              ) : submitResponse.status === "error" ? (
-                <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
-                  <ErrorIcon />
-                  <span className="whitespace-pre-wrap">
-                    {submitResponse.message}
-                  </span>
-                </p>
-              ) : (
-                ""
-              )}
-              <Button
-                variant="contained"
-                disableElevation
-                type="submit"
-                sx={{
-                  fontSize: "16px",
-                  px: "1.5em",
-                  display: "flex",
-                  gap: "0.25em",
-                  whiteSpace: "nowrap",
-                }}
-                disabled={isSubmitting || isSubmitSuccessful}
-              >
-                {isSubmitting ? <Loading size="18px" /> : ""}
-                {isSubmitting ? <>ログイン中</> : ""}
-                {isSubmitSuccessful ? <>ログイン済</> : ""}
-                {!isSubmitting && !isSubmitSuccessful ? <>ログイン</> : ""}
-              </Button>
-            </div>
+            >
+              {isSubmitting ? <Loading size="18px" /> : ""}
+              {isSubmitting ? <>ログイン中</> : ""}
+              {isSubmitSuccessful ? <>ログイン済</> : ""}
+              {!isSubmitting && !isSubmitSuccessful ? <>ログイン</> : ""}
+            </Button>
           </div>
-        </Box>
-
-        <div className="relative flex items-center justify-center">
-          <span className="z-1 inline-block bg-white px-4 py-6 text-sm">
-            または
-          </span>
-          <span className="absolute right-0 left-0 h-[1px] bg-gray-200"></span>
         </div>
+      </Box>
 
-        <div className="mx-auto flex max-w-[300px] flex-col justify-center gap-4 md:gap-4">
-          <OAuthButtonGoogle />
-        </div>
+      <div className="relative flex items-center justify-center">
+        <span className="z-1 inline-block bg-white px-4 py-6 text-sm">
+          または
+        </span>
+        <span className="absolute right-0 left-0 h-[1px] bg-gray-200"></span>
+      </div>
 
-        <div className="mt-6 text-center md:mt-8 md:text-right">
-          <Link href="/signup" className="text-sm underline">
-            アカウントの新規作成はこちら
-          </Link>
-        </div>
+      <div className="mx-auto flex max-w-[300px] flex-col justify-center gap-4 md:gap-4">
+        <OAuthButtonGoogle />
+      </div>
+
+      <div className="mt-6 text-center md:mt-8 md:text-right">
+        <Link href="/signup" className="text-sm underline">
+          アカウントの新規作成はこちら
+        </Link>
       </div>
     </div>
   );

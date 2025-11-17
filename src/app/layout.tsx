@@ -9,12 +9,22 @@ const notoSansJp = Noto_Sans_JP({
   fallback: ["Hiragino Sans", "Hiragino Kaku Gothic ProN", "sans-serif"],
 });
 
+const appName = process.env.NEXT_PUBLIC_APP_NAME;
+if (!appName) {
+  throw new Error("NEXT_PUBLIC_APP_NAMEが設定されていません。");
+}
+
+const appDescription = process.env.NEXT_PUBLIC_APP_DESCRIPTION;
+if (!appDescription) {
+  throw new Error("NEXT_PUBLIC_APP_DESCRIPTIONが設定されていません。");
+}
+
 export const metadata: Metadata = {
   title: {
-    template: `%s | バイクの整備記録・出費管理アプリ`,
-    default: "バイクの整備記録・出費管理アプリ",
+    template: `%s | ${appName}`,
+    default: appName,
   },
-  description: "バイクの整備記録と維持費を管理するアプリ",
+  description: appDescription,
 };
 
 export default async function RootLayout({

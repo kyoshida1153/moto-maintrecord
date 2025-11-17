@@ -12,7 +12,9 @@ export default function AccountEmailEditPage() {
   return (
     <>
       <Heading level={1}>メールアドレスの変更</Heading>
-      <UserEmailEditForm />
+      <div className="max-w-lg">
+        <UserEmailEditForm />
+      </div>
     </>
   );
 }

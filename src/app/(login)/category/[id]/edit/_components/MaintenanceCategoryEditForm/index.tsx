@@ -40,7 +40,7 @@ export default function MaintenanceCategoryEditForm({
   const router = useRouter();
 
   // フォームの送信開始～終了
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitResponse({
@@ -86,7 +86,7 @@ export default function MaintenanceCategoryEditForm({
 
   // フォームのdefaultValueの設定で使うもの
   const [isLoadingGetMaintenanceCategory, setIsLoadingGetMaintenanceCategory] =
-    useState(true);
+    useState<boolean>(true);
   const [getMaintenanceCategoryResponse, setGetMaintenanceCategoryResponse] =
     useState<GetMaintenanceCategoryResponse>({
       status: undefined,
@@ -110,61 +110,59 @@ export default function MaintenanceCategoryEditForm({
   return (
     <>
       {isLoadingGetMaintenanceCategory ? (
-        <div className="flex w-full max-w-lg justify-center py-4">
+        <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
       ) : getMaintenanceCategoryResponse.status === "success" ? (
-        <div className="w-full max-w-lg">
-          <Box component="form" className="mt-6 md:mt-8" onSubmit={onSubmit}>
-            <div className="flex flex-col gap-4 md:gap-6">
-              <TextField
-                id="name"
-                label="カテゴリー名"
-                type="text"
-                name="name"
-                defaultValue={getMaintenanceCategoryResponse.defaultValue?.name}
-                sx={{ backgroundColor: "#fff" }}
-              />
-              <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:justify-end">
-                {submitResponse.status === "success" ? (
-                  <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
-                    <CheckCircleIcon />
-                    <span className="whitespace-pre-wrap">
-                      {submitResponse.message}
-                    </span>
-                  </p>
-                ) : submitResponse.status === "error" ? (
-                  <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
-                    <ErrorIcon />
-                    <span className="whitespace-pre-wrap">
-                      {submitResponse.message}
-                    </span>
-                  </p>
-                ) : (
-                  ""
-                )}
-                <Button
-                  variant="contained"
-                  disableElevation
-                  type="submit"
-                  sx={{
-                    fontSize: "16px",
-                    px: "1.5em",
-                    display: "flex",
-                    gap: "0.25em",
-                    whiteSpace: "nowrap",
-                  }}
-                  disabled={isSubmitting || isSubmitSuccessful}
-                >
-                  {isSubmitting ? <Loading size="18px" /> : ""}
-                  {isSubmitting ? <>送信中</> : ""}
-                  {isSubmitSuccessful ? <>編集済</> : ""}
-                  {!isSubmitting && !isSubmitSuccessful ? <>編集</> : ""}
-                </Button>
-              </div>
+        <Box component="form" className="mt-6 md:mt-8" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-4 md:gap-6">
+            <TextField
+              id="name"
+              label="カテゴリー名"
+              type="text"
+              name="name"
+              defaultValue={getMaintenanceCategoryResponse.defaultValue?.name}
+              sx={{ backgroundColor: "#fff" }}
+            />
+            <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:justify-end">
+              {submitResponse.status === "success" ? (
+                <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
+                  <CheckCircleIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
+                </p>
+              ) : submitResponse.status === "error" ? (
+                <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
+                  <ErrorIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
+                </p>
+              ) : (
+                ""
+              )}
+              <Button
+                variant="contained"
+                disableElevation
+                type="submit"
+                sx={{
+                  fontSize: "16px",
+                  px: "1.5em",
+                  display: "flex",
+                  gap: "0.25em",
+                  whiteSpace: "nowrap",
+                }}
+                disabled={isSubmitting || isSubmitSuccessful}
+              >
+                {isSubmitting ? <Loading size="18px" /> : ""}
+                {isSubmitting ? <>送信中</> : ""}
+                {isSubmitSuccessful ? <>編集済</> : ""}
+                {!isSubmitting && !isSubmitSuccessful ? <>編集</> : ""}
+              </Button>
             </div>
-          </Box>
-        </div>
+          </div>
+        </Box>
       ) : (
         <p>{getMaintenanceCategoryResponse.message}</p>
       )}

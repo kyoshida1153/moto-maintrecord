@@ -27,6 +27,7 @@ export default function DonutChart({
   return (
     <div className="relative w-[300px]">
       <PieChart
+        skipAnimation
         colors={rainbowSurgePalette}
         width={300}
         height={300}

@@ -1,6 +1,6 @@
 "use client";
 
-import { MaintenanceCategoryUpdateInput } from "@/app/api/maintenance-categories/[id]/route";
+import type { MaintenanceCategoryUpdateInput } from "@/app/api/maintenance-categories/[id]/route";
 
 export async function updateMaintenanceCategory(
   data: MaintenanceCategoryUpdateInput,

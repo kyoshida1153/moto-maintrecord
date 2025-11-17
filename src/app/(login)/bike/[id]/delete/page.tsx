@@ -15,9 +15,11 @@ export default async function BikeDeletePage({
 }) {
   const { id } = await params;
   return (
-    <div className="w-full max-w-xl">
+    <>
       <Heading level={1}>所有バイクの削除</Heading>
-      <BikeDeleteForm bikeId={id} />
-    </div>
+      <div className="max-w-xl">
+        <BikeDeleteForm bikeId={id} />
+      </div>
+    </>
   );
 }

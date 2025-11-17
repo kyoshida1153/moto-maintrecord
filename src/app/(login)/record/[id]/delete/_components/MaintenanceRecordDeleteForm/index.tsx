@@ -50,15 +50,15 @@ export default function MaintenanceRecordDeleteForm({
   }, [maintenanceRecordId]);
 
   // フォームの送信開始～終了で使うもの
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
   });
   const router = useRouter();
 
-  const onSubmit = async () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
 
     const response = await deleteMaintenanceRecord(maintenanceRecordId);
@@ -79,7 +79,7 @@ export default function MaintenanceRecordDeleteForm({
   return (
     <>
       {isLoadingGetMaintenanceRecord ? (
-        <div className="flex w-full max-w-lg justify-center py-4">
+        <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
       ) : getMaintenanceRecordResponse.status === "success" ? (
@@ -150,7 +150,7 @@ export default function MaintenanceRecordDeleteForm({
                       whiteSpace: "nowrap",
                     }}
                     disabled={isSubmitting || isSubmitSuccessful}
-                    onClick={onSubmit}
+                    onClick={handleSubmit}
                   >
                     {isSubmitting ? <Loading size="18px" /> : ""}
                     {isSubmitting ? <>送信中</> : ""}

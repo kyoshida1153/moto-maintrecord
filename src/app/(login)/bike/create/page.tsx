@@ -12,7 +12,9 @@ export default function BikeCreatePage() {
   return (
     <>
       <Heading level={1}>所有バイクの登録</Heading>
-      <BikeCreateForm />
+      <div className="max-w-lg">
+        <BikeCreateForm />
+      </div>
     </>
   );
 }

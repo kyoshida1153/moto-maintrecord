@@ -116,8 +116,8 @@ export default function MaintenanceRecordEditForm({
   }, [maintenanceRecordId]);
 
   // フォームの送信開始～終了で使うもの
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
@@ -125,7 +125,7 @@ export default function MaintenanceRecordEditForm({
   const router = useRouter();
 
   // フォームの送信開始～終了
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitResponse({
@@ -233,208 +233,202 @@ export default function MaintenanceRecordEditForm({
   return (
     <>
       {isLoadingGetMaintenanceRecord ? (
-        <div className="flex w-full max-w-lg justify-center py-4">
+        <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
       ) : getMaintenanceRecordResponse.status === "success" ? (
-        <div className="w-full max-w-lg">
-          <Box component="form" className="mt-6 md:mt-8" onSubmit={onSubmit}>
-            <div className="flex flex-col gap-4 md:gap-6">
-              <div className="flex gap-4">
-                <DatePicker
-                  name="calenderDate"
-                  label="実施日や予定日"
-                  defaultValue={
-                    getMaintenanceRecordResponse.result?.calenderDate
-                      ? new Date(
-                          getMaintenanceRecordResponse.result.calenderDate,
-                        )
-                      : undefined
-                  }
-                  disabled={isSubmitting || isSubmitSuccessful}
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      defaultChecked={
-                        getMaintenanceRecordResponse.result?.isDone
-                      }
-                    />
-                  }
-                  name="isDone"
-                  label="実施済み"
-                  disabled={isSubmitting || isSubmitSuccessful}
-                  className="whitespace-nowrap"
-                />
-              </div>
-
-              <TextField
-                required
-                id="title"
-                label="タイトル"
-                type="text"
-                name="title"
-                defaultValue={getMaintenanceRecordResponse.result?.title}
-                disabled={isSubmitting || isSubmitSuccessful}
-                sx={{ backgroundColor: "#fff" }}
-              />
-
-              <TextField
-                required
-                id="cost"
-                label="金額"
-                type="number"
-                name="cost"
-                defaultValue={getMaintenanceRecordResponse.result?.cost}
-                disabled={isSubmitting || isSubmitSuccessful}
-                sx={{ backgroundColor: "#fff" }}
-              />
-
-              {isLoadingGetBikes ? (
-                <div className="flex w-full justify-center py-2">
-                  <Loading size="36px" />
-                </div>
-              ) : getBikesResponse.result &&
-                getBikesResponse.result.length > 0 ? (
-                <SelectBox
-                  name="bikeId"
-                  label="所有バイク"
-                  itemList={[
-                    { value: undefined, text: "未選択" },
-                    ...getBikesResponse.result.map((bike) => {
-                      return {
-                        value: bike.id,
-                        text: bike.name,
-                      };
-                    }),
-                  ]}
-                  defaultValue={getMaintenanceRecordResponse.result?.bike?.id}
-                  disabled={isSubmitting || isSubmitSuccessful}
-                />
-              ) : getBikesResponse.status === "success" ? (
-                <SelectBox
-                  name="bikeId"
-                  label="所有バイク未登録"
-                  disabled={true}
-                />
-              ) : (
-                <p className="py-4 text-center">{getBikesResponse.message}</p>
-              )}
-
-              {isLoadingGetMaintenanceCategoriesResponse ? (
-                <div className="flex w-full justify-center py-2">
-                  <Loading size="36px" />
-                </div>
-              ) : getMaintenanceCategoriesResponse.result &&
-                getMaintenanceCategoriesResponse.result.length > 0 ? (
-                <SelectBox
-                  name="maintenanceCategoryId"
-                  label="カテゴリー"
-                  itemList={[
-                    { value: undefined, text: "未選択" },
-                    ...getMaintenanceCategoriesResponse.result.map(
-                      (maintenanceCategory) => {
-                        return {
-                          value: maintenanceCategory.id,
-                          text: maintenanceCategory.name,
-                        };
-                      },
-                    ),
-                  ]}
-                  defaultValue={
-                    getMaintenanceRecordResponse.result?.maintenanceCategory?.id
-                  }
-                  disabled={isSubmitting || isSubmitSuccessful}
-                />
-              ) : getMaintenanceCategoriesResponse.status === "success" ? (
-                <SelectBox
-                  name="maintenanceCategoryId"
-                  label="カテゴリー未登録"
-                  disabled={true}
-                />
-              ) : (
-                <p className="py-4 text-center">{getBikesResponse.message}</p>
-              )}
-
-              <TextField
-                id="memo"
-                label="メモ"
-                multiline
-                rows={6}
-                name="memo"
-                defaultValue={getMaintenanceRecordResponse.result?.memo}
-                disabled={isSubmitting || isSubmitSuccessful}
-                sx={{ backgroundColor: "#fff" }}
-              />
-
-              <InputFileImage
-                name="imageFiles"
-                multiple={true}
-                label="写真・画像"
-                maxFileCount={Number(process.env.NEXT_PUBLIC_MAX_FILE_COUNT)}
+        <Box component="form" className="mt-6 md:mt-8" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-4 md:gap-6">
+            <div className="flex gap-4">
+              <DatePicker
+                name="calenderDate"
+                label="実施日や予定日"
                 defaultValue={
-                  getMaintenanceRecordResponse.result?.maintenanceRecordImages
+                  getMaintenanceRecordResponse.result?.calenderDate
+                    ? new Date(getMaintenanceRecordResponse.result.calenderDate)
+                    : undefined
                 }
                 disabled={isSubmitting || isSubmitSuccessful}
               />
-
-              <TextField
-                id="mileage"
-                label="走行距離（km）"
-                type="number"
-                name="mileage"
-                defaultValue={getMaintenanceRecordResponse.result?.mileage}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    defaultChecked={getMaintenanceRecordResponse.result?.isDone}
+                  />
+                }
+                name="isDone"
+                label="実施済み"
                 disabled={isSubmitting || isSubmitSuccessful}
-                sx={{ backgroundColor: "#fff" }}
+                className="whitespace-nowrap"
               />
-
-              <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
-                {submitResponse.status === "success" ? (
-                  <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
-                    <CheckCircleIcon />
-                    <span className="whitespace-pre-wrap">
-                      {submitResponse.message}
-                    </span>
-                  </p>
-                ) : submitResponse.status === "error" ? (
-                  <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
-                    <ErrorIcon />
-                    <span className="whitespace-pre-wrap">
-                      {submitResponse.message}
-                    </span>
-                  </p>
-                ) : submitResponse.status === "info" ? (
-                  <p className="flex items-center gap-1 text-[var(--icon-color-info)]">
-                    <InfoIcon />
-                    <span className="whitespace-pre-wrap">
-                      {submitResponse.message}
-                    </span>
-                  </p>
-                ) : (
-                  ""
-                )}
-                <Button
-                  variant="contained"
-                  disableElevation
-                  type="submit"
-                  sx={{
-                    fontSize: "16px",
-                    px: "1.5em",
-                    display: "flex",
-                    gap: "0.25em",
-                    whiteSpace: "nowrap",
-                  }}
-                  disabled={isSubmitting || isSubmitSuccessful}
-                >
-                  {isSubmitting ? <Loading size="18px" /> : ""}
-                  {isSubmitting ? <>送信中</> : ""}
-                  {isSubmitSuccessful ? <>編集済</> : ""}
-                  {!isSubmitting && !isSubmitSuccessful ? <>編集</> : ""}
-                </Button>
-              </div>
             </div>
-          </Box>
-        </div>
+
+            <TextField
+              required
+              id="title"
+              label="タイトル"
+              type="text"
+              name="title"
+              defaultValue={getMaintenanceRecordResponse.result?.title}
+              disabled={isSubmitting || isSubmitSuccessful}
+              sx={{ backgroundColor: "#fff" }}
+            />
+
+            <TextField
+              required
+              id="cost"
+              label="金額"
+              type="number"
+              name="cost"
+              defaultValue={getMaintenanceRecordResponse.result?.cost}
+              disabled={isSubmitting || isSubmitSuccessful}
+              sx={{ backgroundColor: "#fff" }}
+            />
+
+            {isLoadingGetBikes ? (
+              <div className="flex w-full justify-center py-2">
+                <Loading size="36px" />
+              </div>
+            ) : getBikesResponse.result &&
+              getBikesResponse.result.length > 0 ? (
+              <SelectBox
+                name="bikeId"
+                label="所有バイク"
+                itemList={[
+                  { value: undefined, text: "未選択" },
+                  ...getBikesResponse.result.map((bike) => {
+                    return {
+                      value: bike.id,
+                      text: bike.name,
+                    };
+                  }),
+                ]}
+                defaultValue={getMaintenanceRecordResponse.result?.bike?.id}
+                disabled={isSubmitting || isSubmitSuccessful}
+              />
+            ) : getBikesResponse.status === "success" ? (
+              <SelectBox
+                name="bikeId"
+                label="所有バイク未登録"
+                disabled={true}
+              />
+            ) : (
+              <p className="py-4 text-center">{getBikesResponse.message}</p>
+            )}
+
+            {isLoadingGetMaintenanceCategoriesResponse ? (
+              <div className="flex w-full justify-center py-2">
+                <Loading size="36px" />
+              </div>
+            ) : getMaintenanceCategoriesResponse.result &&
+              getMaintenanceCategoriesResponse.result.length > 0 ? (
+              <SelectBox
+                name="maintenanceCategoryId"
+                label="カテゴリー"
+                itemList={[
+                  { value: undefined, text: "未選択" },
+                  ...getMaintenanceCategoriesResponse.result.map(
+                    (maintenanceCategory) => {
+                      return {
+                        value: maintenanceCategory.id,
+                        text: maintenanceCategory.name,
+                      };
+                    },
+                  ),
+                ]}
+                defaultValue={
+                  getMaintenanceRecordResponse.result?.maintenanceCategory?.id
+                }
+                disabled={isSubmitting || isSubmitSuccessful}
+              />
+            ) : getMaintenanceCategoriesResponse.status === "success" ? (
+              <SelectBox
+                name="maintenanceCategoryId"
+                label="カテゴリー未登録"
+                disabled={true}
+              />
+            ) : (
+              <p className="py-4 text-center">{getBikesResponse.message}</p>
+            )}
+
+            <TextField
+              id="memo"
+              label="メモ"
+              multiline
+              rows={6}
+              name="memo"
+              defaultValue={getMaintenanceRecordResponse.result?.memo}
+              disabled={isSubmitting || isSubmitSuccessful}
+              sx={{ backgroundColor: "#fff" }}
+            />
+
+            <InputFileImage
+              name="imageFiles"
+              multiple={true}
+              label="写真・画像"
+              maxFileCount={Number(process.env.NEXT_PUBLIC_MAX_FILE_COUNT)}
+              defaultValue={
+                getMaintenanceRecordResponse.result?.maintenanceRecordImages
+              }
+              disabled={isSubmitting || isSubmitSuccessful}
+            />
+
+            <TextField
+              id="mileage"
+              label="走行距離（km）"
+              type="number"
+              name="mileage"
+              defaultValue={getMaintenanceRecordResponse.result?.mileage}
+              disabled={isSubmitting || isSubmitSuccessful}
+              sx={{ backgroundColor: "#fff" }}
+            />
+
+            <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
+              {submitResponse.status === "success" ? (
+                <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
+                  <CheckCircleIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
+                </p>
+              ) : submitResponse.status === "error" ? (
+                <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
+                  <ErrorIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
+                </p>
+              ) : submitResponse.status === "info" ? (
+                <p className="flex items-center gap-1 text-[var(--icon-color-info)]">
+                  <InfoIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
+                </p>
+              ) : (
+                ""
+              )}
+              <Button
+                variant="contained"
+                disableElevation
+                type="submit"
+                sx={{
+                  fontSize: "16px",
+                  px: "1.5em",
+                  display: "flex",
+                  gap: "0.25em",
+                  whiteSpace: "nowrap",
+                }}
+                disabled={isSubmitting || isSubmitSuccessful}
+              >
+                {isSubmitting ? <Loading size="18px" /> : ""}
+                {isSubmitting ? <>送信中</> : ""}
+                {isSubmitSuccessful ? <>編集済</> : ""}
+                {!isSubmitting && !isSubmitSuccessful ? <>編集</> : ""}
+              </Button>
+            </div>
+          </div>
+        </Box>
       ) : (
         <p>{getMaintenanceRecordResponse.message}</p>
       )}

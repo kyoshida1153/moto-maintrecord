@@ -43,15 +43,15 @@ export default function BikeDeleteForm({ bikeId }: { bikeId: string }) {
   }, [bikeId]);
 
   // フォームの送信開始～終了で使うもの
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
   });
   const router = useRouter();
 
-  const onSubmit = async () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
 
     const response = await deleteBike(bikeId);
@@ -72,7 +72,7 @@ export default function BikeDeleteForm({ bikeId }: { bikeId: string }) {
   return (
     <>
       {isLoadingGetBike ? (
-        <div className="flex w-full max-w-lg justify-center py-4">
+        <div className="flex justify-center py-4">
           <Loading size="36px" />
         </div>
       ) : getBikeResponse.status === "success" ? (
@@ -142,7 +142,7 @@ export default function BikeDeleteForm({ bikeId }: { bikeId: string }) {
                       whiteSpace: "nowrap",
                     }}
                     disabled={isSubmitting || isSubmitSuccessful}
-                    onClick={onSubmit}
+                    onClick={handleSubmit}
                   >
                     {isSubmitting ? <Loading size="18px" /> : ""}
                     {isSubmitting ? <>送信中</> : ""}

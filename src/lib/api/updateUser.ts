@@ -1,6 +1,6 @@
 "use client";
 
-import { UserUpdateInput } from "@/app/api/user/route";
+import type { UserUpdateInput } from "@/app/api/user/route";
 
 type UserUpdateInputPre = Omit<UserUpdateInput, "hashedPassword"> & {
   password?: string | null;

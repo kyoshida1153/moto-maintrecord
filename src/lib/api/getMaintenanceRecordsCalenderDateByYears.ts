@@ -1,6 +1,6 @@
 "use client";
 
-import { MaintenanceRecordAggregateCalenderDateByYears } from "@/app/api/maintenance-records/aggregate/calender-date/by-years/route";
+import type { MaintenanceRecordAggregateCalenderDateByYears } from "@/app/api/maintenance-records/aggregate/calender-date/by-years/route";
 
 export async function getMaintenanceRecordsCalenderDateByYears(): Promise<{
   success: boolean;

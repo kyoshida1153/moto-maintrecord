@@ -15,7 +15,7 @@ export default async function MaintenanceCategoryDeletePage({
 }) {
   const { id } = await params;
   return (
-    <div className="w-full max-w-xl">
+    <div className="max-w-xl">
       <Heading level={1}>カテゴリーの削除</Heading>
       <MaintenanceCategoryDeleteForm maintenanceCategoryId={id} />
     </div>

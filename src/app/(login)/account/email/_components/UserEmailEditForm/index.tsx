@@ -95,90 +95,88 @@ export default function UserEmailEditForm() {
   return (
     <>
       {isLoadingGetUser ? (
-        <div className="flex w-full max-w-lg justify-center py-4">
+        <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
       ) : getUserResponse.status === "success" ? (
-        <div className="w-full max-w-lg">
-          <Box
-            component="form"
-            className="mt-6 md:mt-8"
-            onSubmit={handleSubmit}
-          >
-            <div className="flex flex-col gap-4 md:gap-6">
-              <TextField
-                required
-                id="current_email"
-                label="現在のメールアドレス"
-                type="text"
-                name="current_email"
-                defaultValue={getUserResponse.defaultValue?.email}
-                disabled={isSubmitting || isSubmitSuccessful}
-                sx={{ backgroundColor: "#fff" }}
-              />
-              <TextField
-                required
-                id="new_email"
-                label="新しいメールアドレス"
-                type="text"
-                name="new_email"
-                disabled={isSubmitting || isSubmitSuccessful}
-                sx={{ backgroundColor: "#fff" }}
-              />
-              <TextField
-                required
-                id="new_email_confirm"
-                label="新しいメールアドレス（確認）"
-                type="text"
-                name="new_email_confirm"
-                disabled={isSubmitting || isSubmitSuccessful}
-                sx={{ backgroundColor: "#fff" }}
-              />
-              <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
-                {submitResponse.status === "success" ? (
-                  <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
-                    <CheckCircleIcon />
-                    <span className="whitespace-pre-wrap">
-                      {submitResponse.message}
-                    </span>
-                  </p>
-                ) : submitResponse.status === "error" ? (
-                  <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
-                    <ErrorIcon />
-                    <span className="whitespace-pre-wrap">
-                      {submitResponse.message}
-                    </span>
-                  </p>
-                ) : (
-                  ""
-                )}
-                <Button
-                  variant="contained"
-                  disableElevation
-                  type="submit"
-                  sx={{
-                    fontSize: "16px",
-                    px: "1.5em",
-                    display: "flex",
-                    gap: "0.25em",
-                    whiteSpace: "nowrap",
-                  }}
-                  disabled={isSubmitting || isSubmitSuccessful}
-                >
-                  {isSubmitting ? <Loading size="18px" /> : ""}
-                  {isSubmitting ? <>変更中</> : ""}
-                  {isSubmitSuccessful ? <>変更済</> : ""}
-                  {!isSubmitting && !isSubmitSuccessful ? <>変更</> : ""}
-                </Button>
-              </div>
-              {submitResponse.status === "success" && (
-                <p>
-                  3秒後ログアウトします。新しいメールアドレスで再度ログインしてください。
+        <Box
+          component="form"
+          className="mt-6 w-full md:mt-8"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex flex-col gap-4 md:gap-6">
+            <TextField
+              required
+              id="current_email"
+              label="現在のメールアドレス"
+              type="text"
+              name="current_email"
+              defaultValue={getUserResponse.defaultValue?.email}
+              disabled={isSubmitting || isSubmitSuccessful}
+              sx={{ backgroundColor: "#fff" }}
+            />
+            <TextField
+              required
+              id="new_email"
+              label="新しいメールアドレス"
+              type="text"
+              name="new_email"
+              disabled={isSubmitting || isSubmitSuccessful}
+              sx={{ backgroundColor: "#fff" }}
+            />
+            <TextField
+              required
+              id="new_email_confirm"
+              label="新しいメールアドレス（確認）"
+              type="text"
+              name="new_email_confirm"
+              disabled={isSubmitting || isSubmitSuccessful}
+              sx={{ backgroundColor: "#fff" }}
+            />
+            <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
+              {submitResponse.status === "success" ? (
+                <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
+                  <CheckCircleIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
                 </p>
+              ) : submitResponse.status === "error" ? (
+                <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
+                  <ErrorIcon />
+                  <span className="whitespace-pre-wrap">
+                    {submitResponse.message}
+                  </span>
+                </p>
+              ) : (
+                ""
               )}
+              <Button
+                variant="contained"
+                disableElevation
+                type="submit"
+                sx={{
+                  fontSize: "16px",
+                  px: "1.5em",
+                  display: "flex",
+                  gap: "0.25em",
+                  whiteSpace: "nowrap",
+                }}
+                disabled={isSubmitting || isSubmitSuccessful}
+              >
+                {isSubmitting ? <Loading size="18px" /> : ""}
+                {isSubmitting ? <>変更中</> : ""}
+                {isSubmitSuccessful ? <>変更済</> : ""}
+                {!isSubmitting && !isSubmitSuccessful ? <>変更</> : ""}
+              </Button>
             </div>
-          </Box>
-        </div>
+            {submitResponse.status === "success" && (
+              <p>
+                3秒後ログアウトします。新しいメールアドレスで再度ログインしてください。
+              </p>
+            )}
+          </div>
+        </Box>
       ) : (
         <p>{getUserResponse.message}</p>
       )}

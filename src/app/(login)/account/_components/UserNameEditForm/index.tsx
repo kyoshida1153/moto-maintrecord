@@ -94,7 +94,7 @@ export default function UserNameEditForm() {
   };
 
   // フォームのdefaultValueの設定で使うもの
-  const [isLoadingGetUser, setIsLoadingGetUser] = useState(true);
+  const [isLoadingGetUser, setIsLoadingGetUser] = useState<boolean>(true);
   const [getUserResponse, setGetUserResponse] = useState<GetUserResponse>({
     status: undefined,
     message: "",

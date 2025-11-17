@@ -13,24 +13,26 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function MaintenanceCategoryPage() {
   return (
-    <div className="w-full max-w-3xl">
+    <>
       <Heading level={1}>カテゴリー</Heading>
-      <div className="my-6 text-center md:my-8 md:text-left">
-        <Button
-          component={MuiLink}
-          variant="contained"
-          disableElevation
-          startIcon={<AddIcon />}
-          href="/category/create"
-          sx={{
-            maxWidth: "fit-content",
-            whiteSpace: "nowrap",
-          }}
-        >
-          カテゴリーの登録
-        </Button>
+      <div className="max-w-3xl">
+        <div className="my-6 text-center md:my-8 md:text-left">
+          <Button
+            component={MuiLink}
+            variant="contained"
+            disableElevation
+            startIcon={<AddIcon />}
+            href="/category/create"
+            sx={{
+              maxWidth: "fit-content",
+              whiteSpace: "nowrap",
+            }}
+          >
+            カテゴリーの登録
+          </Button>
+        </div>
+        <MaintenanceCategoryCardList />
       </div>
-      <MaintenanceCategoryCardList />
-    </div>
+    </>
   );
 }

@@ -48,7 +48,7 @@ export async function uploadMaintenanceRecordImageFiles(
   // Promise.allで並列処理を行うための関数の配列
   // 画像ファイルをストレージにアップロード、返値はアップロード先のURL
   const uploadPromises = imageFiles
-    .filter((file, i) => i < maxFileCount)
+    .slice(0, maxFileCount)
     .map(async (file): Promise<{ imageUrl: string }> => {
       // アップロード用ファイルパスを作成
       const yearMonth = format(new Date(), "yyyy/MM", { locale: ja });

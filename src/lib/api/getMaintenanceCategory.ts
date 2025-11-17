@@ -1,6 +1,6 @@
 "use client";
 
-import { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
+import type { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
 
 export async function getMaintenanceCategory(id: string): Promise<{
   success: boolean;

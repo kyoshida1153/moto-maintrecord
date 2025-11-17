@@ -1,6 +1,6 @@
 "use client";
 
-import { MaintenanceRecordUniqueSelect } from "@/app/api/maintenance-records/[id]/route";
+import type { MaintenanceRecordUniqueSelect } from "@/app/api/maintenance-records/[id]/route";
 
 export async function getMaintenanceRecord(id: string): Promise<{
   success: boolean;

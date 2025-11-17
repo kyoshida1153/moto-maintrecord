@@ -1,6 +1,6 @@
 "use client";
 
-import { MaintenanceRecordAggregateCostByCategory } from "@/app/api/maintenance-records/aggregate/cost/by-categories/route";
+import type { MaintenanceRecordAggregateCostByCategory } from "@/app/api/maintenance-records/aggregate/cost/by-categories/route";
 
 type Params = {
   date?: string;

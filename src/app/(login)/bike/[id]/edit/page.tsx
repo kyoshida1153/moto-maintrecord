@@ -17,7 +17,9 @@ export default async function BikeEditPage({
   return (
     <>
       <Heading level={1}>所有バイクの編集</Heading>
-      <BikeEditForm bikeId={id} />
+      <div className="max-w-lg">
+        <BikeEditForm bikeId={id} />
+      </div>
     </>
   );
 }

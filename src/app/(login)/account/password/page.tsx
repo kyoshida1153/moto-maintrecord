@@ -12,7 +12,9 @@ export default function AccountPasswordEditPage() {
   return (
     <>
       <Heading level={1}>パスワードの変更</Heading>
-      <UserPasswordEditForm />
+      <div className="max-w-lg">
+        <UserPasswordEditForm />
+      </div>
     </>
   );
 }

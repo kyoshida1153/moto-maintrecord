@@ -11,7 +11,9 @@ export default function AccountDeletePage() {
   return (
     <>
       <Heading level={1}>アカウントの削除</Heading>
-      <UserDeleteForm />
+      <div className="max-w-lg">
+        <UserDeleteForm />
+      </div>
     </>
   );
 }

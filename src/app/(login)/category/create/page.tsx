@@ -12,7 +12,9 @@ export default function MaintenanceCategoryCreatePage() {
   return (
     <>
       <Heading level={1}>カテゴリーの登録</Heading>
-      <MaintenanceCategoryCreateForm />
+      <div className="max-w-lg">
+        <MaintenanceCategoryCreateForm />
+      </div>
     </>
   );
 }

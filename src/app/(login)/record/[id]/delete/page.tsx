@@ -15,9 +15,11 @@ export default async function MaintenanceRecordDeletePage({
 }) {
   const { id } = await params;
   return (
-    <div className="w-full max-w-xl">
+    <>
       <Heading level={1}>整備・出費記録の削除</Heading>
-      <MaintenanceRecordDeleteForm maintenanceRecordId={id} />
-    </div>
+      <div className="max-w-xl">
+        <MaintenanceRecordDeleteForm maintenanceRecordId={id} />
+      </div>
+    </>
   );
 }

@@ -17,7 +17,9 @@ export default async function MaintenanceRecordEditPage({
   return (
     <>
       <Heading level={1}>整備・出費記録の編集</Heading>
-      <MaintenanceRecordEditForm maintenanceRecordId={id} />
+      <div className="max-w-lg">
+        <MaintenanceRecordEditForm maintenanceRecordId={id} />
+      </div>
     </>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { MaintenanceRecordAggregateCostByMonth } from "@/app/api/maintenance-records/aggregate/cost/by-monthly/route";
+import type { MaintenanceRecordAggregateCostByMonth } from "@/app/api/maintenance-records/aggregate/cost/by-monthly/route";
 
 type Params = {
   date?: string;

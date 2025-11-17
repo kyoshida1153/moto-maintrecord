@@ -18,15 +18,15 @@ type SubmitResponse = {
 
 export default function BikeCreateForm() {
   // フォーム送信
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
   });
   const router = useRouter();
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitResponse({
@@ -96,81 +96,79 @@ export default function BikeCreateForm() {
   };
 
   return (
-    <div className="w-full max-w-lg">
-      <Box component="form" className="mt-6 md:mt-8" onSubmit={onSubmit}>
-        <div className="flex flex-col gap-4 md:gap-6">
-          <InputFileImage
-            name="imageFile"
-            multiple={false}
-            label="バイクの写真"
+    <Box component="form" className="mt-6 md:mt-8" onSubmit={handleSubmit}>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <InputFileImage
+          name="imageFile"
+          multiple={false}
+          label="バイクの写真"
+          disabled={isSubmitting || isSubmitSuccessful}
+        />
+        <TextField
+          required
+          id="name"
+          label="バイクの名前"
+          type="text"
+          name="name"
+          sx={{ backgroundColor: "#fff" }}
+          disabled={isSubmitting || isSubmitSuccessful}
+        />
+        <TextField
+          id="mileage"
+          label="毎月の走行距離（km）"
+          type="number"
+          name="mileage"
+          sx={{ backgroundColor: "#fff" }}
+          disabled={isSubmitting || isSubmitSuccessful}
+        />
+        <TextField
+          id="memo"
+          label="メモ"
+          multiline
+          rows={6}
+          name="memo"
+          defaultValue=""
+          sx={{ backgroundColor: "#fff" }}
+          disabled={isSubmitting || isSubmitSuccessful}
+        />
+        <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
+          {submitResponse.status === "success" ? (
+            <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
+              <CheckCircleIcon />
+              <span className="whitespace-pre-wrap">
+                {submitResponse.message}
+              </span>
+            </p>
+          ) : submitResponse.status === "error" ? (
+            <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
+              <ErrorIcon />
+              <span className="whitespace-pre-wrap">
+                {submitResponse.message}
+              </span>
+            </p>
+          ) : (
+            ""
+          )}
+          <Button
+            variant="contained"
+            disableElevation
+            type="submit"
+            sx={{
+              fontSize: "16px",
+              px: "1.5em",
+              display: "flex",
+              gap: "0.25em",
+              whiteSpace: "nowrap",
+            }}
             disabled={isSubmitting || isSubmitSuccessful}
-          />
-          <TextField
-            required
-            id="name"
-            label="バイクの名前"
-            type="text"
-            name="name"
-            sx={{ backgroundColor: "#fff" }}
-            disabled={isSubmitting || isSubmitSuccessful}
-          />
-          <TextField
-            id="mileage"
-            label="毎月の走行距離（km）"
-            type="number"
-            name="mileage"
-            sx={{ backgroundColor: "#fff" }}
-            disabled={isSubmitting || isSubmitSuccessful}
-          />
-          <TextField
-            id="memo"
-            label="メモ"
-            multiline
-            rows={6}
-            name="memo"
-            defaultValue=""
-            sx={{ backgroundColor: "#fff" }}
-            disabled={isSubmitting || isSubmitSuccessful}
-          />
-          <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
-            {submitResponse.status === "success" ? (
-              <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
-                <CheckCircleIcon />
-                <span className="whitespace-pre-wrap">
-                  {submitResponse.message}
-                </span>
-              </p>
-            ) : submitResponse.status === "error" ? (
-              <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
-                <ErrorIcon />
-                <span className="whitespace-pre-wrap">
-                  {submitResponse.message}
-                </span>
-              </p>
-            ) : (
-              ""
-            )}
-            <Button
-              variant="contained"
-              disableElevation
-              type="submit"
-              sx={{
-                fontSize: "16px",
-                px: "1.5em",
-                display: "flex",
-                gap: "0.25em",
-                whiteSpace: "nowrap",
-              }}
-              disabled={isSubmitting || isSubmitSuccessful}
-            >
-              {isSubmitting ? <Loading size="18px" /> : ""}
-              {isSubmitting ? <>送信中</> : ""}
-              {isSubmitSuccessful ? <>登録済</> : ""}
-              {!isSubmitting && !isSubmitSuccessful ? <>登録</> : ""}
-            </Button>
-          </div>
+          >
+            {isSubmitting ? <Loading size="18px" /> : ""}
+            {isSubmitting ? <>送信中</> : ""}
+            {isSubmitSuccessful ? <>登録済</> : ""}
+            {!isSubmitting && !isSubmitSuccessful ? <>登録</> : ""}
+          </Button>
         </div>
-      </Box>
-    </div>
+      </div>
+    </Box>
   );
 }
