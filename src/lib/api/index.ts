@@ -23,3 +23,6 @@ export { updateBike } from "./updateBike";
 export { updateMaintenanceCategory } from "./updateMaintenanceCategory";
 export { updateMaintenanceRecord } from "./updateMaintenanceRecord";
 export { updateUser } from "./updateUser";
+export { updateUserEmail } from "./updateUserEmail";
+export { updateUserName } from "./updateUserName";
+export { updateUserPassword } from "./updateUserPassword";

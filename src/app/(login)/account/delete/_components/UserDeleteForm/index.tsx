@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import WarningIcon from "@mui/icons-material/Warning";
 
-import { Loading } from "@/components";
+import { LinkButton, Loading, SubmitButton } from "@/components";
 import { getUser, deleteUser } from "@/lib/api";
 import type { UserUniqueSelect } from "@/app/api/user/route";
 
@@ -52,7 +52,6 @@ export default function AccountDeleteForm() {
 
       if (deleteUserResponse.success === true) {
         setIsSubmitSuccessful(true);
-        // signOut({ callbackUrl: "/" });
         setTimeout(() => {
           signOut({ callbackUrl: "/" });
         }, 2000);
@@ -142,39 +141,24 @@ export default function AccountDeleteForm() {
             )}
 
             <div className="flex justify-center gap-3 md:justify-start">
-              <Button
+              <LinkButton
+                href="#"
                 variant="outlined"
-                disableElevation
-                sx={{
-                  backgroundColor: "#fff",
-                  maxWidth: "fit-content",
-                  px: "1.5em",
-                  fontSize: "16px",
-                  whiteSpace: "nowrap",
-                }}
                 disabled={isSubmitting || isSubmitSuccessful}
                 onClick={router.back}
               >
                 キャンセル
-              </Button>
-              <Button
+              </LinkButton>
+              <SubmitButton
                 variant="contained"
-                disableElevation
-                type="submit"
-                sx={{
-                  fontSize: "16px",
-                  px: "1.5em",
-                  display: "flex",
-                  gap: "0.25em",
-                  whiteSpace: "nowrap",
+                isSubmitting={isSubmitting}
+                isSubmitSuccessful={isSubmitSuccessful}
+                labels={{
+                  default: "削除",
+                  isSubmitting: "削除中",
+                  isSubmitSuccessful: "削除完了",
                 }}
-                disabled={isSubmitting || isSubmitSuccessful}
-              >
-                {isSubmitting ? <Loading size="18px" /> : ""}
-                {isSubmitting ? <>削除中</> : ""}
-                {isSubmitSuccessful ? <>削除済</> : ""}
-                {!isSubmitting && !isSubmitSuccessful ? <>削除</> : ""}
-              </Button>
+              />
             </div>
           </div>
         </Box>
