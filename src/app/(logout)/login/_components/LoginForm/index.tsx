@@ -6,12 +6,15 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import { Loading, OAuthButtonGoogle } from "@/components";
+import { TextField, SubmitButton, OAuthButtonGoogle } from "@/components";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { SigninSchema } from "@/validations";
+import type * as z from "zod";
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;
@@ -19,59 +22,75 @@ type SubmitResponse = {
 };
 
 export default function LoginForm() {
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
+  // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
   });
   const router = useRouter();
 
-  // ログイン
-  const login = async (formData: FormData): Promise<SubmitResponse> => {
-    const data = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting, isSubmitSuccessful, errors },
+    reset,
+  } = useForm<z.infer<typeof SigninSchema>>({
+    resolver: zodResolver(SigninSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
 
+  // ログイン
+  const login = async (values: z.infer<typeof SigninSchema>) => {
     const signinResponse = await signIn("credentials", {
-      ...data,
+      email: values.email,
+      password: values.password,
       redirect: false,
     });
 
     if (signinResponse?.ok) {
       return {
-        status: "success",
+        success: true,
         message: "ログインに成功しました。",
       };
     } else {
       return {
-        status: "error",
+        success: false,
         message: "ログインに失敗しました。",
       };
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  // フォームの送信開始～終了
+  const onSubmit = async (values: z.infer<typeof SigninSchema>) => {
     setSubmitResponse({
       status: undefined,
       message: "",
     });
 
-    const formData = new FormData(e.currentTarget);
+    const data = {
+      email: values.email,
+      password: values.password,
+    };
 
-    const loginResponse = await login(formData);
-    setSubmitResponse(loginResponse);
-    setIsSubmitting(false);
-    if (loginResponse.status === "error") {
-      return false;
-    } else {
-      setIsSubmitSuccessful(true);
+    const loginResponse = await login(data);
+    setSubmitResponse({
+      message: loginResponse.message,
+      status: loginResponse.success === true ? "success" : "error",
+    });
+
+    if (loginResponse.success === true) {
       setTimeout(() => {
         router.push("/top");
       }, 1500);
+    } else {
+      setTimeout(() => {
+        reset(undefined, { keepValues: true });
+      }, 300);
+      return false;
     }
   };
 
@@ -79,34 +98,53 @@ export default function LoginForm() {
     <div className="w-full rounded bg-white p-6 shadow-md shadow-gray-300/50 md:p-8">
       <h1 className="mb-6 text-center text-xl md:mb-8 md:text-2xl">ログイン</h1>
 
-      <Box component="form" className="mt-6 md:mt-8" onSubmit={handleSubmit}>
+      <Box
+        component="form"
+        className="mt-6 md:mt-8"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex flex-col gap-4 md:gap-6">
-          <TextField
-            required
-            id="email"
-            label="メールアドレス"
-            type="text"
+          <Controller
             name="email"
-            disabled={isSubmitting || isSubmitSuccessful}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                required={true}
+                field={field}
+                label="メールアドレス"
+                type="text"
+                disabled={isSubmitting || isSubmitSuccessful}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            )}
           />
-          <TextField
-            required
-            id="password"
-            label="パスワード"
-            type="password"
+          <Controller
             name="password"
-            disabled={isSubmitting || isSubmitSuccessful}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                required={true}
+                field={field}
+                label="パスワード"
+                type="password"
+                disabled={isSubmitting || isSubmitSuccessful}
+                error={!!errors.password}
+                helperText={errors.password?.message}
+              />
+            )}
           />
-          <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:justify-end">
+
+          <div className="flex flex-col items-center justify-center gap-4 md:mb-4 md:flex-row md:items-start md:justify-end md:gap-2">
             {submitResponse.status === "success" ? (
-              <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
+              <p className="flex gap-1 text-[var(--icon-color-success)] md:mr-[1em]">
                 <CheckCircleIcon />
                 <span className="whitespace-pre-wrap">
                   {submitResponse.message}
                 </span>
               </p>
             ) : submitResponse.status === "error" ? (
-              <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
+              <p className="flex gap-1 text-[var(--icon-color-success)] md:mr-[1em]">
                 <ErrorIcon />
                 <span className="whitespace-pre-wrap">
                   {submitResponse.message}
@@ -115,24 +153,17 @@ export default function LoginForm() {
             ) : (
               ""
             )}
-            <Button
+
+            <SubmitButton
               variant="contained"
-              disableElevation
-              type="submit"
-              sx={{
-                fontSize: "16px",
-                px: "1.5em",
-                display: "flex",
-                gap: "0.25em",
-                whiteSpace: "nowrap",
+              isSubmitting={isSubmitting}
+              isSubmitSuccessful={isSubmitSuccessful}
+              labels={{
+                default: "ログイン",
+                isSubmitting: "送信中",
+                isSubmitSuccessful: "送信完了",
               }}
-              disabled={isSubmitting || isSubmitSuccessful}
-            >
-              {isSubmitting ? <Loading size="18px" /> : ""}
-              {isSubmitting ? <>ログイン中</> : ""}
-              {isSubmitSuccessful ? <>ログイン済</> : ""}
-              {!isSubmitting && !isSubmitSuccessful ? <>ログイン</> : ""}
-            </Button>
+            />
           </div>
         </div>
       </Box>

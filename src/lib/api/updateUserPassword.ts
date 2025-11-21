@@ -3,10 +3,8 @@
 import * as z from "zod";
 import { UserPasswordSchema } from "@/validations";
 
-type UserUpdatePasswordInput = z.infer<typeof UserPasswordSchema>;
-
 export async function updateUserPassword(
-  data: UserUpdatePasswordInput,
+  data: z.infer<typeof UserPasswordSchema>,
 ): Promise<{
   success: boolean;
   message: string;

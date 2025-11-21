@@ -3,16 +3,17 @@ import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { getCurrentUser } from "@/actions";
+import { SignupSchema } from "@/validations";
 
 /* ###################################################################### */
 
 // 取得
 
-const UserUniqueSelect = Prisma.validator<Prisma.UserSelect>()({
+const UserUniqueSelect = {
   id: true,
   name: true,
   email: true,
-});
+} satisfies Prisma.UserSelect;
 
 export type UserUniqueSelect = Prisma.UserGetPayload<{
   select: typeof UserUniqueSelect;
@@ -38,7 +39,11 @@ export async function GET() {
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -50,8 +55,6 @@ export async function GET() {
 
 // 作成
 
-export type UserCreateInput = Prisma.UserCreateInput;
-
 export async function POST(request: NextRequest) {
   // 認証チェック※ログイン中は作成できないようにする
   const currentUser = await getCurrentUser();
@@ -60,68 +63,40 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { email, name, password } = await request.json();
+    const { name, email, password, confirmPassword } = await request.json();
+
+    // バリデーションチェック
+    const validated = SignupSchema.safeParse({
+      name,
+      email,
+      password,
+      confirmPassword,
+    });
+
+    if (!validated.success) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const data: UserCreateInput = {
-      email,
-      name,
-      hashedPassword,
-    };
-
-    const result = await prisma.user.create({ data });
+    const result = await prisma.user.create({
+      data: {
+        name,
+        email,
+        hashedPassword,
+      },
+    });
 
     if (result) {
       return NextResponse.json({ message: "Success" }, { status: 201 });
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 },
-    );
-  }
-}
-
-/* ###################################################################### */
-
-// 編集
-
-export type UserUpdateInput = Prisma.UserUpdateInput;
-
-export async function PUT(request: NextRequest) {
-  // 認証チェック
-  const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-  const userId = currentUser.id;
-
-  // ここからDB操作
-  try {
-    const { name, email, password } = await request.json();
-    const hashedPassword = password
-      ? await bcrypt.hash(password, 12)
-      : undefined;
-
-    const data: UserUpdateInput = {
-      name,
-      email,
-      hashedPassword,
-    };
-
-    const result = await prisma.user.update({
-      data,
-      where: { id: userId },
-    });
-
-    if (result) {
-      return NextResponse.json({ message: "Success", result }, { status: 201 });
-    } else {
-      return NextResponse.json({ message: "Not Found" }, { status: 404 });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
     }
-  } catch {
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -143,13 +118,10 @@ export async function DELETE() {
 
   // ここからDB操作
   try {
-    // 型は編集のを使用
-    const data: UserUpdateInput = {
-      deletedAt: new Date(),
-    };
-
     const result = await prisma.user.update({
-      data,
+      data: {
+        deletedAt: new Date(),
+      },
       where: { id: userId },
     });
 
@@ -158,7 +130,11 @@ export async function DELETE() {
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },

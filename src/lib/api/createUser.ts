@@ -1,40 +1,51 @@
 "use client";
 
-import { Prisma } from "@prisma/client";
+import * as z from "zod";
+import { SignupSchema } from "@/validations";
 
-type User = Prisma.UserGetPayload<{
-  select: {
-    email: true;
-    name: true;
-  };
-}> & {
-  password: string;
-};
-
-export async function createUser(data: User): Promise<{
+export async function createUser(data: z.infer<typeof SignupSchema>): Promise<{
   success: boolean;
   message: string;
 }> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/`,
-    {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    },
-  );
+    );
 
-  if (response.ok) {
-    return {
-      success: true,
-      message: "アカウントの作成に成功しました。",
-    };
-  } else {
+    if (response.ok) {
+      return {
+        success: true,
+        message: "アカウントの作成に成功しました。",
+      };
+    }
+
+    switch (response.status) {
+      case 400:
+        return {
+          success: false,
+          message: `アカウントの作成が中断されました。入力内容を確認してください。`,
+        };
+      default:
+        return {
+          success: false,
+          message: "アカウントの作成に失敗しました。",
+        };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return {
       success: false,
-      message: "アカウントの作成に失敗しました。",
+      message: "変更に失敗しました。",
     };
   }
 }

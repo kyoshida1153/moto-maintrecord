@@ -5,12 +5,16 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import { Loading, OAuthButtonGoogle } from "@/components";
+import { TextField, SubmitButton, OAuthButtonGoogle } from "@/components";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { SignupSchema } from "@/validations";
+import type * as z from "zod";
+
 import { createUser } from "@/lib/api";
 
 type SubmitResponse = {
@@ -19,95 +23,80 @@ type SubmitResponse = {
 };
 
 export default function SignupForm() {
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
+  // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
   });
   const router = useRouter();
 
-  // アカウント作成
-  const signup = async (formData: FormData): Promise<SubmitResponse> => {
-    const data = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting, isSubmitSuccessful, errors },
+    reset,
+  } = useForm<z.infer<typeof SignupSchema>>({
+    resolver: zodResolver(SignupSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    mode: "onChange",
+  });
 
-    const signupResponse = await createUser(data);
-
-    if (signupResponse.success === false) {
-      return {
-        status: "error",
-        message: signupResponse.message,
-      };
-    } else {
-      return {
-        status: "success",
-        message: signupResponse.message,
-      };
-    }
-  };
-
-  // ログイン
-  const login = async (formData: FormData): Promise<SubmitResponse> => {
-    const data = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
-
-    const loginResponse = await signIn("credentials", {
-      ...data,
-      redirect: false,
-    });
-
-    if (loginResponse?.ok) {
-      return {
-        status: "success",
-        message: "ログインに成功しました。",
-      };
-    } else {
-      return {
-        status: "error",
-        message:
-          "ログインに失敗しました。\nお手数ですがログイン画面でログインしてください。\n3秒後にログイン画面に移動します。",
-      };
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  // フォームの送信開始～終了
+  const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
     setSubmitResponse({
       status: undefined,
       message: "",
     });
 
-    const formData = new FormData(e.currentTarget);
+    // ユーザー作成
+    const createUserResponse = await createUser({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+    });
 
-    const signupResponse = await signup(formData);
-    setSubmitResponse(signupResponse);
-    if (signupResponse.status === "error") {
-      setIsSubmitting(false);
+    setSubmitResponse({
+      message: createUserResponse.message,
+      status: createUserResponse.success === true ? "success" : "error",
+    });
+
+    if (createUserResponse.success === false) {
+      setTimeout(() => {
+        reset(undefined, { keepValues: true });
+      }, 300);
       return false;
     }
 
-    const loginResponse = await login(formData);
-    setIsSubmitting(false);
-    setIsSubmitSuccessful(true);
-    setSubmitResponse(loginResponse);
+    // ログイン
+    const loginResponse = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
 
-    if (loginResponse.status === "error") {
-      setTimeout(() => {
-        router.push("/login");
-      }, 3000);
-      return false;
-    } else {
+    if (loginResponse?.ok) {
+      setSubmitResponse({
+        message: "ログインに成功しました。",
+        status: "success",
+      });
       setTimeout(() => {
         router.push("/top");
       }, 1500);
-      return true;
+    } else {
+      setSubmitResponse({
+        message:
+          "ログインに失敗しました。\nお手数ですがログイン画面でログインしてください。\n3秒後にログイン画面に移動します。",
+        status: "error",
+      });
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
     }
   };
 
@@ -117,49 +106,82 @@ export default function SignupForm() {
         アカウント作成
       </h1>
 
-      <Box component="form" className="mt-6 md:mt-8" onSubmit={handleSubmit}>
+      <Box
+        component="form"
+        className="mt-6 md:mt-8"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex flex-col gap-4 md:gap-6">
-          <TextField
-            required
-            id="name"
-            label="ユーザー名"
-            type="text"
+          <Controller
             name="name"
-            disabled={isSubmitting || isSubmitSuccessful}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                required={true}
+                field={field}
+                label="ユーザー名"
+                type="text"
+                disabled={isSubmitting || isSubmitSuccessful}
+                error={!!errors.name}
+                helperText={errors.name?.message}
+              />
+            )}
           />
-          <TextField
-            required
-            id="email"
-            label="メールアドレス"
-            type="text"
+          <Controller
             name="email"
-            disabled={isSubmitting || isSubmitSuccessful}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                required={true}
+                field={field}
+                label="メールアドレス"
+                type="text"
+                disabled={isSubmitting || isSubmitSuccessful}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            )}
           />
-          <TextField
-            required
-            id="password"
-            label="パスワード"
-            type="password"
-            disabled={isSubmitting || isSubmitSuccessful}
-          />
-          <TextField
-            required
-            id="password_confirm"
-            label="パスワード（確認）"
-            type="password"
+          <Controller
             name="password"
-            disabled={isSubmitting || isSubmitSuccessful}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                required={true}
+                field={field}
+                label="パスワード"
+                type="password"
+                disabled={isSubmitting || isSubmitSuccessful}
+                error={!!errors.password}
+                helperText={errors.password?.message}
+              />
+            )}
           />
-          <div className="mt-3 flex flex-col items-center justify-center gap-2 md:mt-4 md:flex-row md:justify-end">
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                required={true}
+                field={field}
+                label="パスワード（確認）"
+                type="password"
+                disabled={isSubmitting || isSubmitSuccessful}
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword?.message}
+              />
+            )}
+          />
+          <div className="flex flex-col items-center justify-center gap-4 md:mb-4 md:flex-row md:items-start md:justify-end md:gap-2">
             {submitResponse.status === "success" ? (
-              <p className="flex items-center gap-1 text-[var(--icon-color-success)] md:mr-[1em]">
+              <p className="flex gap-1 text-[var(--icon-color-success)] md:mr-[1em]">
                 <CheckCircleIcon />
                 <span className="whitespace-pre-wrap">
                   {submitResponse.message}
                 </span>
               </p>
             ) : submitResponse.status === "error" ? (
-              <p className="flex items-center gap-1 text-[var(--icon-color-error)] md:mr-[1em]">
+              <p className="flex gap-1 text-[var(--icon-color-error)] md:mr-[1em]">
                 <ErrorIcon />
                 <span className="whitespace-pre-wrap">
                   {submitResponse.message}
@@ -168,24 +190,16 @@ export default function SignupForm() {
             ) : (
               ""
             )}
-            <Button
+            <SubmitButton
               variant="contained"
-              disableElevation
-              type="submit"
-              sx={{
-                fontSize: "16px",
-                px: "1.5em",
-                display: "flex",
-                gap: "0.25em",
-                whiteSpace: "nowrap",
+              isSubmitting={isSubmitting}
+              isSubmitSuccessful={isSubmitSuccessful}
+              labels={{
+                default: "作成する",
+                isSubmitting: "送信中",
+                isSubmitSuccessful: "送信完了",
               }}
-              disabled={isSubmitting || isSubmitSuccessful}
-            >
-              {isSubmitting ? <Loading size="18px" /> : ""}
-              {isSubmitting ? <>作成中</> : ""}
-              {isSubmitSuccessful ? <>作成済</> : ""}
-              {!isSubmitting && !isSubmitSuccessful ? <>作成する</> : ""}
-            </Button>
+            />
           </div>
         </div>
       </Box>

@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function LoginPage() {
   return (
-    <div className="flex h-[calc(100vh-var(--header-height)-32px)] items-center justify-center md:h-[calc(100vh-var(--header-height)-64px)]">
+    <div className="flex min-h-[calc(100vh-var(--header-height)-32px)] items-center justify-center md:min-h-[calc(100vh-var(--header-height)-64px)]">
       <div className="w-full max-w-lg">
         <LoginForm />
       </div>

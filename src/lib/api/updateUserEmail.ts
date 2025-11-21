@@ -3,9 +3,9 @@
 import * as z from "zod";
 import { UserEmailSchema } from "@/validations";
 
-type UserUpdateEmailInput = z.infer<typeof UserEmailSchema>;
-
-export async function updateUserEmail(data: UserUpdateEmailInput): Promise<{
+export async function updateUserEmail(
+  data: z.infer<typeof UserEmailSchema>,
+): Promise<{
   success: boolean;
   message: string;
 }> {
