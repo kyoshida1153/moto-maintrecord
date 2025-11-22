@@ -1,9 +1,11 @@
 "use client";
 
 import * as z from "zod";
-import { SignupSchema } from "@/validations";
+import { CreateUserSchema } from "@/validations";
 
-export async function createUser(data: z.infer<typeof SignupSchema>): Promise<{
+export async function createUser(
+  data: z.infer<typeof CreateUserSchema>,
+): Promise<{
   success: boolean;
   message: string;
 }> {

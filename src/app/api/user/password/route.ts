@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import bcrypt from "bcrypt";
 import { getCurrentUser } from "@/actions";
-import { UserPasswordSchema } from "@/validations";
+import { UpdateUserPasswordSchema } from "@/validations";
 
 /* ###################################################################### */
 
@@ -22,7 +22,7 @@ export async function PUT(request: NextRequest) {
       await request.json();
 
     // バリデーションチェック
-    const validated = UserPasswordSchema.safeParse({
+    const validated = UpdateUserPasswordSchema.safeParse({
       currentPassword,
       newPassword,
       confirmNewPassword,

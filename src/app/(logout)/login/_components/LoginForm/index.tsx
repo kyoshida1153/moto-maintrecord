@@ -13,7 +13,7 @@ import { TextField, SubmitButton, OAuthButtonGoogle } from "@/components";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { SigninSchema } from "@/validations";
+import { LoginFormSchema } from "./schemas";
 import type * as z from "zod";
 
 type SubmitResponse = {
@@ -34,8 +34,8 @@ export default function LoginForm() {
     handleSubmit,
     formState: { isSubmitting, isSubmitSuccessful, errors },
     reset,
-  } = useForm<z.infer<typeof SigninSchema>>({
-    resolver: zodResolver(SigninSchema),
+  } = useForm<z.infer<typeof LoginFormSchema>>({
+    resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -44,7 +44,7 @@ export default function LoginForm() {
   });
 
   // ログイン
-  const login = async (values: z.infer<typeof SigninSchema>) => {
+  const login = async (values: z.infer<typeof LoginFormSchema>) => {
     const signinResponse = await signIn("credentials", {
       email: values.email,
       password: values.password,
@@ -65,7 +65,7 @@ export default function LoginForm() {
   };
 
   // フォームの送信開始～終了
-  const onSubmit = async (values: z.infer<typeof SigninSchema>) => {
+  const onSubmit = async (values: z.infer<typeof LoginFormSchema>) => {
     setSubmitResponse({
       status: undefined,
       message: "",
@@ -144,7 +144,7 @@ export default function LoginForm() {
                 </span>
               </p>
             ) : submitResponse.status === "error" ? (
-              <p className="flex gap-1 text-[var(--icon-color-success)] md:mr-[1em]">
+              <p className="flex gap-1 text-[var(--icon-color-error)] md:mr-[1em]">
                 <ErrorIcon />
                 <span className="whitespace-pre-wrap">
                   {submitResponse.message}

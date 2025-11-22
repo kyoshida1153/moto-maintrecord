@@ -11,7 +11,7 @@ import { updateUserEmail } from "@/lib/api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { UserEmailSchema } from "@/validations";
+import { UpdateUserEmailSchema } from "@/validations";
 import type * as z from "zod";
 
 type SubmitResponse = {
@@ -31,8 +31,8 @@ export default function UserEmailEditForm() {
     handleSubmit,
     formState: { isSubmitting, isSubmitSuccessful, errors },
     reset,
-  } = useForm<z.infer<typeof UserEmailSchema>>({
-    resolver: zodResolver(UserEmailSchema),
+  } = useForm<z.infer<typeof UpdateUserEmailSchema>>({
+    resolver: zodResolver(UpdateUserEmailSchema),
     defaultValues: {
       currentEmail: "",
       newEmail: "",
@@ -42,7 +42,7 @@ export default function UserEmailEditForm() {
   });
 
   // フォームの送信開始～終了
-  const onSubmit = async (values: z.infer<typeof UserEmailSchema>) => {
+  const onSubmit = async (values: z.infer<typeof UpdateUserEmailSchema>) => {
     setSubmitResponse({
       status: undefined,
       message: "",

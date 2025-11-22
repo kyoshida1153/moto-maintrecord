@@ -12,7 +12,7 @@ import { TextField, SubmitButton, OAuthButtonGoogle } from "@/components";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { SignupSchema } from "@/validations";
+import { CreateUserSchema } from "@/validations";
 import type * as z from "zod";
 
 import { createUser } from "@/lib/api";
@@ -35,8 +35,8 @@ export default function SignupForm() {
     handleSubmit,
     formState: { isSubmitting, isSubmitSuccessful, errors },
     reset,
-  } = useForm<z.infer<typeof SignupSchema>>({
-    resolver: zodResolver(SignupSchema),
+  } = useForm<z.infer<typeof CreateUserSchema>>({
+    resolver: zodResolver(CreateUserSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -47,7 +47,7 @@ export default function SignupForm() {
   });
 
   // フォームの送信開始～終了
-  const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
+  const onSubmit = async (values: z.infer<typeof CreateUserSchema>) => {
     setSubmitResponse({
       status: undefined,
       message: "",

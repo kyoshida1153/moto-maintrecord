@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const UserSchema = z.object({
+export const UserSchemaBase = z.object({
   name: z
     .string()
     .max(20, "20文字以内で入力してください。")

@@ -3,7 +3,7 @@ import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { getCurrentUser } from "@/actions";
-import { SignupSchema } from "@/validations";
+import { CreateUserSchema } from "@/validations";
 
 /* ###################################################################### */
 
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     const { name, email, password, confirmPassword } = await request.json();
 
     // バリデーションチェック
-    const validated = SignupSchema.safeParse({
+    const validated = CreateUserSchema.safeParse({
       name,
       email,
       password,

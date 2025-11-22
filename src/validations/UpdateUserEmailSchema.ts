@@ -1,9 +1,9 @@
 import * as z from "zod";
-import { UserSchema } from "@/validations";
+import { UserSchemaBase } from "@/validations";
 
-const email = UserSchema.shape.email;
+const email = UserSchemaBase.shape.email;
 
-export const UserEmailSchema = z
+export const UpdateUserEmailSchema = z
   .object({
     currentEmail: email,
     newEmail: email,

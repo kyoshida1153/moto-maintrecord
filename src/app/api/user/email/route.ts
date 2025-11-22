@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { getCurrentUser } from "@/actions";
-import { UserEmailSchema } from "@/validations";
+import { UpdateUserEmailSchema } from "@/validations";
 
 /* ###################################################################### */
 
@@ -25,7 +25,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // バリデーションチェック
-    const validated = UserEmailSchema.safeParse({
+    const validated = UpdateUserEmailSchema.safeParse({
       currentEmail,
       newEmail,
       confirmNewEmail,

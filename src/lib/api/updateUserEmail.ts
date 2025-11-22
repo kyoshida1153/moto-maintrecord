@@ -1,10 +1,10 @@
 "use client";
 
 import * as z from "zod";
-import { UserEmailSchema } from "@/validations";
+import { UpdateUserEmailSchema } from "@/validations";
 
 export async function updateUserEmail(
-  data: z.infer<typeof UserEmailSchema>,
+  data: z.infer<typeof UpdateUserEmailSchema>,
 ): Promise<{
   success: boolean;
   message: string;

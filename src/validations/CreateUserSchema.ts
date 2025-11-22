@@ -1,11 +1,11 @@
 import * as z from "zod";
-import { UserSchema } from "@/validations";
+import { UserSchemaBase } from "@/validations";
 
-const name = UserSchema.shape.name;
-const email = UserSchema.shape.email;
-const password = UserSchema.shape.password;
+const name = UserSchemaBase.shape.name;
+const email = UserSchemaBase.shape.email;
+const password = UserSchemaBase.shape.password;
 
-export const SignupSchema = z
+export const CreateUserSchema = z
   .object({
     name: name,
     email: email,

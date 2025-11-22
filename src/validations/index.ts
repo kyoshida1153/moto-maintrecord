@@ -1,6 +1,5 @@
-export { UserSchema } from "./UserSchema";
-export { UserPasswordSchema } from "./UserPasswordSchema";
-export { UserEmailSchema } from "./UserEmailSchema";
-export { UserNameSchema } from "./UserNameSchema";
-export { SigninSchema } from "./SigninSchema";
-export { SignupSchema } from "./SignupSchema";
+export { CreateUserSchema } from "./CreateUserSchema";
+export { UpdateUserEmailSchema } from "./UpdateUserEmailSchema";
+export { UpdateUserNameSchema } from "./UpdateUserNameSchema";
+export { UpdateUserPasswordSchema } from "./UpdateUserPasswordSchema";
+export { UserSchemaBase } from "./UserSchemaBase";

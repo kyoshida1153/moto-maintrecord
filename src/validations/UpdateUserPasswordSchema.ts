@@ -1,9 +1,9 @@
 import * as z from "zod";
-import { UserSchema } from "@/validations";
+import { UserSchemaBase } from "@/validations";
 
-const password = UserSchema.shape.password;
+const password = UserSchemaBase.shape.password;
 
-export const UserPasswordSchema = z
+export const UpdateUserPasswordSchema = z
   .object({
     currentPassword: z.string().nullable(),
     newPassword: password,

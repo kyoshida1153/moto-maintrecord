@@ -14,7 +14,7 @@ import useHeaderStore from "@/app/_components/Header/store";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { UserNameSchema } from "@/validations";
+import { UpdateUserNameSchema } from "@/validations";
 import type * as z from "zod";
 
 type GetUserResponse = {
@@ -55,7 +55,7 @@ export default function UserNameEditForm() {
     status: undefined,
     message: "",
   });
-  const { update } = useSession();
+  const { update: updateSession } = useSession();
   const { getLoginUserResponse, setGetLoginUserResponse } = useHeaderStore();
 
   const {
@@ -63,13 +63,13 @@ export default function UserNameEditForm() {
     handleSubmit,
     formState: { isSubmitting, isSubmitSuccessful, errors },
     reset,
-  } = useForm<z.infer<typeof UserNameSchema>>({
-    resolver: zodResolver(UserNameSchema),
+  } = useForm<z.infer<typeof UpdateUserNameSchema>>({
+    resolver: zodResolver(UpdateUserNameSchema),
     mode: "onChange",
   });
 
   // フォームの送信開始～終了
-  const onSubmit = async (values: z.infer<typeof UserNameSchema>) => {
+  const onSubmit = async (values: z.infer<typeof UpdateUserNameSchema>) => {
     setSubmitResponse({
       status: undefined,
       message: "",
@@ -80,14 +80,14 @@ export default function UserNameEditForm() {
     };
 
     const updateResponse = await updateUserName(data);
+
     setSubmitResponse({
       message: updateResponse.message,
       status: updateResponse.success === true ? "success" : "error",
     });
-
     if (updateResponse.success === true) {
       // セッションを更新
-      await update(data);
+      await updateSession(data);
 
       // ヘッダーのユーザー名を更新
       setGetLoginUserResponse({
@@ -105,13 +105,8 @@ export default function UserNameEditForm() {
           status: undefined,
           message: "",
         });
-      }, 1000);
+      }, 300);
     } else {
-      setSubmitResponse({
-        message: updateResponse.message,
-        status: "error",
-      });
-
       setTimeout(() => {
         reset(undefined, { keepValues: true });
       }, 300);
@@ -158,7 +153,7 @@ export default function UserNameEditForm() {
                 labels={{
                   default: "変更",
                   isSubmitting: "変更中",
-                  isSubmitSuccessful: "変更済",
+                  isSubmitSuccessful: "変更",
                 }}
               />
             </div>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { getCurrentUser } from "@/actions";
-import { UserNameSchema } from "@/validations";
+import { UpdateUserNameSchema } from "@/validations";
 
 /* ###################################################################### */
 
@@ -20,7 +20,7 @@ export async function PUT(request: NextRequest) {
     const { name } = await request.json();
 
     // バリデーションチェック
-    const validated = UserNameSchema.safeParse({ name });
+    const validated = UpdateUserNameSchema.safeParse({ name });
     if (!validated.success) {
       return NextResponse.json({ message: "Bad Request" }, { status: 400 });
     }

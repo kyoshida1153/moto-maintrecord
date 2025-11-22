@@ -11,7 +11,7 @@ import { updateUserPassword } from "@/lib/api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { UserPasswordSchema } from "@/validations";
+import { UpdateUserPasswordSchema } from "@/validations";
 import type * as z from "zod";
 
 type SubmitResponse = {
@@ -31,8 +31,8 @@ export default function UserPasswordEditForm() {
     handleSubmit,
     formState: { isSubmitting, isSubmitSuccessful, errors },
     reset,
-  } = useForm<z.infer<typeof UserPasswordSchema>>({
-    resolver: zodResolver(UserPasswordSchema),
+  } = useForm<z.infer<typeof UpdateUserPasswordSchema>>({
+    resolver: zodResolver(UpdateUserPasswordSchema),
     defaultValues: {
       currentPassword: "",
       newPassword: "",
@@ -42,7 +42,7 @@ export default function UserPasswordEditForm() {
   });
 
   // フォームの送信開始～終了
-  const onSubmit = async (values: z.infer<typeof UserPasswordSchema>) => {
+  const onSubmit = async (values: z.infer<typeof UpdateUserPasswordSchema>) => {
     setSubmitResponse({
       status: undefined,
       message: "",

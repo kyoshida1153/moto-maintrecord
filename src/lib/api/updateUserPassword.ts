@@ -1,10 +1,10 @@
 "use client";
 
 import * as z from "zod";
-import { UserPasswordSchema } from "@/validations";
+import { UpdateUserPasswordSchema } from "@/validations";
 
 export async function updateUserPassword(
-  data: z.infer<typeof UserPasswordSchema>,
+  data: z.infer<typeof UpdateUserPasswordSchema>,
 ): Promise<{
   success: boolean;
   message: string;
