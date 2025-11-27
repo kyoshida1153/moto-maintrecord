@@ -2,30 +2,41 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
 
-import { TextField, SubmitButton, InputFileImage } from "@/components";
+import { InputFileImage, TextField, SubmitButton } from "@/components";
+import { useInputFileImageStore } from "@/components/InputFileImage/stores";
 import { uploadBikeImageFile } from "@/lib";
-import { createBike } from "@/lib/api";
+import { updateBike } from "@/lib/api";
+import type { BikeUniqueSelect } from "@/app/api/bikes/[id]/route";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { BikeCreateFormSchema } from "./validations";
+import { BikeUpdateFormSchema } from "./validations";
 import type * as z from "zod";
 
 type SubmitResponse = {
-  status: "success" | "error" | undefined;
+  status: "success" | "error" | "info" | undefined;
   message: string;
 };
 
-export default function BikeCreateForm() {
+export default function BikeEditFormForm({
+  defaultValues,
+  bikeId,
+}: {
+  defaultValues?: BikeUniqueSelect;
+  bikeId: string;
+}) {
   // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
   });
+  const { isChangedInputFileImage } = useInputFileImageStore();
   const router = useRouter();
 
   const {
@@ -33,47 +44,71 @@ export default function BikeCreateForm() {
     handleSubmit,
     formState: { isSubmitting, isSubmitSuccessful, errors },
     reset,
-  } = useForm<z.infer<typeof BikeCreateFormSchema>>({
-    resolver: zodResolver(BikeCreateFormSchema),
+  } = useForm<z.infer<typeof BikeUpdateFormSchema>>({
+    resolver: zodResolver(BikeUpdateFormSchema),
     defaultValues: {
-      imageFile: undefined,
-      name: "",
-      mileage: null,
-      memo: null,
+      name: defaultValues?.name,
+      mileage: defaultValues?.mileage,
+      memo: defaultValues?.memo,
     },
     mode: "onChange",
   });
 
   // フォームの送信開始～終了
-  const onSubmit = async (values: z.infer<typeof BikeCreateFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof BikeUpdateFormSchema>) => {
     setSubmitResponse({
       status: undefined,
       message: "",
     });
 
     // ここから画像アップロード
-    const uploadResponse = await uploadBikeImageFile(values.imageFile);
+    const uploadResponse =
+      isChangedInputFileImage === true &&
+      values.imageFile &&
+      values.imageFile.length > 0
+        ? await uploadBikeImageFile(values.imageFile)
+        : undefined;
 
-    setSubmitResponse({
-      message: uploadResponse.message,
-      status: uploadResponse.success === true ? "success" : "error",
-    });
+    if (uploadResponse) {
+      setSubmitResponse({
+        message: uploadResponse.message,
+        status: uploadResponse.success === true ? "success" : "error",
+      });
+      if (uploadResponse.success === false) {
+        setTimeout(() => {
+          reset(undefined, { keepValues: true });
+        }, 300);
+        return;
+      }
+    }
 
-    if (uploadResponse.success === false) {
-      setTimeout(() => {
-        reset(undefined, { keepValues: true });
-      }, 300);
-      return;
+    if (isChangedInputFileImage === false) {
+      setSubmitResponse({
+        message: "画像の更新無し。",
+        status: "info",
+      });
     }
 
     // ここからAPIでDB操作
-    const bikeResponse = await createBike({
+    const data = {
       name: values.name,
-      imageUrl: uploadResponse.imageUrl ?? null,
-      mileage: values.mileage,
-      memo: values.memo,
-    });
+      mileage: values.mileage ?? null,
+      memo: values.memo ?? null,
+    };
 
+    if (uploadResponse && uploadResponse.success === true) {
+      // 別の画像に変更した場合
+      Object.assign(data, { imageUrl: uploadResponse.imageUrl });
+    } else if (
+      isChangedInputFileImage === true &&
+      values.imageFile &&
+      values.imageFile.length === 0
+    ) {
+      // 画像を無しにした場合
+      Object.assign(data, { imageUrl: null });
+    }
+
+    const bikeResponse = await updateBike(data, bikeId);
     setSubmitResponse({
       message: bikeResponse.message,
       status: bikeResponse.success === true ? "success" : "error",
@@ -106,6 +141,11 @@ export default function BikeCreateForm() {
             <InputFileImage
               multiple={false}
               label="バイクの写真"
+              defaultValue={
+                defaultValues?.imageUrl
+                  ? [{ imageUrl: defaultValues?.imageUrl }]
+                  : undefined
+              }
               disabled={isSubmitting || isSubmitSuccessful}
               field={field}
               fieldError={errors.imageFile}
@@ -172,6 +212,13 @@ export default function BikeCreateForm() {
               {submitResponse.message}
             </span>
           </p>
+        ) : submitResponse.status === "info" ? (
+          <p className="flex items-center gap-1 text-[var(--icon-color-info)]">
+            <InfoIcon />
+            <span className="whitespace-pre-wrap">
+              {submitResponse.message}
+            </span>
+          </p>
         ) : (
           ""
         )}
@@ -182,7 +229,7 @@ export default function BikeCreateForm() {
             isSubmitting={isSubmitting}
             isSubmitSuccessful={isSubmitSuccessful}
             labels={{
-              default: "登録",
+              default: "保存",
               isSubmitting: "送信中",
               isSubmitSuccessful: "送信完了",
             }}

@@ -11,17 +11,21 @@ export function TextField({
   field,
   helperText,
   label,
+  multiline,
   required = false,
+  rows = 1,
   type,
   variant = "outlined",
 }: {
-  defaultValue?: string;
+  defaultValue?: number | string | null;
   disabled?: boolean;
   error?: boolean;
-  field?: FieldValues;
+  field: FieldValues;
   helperText?: string;
   label: string;
+  multiline?: boolean;
   required?: boolean;
+  rows?: number | string;
   type?: HTMLInputTypeAttribute;
   variant?: "filled" | "outlined" | "standard";
 }) {
@@ -33,7 +37,9 @@ export function TextField({
       {...field}
       helperText={helperText}
       label={label}
+      multiline={multiline}
       required={required}
+      rows={rows}
       type={type}
       variant={variant}
       sx={{
@@ -49,6 +55,9 @@ export function TextField({
           color: "#333",
         },
       }}
+      // onChange={(e) => {
+      //   console.log(e.target.value);
+      // }}
     />
   );
 }

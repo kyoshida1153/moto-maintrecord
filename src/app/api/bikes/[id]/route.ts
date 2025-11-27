@@ -2,18 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/actions";
+import { BikeSchema } from "@/validations";
 
 /* ###################################################################### */
 
 // 取得
 
-const bikeUniqueSelect = Prisma.validator<Prisma.BikeSelect>()({
+const bikeUniqueSelect = {
   id: true,
   name: true,
   mileage: true,
   memo: true,
   imageUrl: true,
-});
+} satisfies Prisma.BikeSelect;
 
 export type BikeUniqueSelect = Prisma.BikeGetPayload<{
   select: typeof bikeUniqueSelect;
@@ -44,7 +45,11 @@ export async function GET(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -72,16 +77,27 @@ export async function PUT(
   // ここからDB操作
   try {
     const { name, mileage, memo, imageUrl } = await request.json();
-    const data: BikeUpdateInput = {
+
+    // バリデーションチェック
+    const validated = BikeSchema.safeParse({
       name,
       mileage,
       memo,
       imageUrl,
-    };
+    });
+
+    if (!validated.success) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
 
     const { id } = await context.params;
     const result = await prisma.bike.update({
-      data,
+      data: {
+        name,
+        mileage,
+        memo,
+        imageUrl,
+      },
       where: { id, userId },
     });
 
@@ -90,7 +106,11 @@ export async function PUT(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -115,14 +135,11 @@ export async function DELETE(
 
   // ここからDB操作
   try {
-    // 型は編集のを使用
-    const data: BikeUpdateInput = {
-      deletedAt: new Date(),
-    };
-
     const { id } = await context.params;
     const result = await prisma.bike.update({
-      data,
+      data: {
+        deletedAt: new Date(),
+      },
       where: { id, userId },
     });
 
@@ -131,7 +148,11 @@ export async function DELETE(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },

@@ -2,50 +2,56 @@
 
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
-import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
+import { useInputFileImageStore } from "./stores";
+import type { FieldError, FieldValues, Merge } from "react-hook-form";
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+const mimeTypes = [
+  "image/apng",
+  "image/avif",
+  "image/gif",
+  "image/jpeg",
+  "image/png",
+  "image/svg+xml",
+  "image/webp",
+];
 
 type PreviewImageUrl = {
   id?: string;
   imageUrl: string;
 };
 
-// ※アップロードする画像の数を制限する処理はサーバー側で行う
 export function InputFileImage({
-  name,
-  label = "画像を選択",
-  multiple = false,
-  maxFileCount = 1,
-  disabled = false,
   defaultValue = [],
+  disabled = false,
+  field,
+  fieldError,
+  label = "画像を選択",
+  maxFileCount = 1,
+  multiple = false,
 }: {
-  name: string;
-  label?: string;
-  multiple?: boolean;
-  maxFileCount?: number;
-  disabled?: boolean;
   defaultValue?: PreviewImageUrl[];
+  disabled?: boolean;
+  field: FieldValues;
+  fieldError?: Merge<FieldError, (FieldError | undefined)[]>;
+  label?: string;
+  maxFileCount?: number;
+  multiple?: boolean;
 }) {
   const [previewImageUrls, setPreviewImageUrls] =
     useState<PreviewImageUrl[]>(defaultValue);
-  const [isChangedInputFileImage, setIsChangedInputFileImage] =
-    useState<boolean>(false);
+
+  // const [isChangedInputFileImage, setIsChangedInputFileImage] =
+  //   useState<boolean>(false);
+  const { isChangedInputFileImage, setIsChangedInputFileImage } =
+    useInputFileImageStore();
 
   const changePreviewImageUrls = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    console.log("files", files);
+    console.log("fieldError", fieldError);
     if (!files) return setPreviewImageUrls([]);
 
     if (isChangedInputFileImage === false) {
@@ -57,11 +63,13 @@ export function InputFileImage({
         ? Array.from(files).slice(0, maxFileCount)
         : Array.from(files).slice(0, 1);
 
-    const newPreviewImageUrls = limitedFiles.map((file) => {
-      return { imageUrl: URL.createObjectURL(file) };
+    const newPreviewImageUrlArray = limitedFiles.map((file) => {
+      const imageUrl = mimeTypes.includes(file.type)
+        ? URL.createObjectURL(file)
+        : "";
+      return { imageUrl };
     });
-
-    setPreviewImageUrls(newPreviewImageUrls);
+    setPreviewImageUrls(newPreviewImageUrlArray);
   };
 
   return (
@@ -80,34 +88,80 @@ export function InputFileImage({
       >
         {label}
         {multiple && maxFileCount > 1 && <span>（{maxFileCount}枚まで）</span>}
-        <VisuallyHiddenInput
+        <input
           type="file"
-          onChange={changePreviewImageUrls}
           multiple={multiple ? true : false}
           accept="image/*"
-          name={name}
           disabled={disabled ? true : false}
+          name={field.name}
+          ref={field.ref}
+          onChange={(e) => {
+            field.onChange([...Array.from(e.target.files ?? [])]);
+            changePreviewImageUrls(e);
+          }}
+          onBlur={field.onBlur}
+          style={{
+            clip: "rect(0 0 0 0)",
+            clipPath: "inset(50%)",
+            height: 1,
+            overflow: "hidden",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            whiteSpace: "nowrap",
+            width: 1,
+          }}
         />
       </Button>
       <input
         type="checkbox"
-        name={`isChangedInputFileImage_${name}`}
+        name={`isChangedInputFileImage_${field.name}`}
         checked={isChangedInputFileImage}
         className="hidden"
         readOnly
       />
+
+      {/* 画像プレビュー */}
       {previewImageUrls && previewImageUrls.length > 0 ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(calc((100%-1em)/3),1fr))] gap-[0.5em]">
           {previewImageUrls.map((previewImageUrl, i) => {
             return (
-              <Image
+              <div
                 key={previewImageUrl.id ?? i}
-                src={previewImageUrl.imageUrl}
-                width={200}
-                height={200}
-                className="aspect-square h-full w-full object-cover"
-                alt=""
-              />
+                className="relative flex aspect-square h-full w-full items-center justify-center rounded"
+              >
+                {previewImageUrl.imageUrl ? (
+                  <Image
+                    src={previewImageUrl.imageUrl}
+                    width={200}
+                    height={200}
+                    className="aspect-square h-full w-full rounded object-cover"
+                    alt=""
+                  />
+                ) : (
+                  <ImageNotSupportedIcon
+                    sx={{
+                      fontSize: { xs: "4em", sm: "5em" },
+                    }}
+                  />
+                )}
+
+                {Array.isArray(fieldError) && fieldError[i]?.message ? (
+                  <div className="absolute top-0 flex aspect-square h-full w-full items-center justify-center bg-[#ffffffcc] object-cover">
+                    <p className="w-[85%] text-sm text-[#d32f2f]">
+                      {fieldError[i].message}
+                    </p>
+                  </div>
+                ) : fieldError?.message ? (
+                  <div className="absolute top-0 flex aspect-square h-full w-full items-center justify-center bg-[#ffffffcc] object-cover">
+                    <p className="w-[85%] text-sm text-[#d32f2f]">
+                      {fieldError.message}
+                    </p>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
             );
           })}
         </div>

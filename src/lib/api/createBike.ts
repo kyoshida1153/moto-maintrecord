@@ -1,37 +1,48 @@
 "use client";
 
-import { Prisma } from "@prisma/client";
+import type * as z from "zod";
+import { BikeSchema } from "@/validations";
 
-type Bike = Prisma.BikeGetPayload<{
-  select: {
-    name: true;
-    mileage: true;
-    memo: true;
-    imageUrl: true;
-  };
-}>;
-
-export async function createBike(data: Bike): Promise<{
+export async function createBike(data: z.infer<typeof BikeSchema>): Promise<{
   success: boolean;
   message: string;
 }> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/`,
-    {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    },
-  );
+    );
 
-  if (response?.status === 201) {
-    return {
-      success: true,
-      message: "所有バイクの登録に成功しました。",
-    };
-  } else {
+    if (response.ok) {
+      return {
+        success: true,
+        message: "所有バイクの登録に成功しました。",
+      };
+    }
+
+    switch (response.status) {
+      case 400:
+        return {
+          success: false,
+          message: `所有バイクの登録が中断されました。入力内容を確認してください。`,
+        };
+      default:
+        return {
+          success: false,
+          message: "所有バイクの登録に失敗しました。",
+        };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return {
       success: false,
       message: "所有バイクの登録に失敗しました。",

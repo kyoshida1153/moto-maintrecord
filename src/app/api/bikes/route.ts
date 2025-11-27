@@ -2,18 +2,19 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/actions";
+import { BikeSchema } from "@/validations";
 
 /* ###################################################################### */
 
 // 一覧取得
 
-const bikeSelect = Prisma.validator<Prisma.BikeSelect>()({
+const bikeSelect = {
   id: true,
   name: true,
   mileage: true,
   memo: true,
   imageUrl: true,
-});
+} satisfies Prisma.BikeSelect;
 
 export type BikeSelect = Prisma.BikeGetPayload<{
   select: typeof bikeSelect;
@@ -42,7 +43,11 @@ export async function GET(): Promise<
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -53,8 +58,6 @@ export async function GET(): Promise<
 /* ###################################################################### */
 
 // 登録
-
-export type BikeCreateInput = Prisma.BikeCreateInput;
 
 export async function POST(
   request: Request,
@@ -69,26 +72,43 @@ export async function POST(
   // ここからDB操作
   try {
     const { name, mileage, memo, imageUrl } = await request.json();
-    const data: BikeCreateInput = {
+
+    // バリデーションチェック
+    const validated = BikeSchema.safeParse({
       name,
       mileage,
       memo,
       imageUrl,
-      user: {
-        connect: {
-          id: userId,
+    });
+
+    if (!validated.success) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
+
+    const result = await prisma.bike.create({
+      data: {
+        name,
+        mileage,
+        memo,
+        imageUrl,
+        user: {
+          connect: {
+            id: userId,
+          },
         },
       },
-    };
-
-    const result = await prisma.bike.create({ data });
+    });
 
     if (result) {
       return NextResponse.json({ message: "Success" }, { status: 201 });
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },

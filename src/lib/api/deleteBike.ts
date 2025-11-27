@@ -4,19 +4,38 @@ export async function deleteBike(bikeId: string): Promise<{
   success: boolean;
   message: string;
 }> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/${bikeId}`,
-    {
-      method: "DELETE",
-    },
-  );
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/${bikeId}`,
+      {
+        method: "DELETE",
+      },
+    );
 
-  if (response.ok) {
-    return {
-      success: true,
-      message: "所有バイクの削除に成功しました。",
-    };
-  } else {
+    if (response.ok) {
+      return {
+        success: true,
+        message: "所有バイクの削除に成功しました。",
+      };
+    }
+
+    switch (response.status) {
+      case 400:
+        return {
+          success: false,
+          message: `所有バイクの削除が中断されました。`,
+        };
+      default:
+        return {
+          success: false,
+          message: "所有バイクの削除に失敗しました。",
+        };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return {
       success: false,
       message: "所有バイクの削除に失敗しました。",
