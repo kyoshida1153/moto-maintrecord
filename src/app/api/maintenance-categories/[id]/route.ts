@@ -2,16 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/actions";
+import { UpdateMaintenanceCategorySchema } from "@/validations";
 
 /* ###################################################################### */
 
 // 取得
 
-const maintenanceCategoryUniqueSelect =
-  Prisma.validator<Prisma.MaintenanceCategorySelect>()({
-    id: true,
-    name: true,
-  });
+const maintenanceCategoryUniqueSelect = {
+  id: true,
+  name: true,
+} satisfies Prisma.MaintenanceCategorySelect;
 
 export type MaintenanceCategoryUniqueSelect = Prisma.BikeGetPayload<{
   select: typeof maintenanceCategoryUniqueSelect;
@@ -34,7 +34,7 @@ export async function GET(
 
     const result = await prisma.maintenanceCategory.findUnique({
       select: maintenanceCategoryUniqueSelect,
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
     });
 
     if (result) {
@@ -42,7 +42,11 @@ export async function GET(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -53,9 +57,6 @@ export async function GET(
 /* ###################################################################### */
 
 // 編集
-
-export type MaintenanceCategoryUpdateInput =
-  Prisma.MaintenanceCategoryUpdateInput;
 
 export async function PUT(
   request: NextRequest,
@@ -71,11 +72,21 @@ export async function PUT(
   // ここからDB操作
   try {
     const { name } = await request.json();
-    const data: MaintenanceCategoryUpdateInput = { name };
+
+    // バリデーションチェック
+    const validated = UpdateMaintenanceCategorySchema.safeParse({
+      name,
+    });
+
+    if (!validated.success) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
 
     const { id } = await context.params;
     const result = await prisma.maintenanceCategory.update({
-      data,
+      data: {
+        name: validated.data.name,
+      },
       where: { id, userId },
     });
 
@@ -84,7 +95,11 @@ export async function PUT(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -109,14 +124,11 @@ export async function DELETE(
 
   // ここからDB操作
   try {
-    // 型は編集のを使用
-    const data: MaintenanceCategoryUpdateInput = {
-      deletedAt: new Date(),
-    };
-
     const { id } = await context.params;
     const result = await prisma.maintenanceCategory.update({
-      data,
+      data: {
+        deletedAt: new Date(),
+      },
       where: { id, userId },
     });
 
@@ -125,7 +137,11 @@ export async function DELETE(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },

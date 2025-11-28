@@ -1,8 +1,9 @@
+export { CreateBikeSchema } from "./CreateBikeSchema";
+export { CreateMaintenanceCategorySchema } from "./CreateMaintenanceCategorySchema";
 export { CreateUserSchema } from "./CreateUserSchema";
+export { FileImageSchema } from "./FileImageSchema";
+export { UpdateBikeSchema } from "./UpdateBikeSchema";
+export { UpdateMaintenanceCategorySchema } from "./UpdateMaintenanceCategorySchema";
 export { UpdateUserEmailSchema } from "./UpdateUserEmailSchema";
 export { UpdateUserNameSchema } from "./UpdateUserNameSchema";
 export { UpdateUserPasswordSchema } from "./UpdateUserPasswordSchema";
-
-export { FileImageSchema } from "./FileImageSchema";
-export { CreateBikeSchema } from "./CreateBikeSchema";
-export { UpdateBikeSchema } from "./UpdateBikeSchema";

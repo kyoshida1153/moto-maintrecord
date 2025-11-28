@@ -1,20 +1,19 @@
 "use client";
 
 import type * as z from "zod";
-import { UpdateMaintenanceCategorySchema } from "@/validations";
+import { CreateMaintenanceCategorySchema } from "@/validations";
 
-export async function updateMaintenanceCategory(
-  data: z.infer<typeof UpdateMaintenanceCategorySchema>,
-  id: string,
+export async function createMaintenanceCategory(
+  data: z.infer<typeof CreateMaintenanceCategorySchema>,
 ): Promise<{
   success: boolean;
   message: string;
 }> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-categories/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-categories/`,
       {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +24,7 @@ export async function updateMaintenanceCategory(
     if (response.ok) {
       return {
         success: true,
-        message: "カテゴリーの変更に成功しました。",
+        message: "カテゴリーの登録に成功しました。",
       };
     }
 
@@ -33,12 +32,12 @@ export async function updateMaintenanceCategory(
       case 400:
         return {
           success: false,
-          message: `カテゴリーの変更が中断されました。入力内容を確認してください。`,
+          message: `カテゴリーの登録が中断されました。入力内容を確認してください。`,
         };
       default:
         return {
           success: false,
-          message: "カテゴリーの変更に失敗しました。",
+          message: "カテゴリーの登録に失敗しました。",
         };
     }
   } catch (error) {
@@ -48,7 +47,7 @@ export async function updateMaintenanceCategory(
 
     return {
       success: false,
-      message: "カテゴリーの変更に失敗しました。",
+      message: "カテゴリーの登録に失敗しました。",
     };
   }
 }

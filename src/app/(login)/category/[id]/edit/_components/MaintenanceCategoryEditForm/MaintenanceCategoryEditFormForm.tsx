@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
 
 import { TextField, SubmitButton } from "@/components";
-import { createMaintenanceCategory } from "@/lib/api";
+import { updateMaintenanceCategory } from "@/lib/api";
+import type { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { MaintenanceCategoryCreateFormSchema } from "./validations";
+import { MaintenanceCategoryEditFormSchema } from "./validations";
 import type * as z from "zod";
 
 type SubmitResponse = {
@@ -19,11 +22,19 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function MaintenanceCategoryCreateForm() {
+export default function MaintenanceCategoryEditFormForm({
+  defaultValues,
+  maintenanceCategoryId,
+}: {
+  defaultValues?: MaintenanceCategoryUniqueSelect;
+  maintenanceCategoryId: string;
+}) {
+  // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
     message: "",
   });
+
   const router = useRouter();
 
   const {
@@ -31,16 +42,17 @@ export default function MaintenanceCategoryCreateForm() {
     handleSubmit,
     formState: { isSubmitting, isSubmitSuccessful, errors },
     reset,
-  } = useForm<z.infer<typeof MaintenanceCategoryCreateFormSchema>>({
-    resolver: zodResolver(MaintenanceCategoryCreateFormSchema),
+  } = useForm<z.infer<typeof MaintenanceCategoryEditFormSchema>>({
+    resolver: zodResolver(MaintenanceCategoryEditFormSchema),
     defaultValues: {
-      name: "",
+      name: defaultValues?.name,
     },
     mode: "onChange",
   });
 
+  // フォームの送信開始～終了
   const onSubmit = async (
-    values: z.infer<typeof MaintenanceCategoryCreateFormSchema>,
+    values: z.infer<typeof MaintenanceCategoryEditFormSchema>,
   ) => {
     setSubmitResponse({
       status: undefined,
@@ -48,16 +60,18 @@ export default function MaintenanceCategoryCreateForm() {
     });
 
     // ここからAPIでDB操作
-    const response = await createMaintenanceCategory({
-      name: values.name,
-    });
+    const maintenanceCategoryResponse = await updateMaintenanceCategory(
+      { name: values.name },
+      maintenanceCategoryId,
+    );
 
     setSubmitResponse({
-      message: response.message,
-      status: response.success === true ? "success" : "error",
+      message: maintenanceCategoryResponse.message,
+      status:
+        maintenanceCategoryResponse.success === true ? "success" : "error",
     });
 
-    if (response.success === true) {
+    if (maintenanceCategoryResponse.success === true) {
       setTimeout(() => {
         router.push("/category");
       }, 2000);
@@ -107,6 +121,13 @@ export default function MaintenanceCategoryCreateForm() {
               {submitResponse.message}
             </span>
           </p>
+        ) : submitResponse.status === "info" ? (
+          <p className="flex items-center gap-1 text-[var(--icon-color-info)]">
+            <InfoIcon />
+            <span className="whitespace-pre-wrap">
+              {submitResponse.message}
+            </span>
+          </p>
         ) : (
           ""
         )}
@@ -117,7 +138,7 @@ export default function MaintenanceCategoryCreateForm() {
             isSubmitting={isSubmitting}
             isSubmitSuccessful={isSubmitSuccessful}
             labels={{
-              default: "登録",
+              default: "保存",
               isSubmitting: "送信中",
               isSubmitSuccessful: "送信完了",
             }}

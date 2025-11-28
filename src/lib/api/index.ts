@@ -1,4 +1,5 @@
 export { createBike } from "./createBike";
+export { createMaintenanceCategory } from "./createMaintenanceCategory";
 export { createMaintenanceRecord } from "./createMaintenanceRecord";
 export { createUser } from "./createUser";
 export { deleteBike } from "./deleteBike";
