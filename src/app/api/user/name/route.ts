@@ -27,7 +27,7 @@ export async function PUT(request: NextRequest) {
 
     const result = await prisma.user.update({
       data: {
-        name,
+        name: validated.data.name,
       },
       where: { id: userId },
     });

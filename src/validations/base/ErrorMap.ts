@@ -17,6 +17,12 @@ export const ErrorMap: z.ZodErrorMap = (issue, ctx) => {
     return { message: "入力は必須です。" };
   }
 
+  if (issue.code === z.ZodIssueCode.invalid_string) {
+    if (issue.validation === "email") {
+      return { message: "正しいメールアドレスを入力してください。" };
+    }
+  }
+
   if (issue.code === z.ZodIssueCode.too_small) {
     switch (issue.type) {
       case "string":

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/actions";
-import { BikeSchema } from "@/validations";
+import { UpdateBikeSchema } from "@/validations";
 
 /* ###################################################################### */
 
@@ -61,8 +61,6 @@ export async function GET(
 
 // 編集
 
-export type BikeUpdateInput = Prisma.BikeUpdateInput;
-
 export async function PUT(
   request: NextRequest,
   context: RouteContext<"/api/bikes/[id]">,
@@ -79,7 +77,7 @@ export async function PUT(
     const { name, mileage, memo, imageUrl } = await request.json();
 
     // バリデーションチェック
-    const validated = BikeSchema.safeParse({
+    const validated = UpdateBikeSchema.safeParse({
       name,
       mileage,
       memo,
@@ -93,10 +91,10 @@ export async function PUT(
     const { id } = await context.params;
     const result = await prisma.bike.update({
       data: {
-        name,
-        mileage,
-        memo,
-        imageUrl,
+        name: validated.data.name,
+        mileage: validated.data.mileage,
+        memo: validated.data.memo,
+        imageUrl: validated.data.imageUrl,
       },
       where: { id, userId },
     });

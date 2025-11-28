@@ -3,7 +3,7 @@ import { ErrorMap } from "./ErrorMap";
 
 z.setErrorMap(ErrorMap);
 
-export const BikeSchema = z.object({
+export const BikeSchemaBase = z.object({
   name: z
     .string()
     .min(1)

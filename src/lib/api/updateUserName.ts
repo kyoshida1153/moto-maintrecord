@@ -1,6 +1,6 @@
 "use client";
 
-import * as z from "zod";
+import type * as z from "zod";
 import { UpdateUserNameSchema } from "@/validations";
 
 export async function updateUserName(

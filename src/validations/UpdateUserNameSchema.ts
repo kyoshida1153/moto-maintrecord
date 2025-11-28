@@ -1,7 +1,7 @@
 import * as z from "zod";
-import { UserSchemaBase } from "@/validations";
+import { UserSchemaBase } from "./base";
 
-const name = UserSchemaBase.shape.name;
+const { name } = UserSchemaBase.shape;
 
 export const UpdateUserNameSchema = z.object({
   name,

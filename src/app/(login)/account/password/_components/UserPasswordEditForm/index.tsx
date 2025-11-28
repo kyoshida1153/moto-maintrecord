@@ -49,13 +49,12 @@ export default function UserPasswordEditForm() {
     });
 
     // ここからAPIでDB操作
-    const data = {
+    const updateUserResponse = await updateUserPassword({
       currentPassword: values.currentPassword,
       newPassword: values.newPassword,
       confirmNewPassword: values.confirmNewPassword,
-    };
+    });
 
-    const updateUserResponse = await updateUserPassword(data);
     setSubmitResponse({
       message: updateUserResponse.message,
       status: updateUserResponse.success === true ? "success" : "error",
@@ -66,11 +65,6 @@ export default function UserPasswordEditForm() {
         signOut({ callbackUrl: "/login" });
       }, 3000);
     } else {
-      setSubmitResponse({
-        message: updateUserResponse.message,
-        status: "error",
-      });
-
       setTimeout(() => {
         reset(undefined, { keepValues: true });
       }, 300);

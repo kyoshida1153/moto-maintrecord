@@ -1,9 +1,8 @@
 import * as z from "zod";
-import { BikeSchema, FileImageSchema } from "@/validations";
+import { BikeSchemaBase } from "@/validations/base";
+import { FileImageSchema } from "@/validations";
 
-const name = BikeSchema.shape.name;
-const mileage = BikeSchema.shape.mileage;
-const memo = BikeSchema.shape.memo;
+const { name, mileage, memo } = BikeSchemaBase.shape;
 
 export const BikeUpdateFormSchema = z.object({
   imageFile: z.array(FileImageSchema).optional(),

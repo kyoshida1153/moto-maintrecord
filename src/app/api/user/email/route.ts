@@ -19,7 +19,7 @@ export async function PUT(request: NextRequest) {
   try {
     const { currentEmail, newEmail, confirmNewEmail } = await request.json();
 
-    // 現在のメールアドレスをチェック
+    // 現在のメールアドレスとログインユーザーのメールアドレスが一致するかチェック
     if (currentEmail !== currentUser.email) {
       return NextResponse.json({ message: "Bad Request" }, { status: 400 });
     }
@@ -36,7 +36,7 @@ export async function PUT(request: NextRequest) {
 
     const result = await prisma.user.update({
       data: {
-        email: newEmail,
+        email: validated.data.newEmail,
       },
       where: { id: userId },
     });

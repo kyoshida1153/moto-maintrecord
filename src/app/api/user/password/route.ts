@@ -32,14 +32,25 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ message: "Bad Request" }, { status: 400 });
     }
 
-    // 現在のパスワードチェック ※OAuthでログインしたユーザーは除く
+    // 現在のパスワードチェック
+    // ※OAuthでログインしたユーザーはパスワード未設定 null なので除外
     if (currentUser.hashedPassword !== null) {
       const isCorrectPassword = await bcrypt.compare(
-        currentPassword,
+        validated.data.currentPassword ?? "",
         currentUser.hashedPassword,
       );
 
       if (!isCorrectPassword) {
+        return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+      }
+    }
+
+    // パスワード未設定 null の場合、現在のパスワードの値が null か 空文字 以外なら中断
+    if (currentUser.hashedPassword === null) {
+      if (
+        validated.data.currentPassword !== null &&
+        validated.data.currentPassword.length > 0
+      ) {
         return NextResponse.json({ message: "Bad Request" }, { status: 400 });
       }
     }

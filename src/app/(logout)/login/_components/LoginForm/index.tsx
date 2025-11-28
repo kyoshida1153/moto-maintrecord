@@ -13,7 +13,7 @@ import { TextField, SubmitButton, OAuthButtonGoogle } from "@/components";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { LoginFormSchema } from "./schemas";
+import { LoginFormSchema } from "./validations";
 import type * as z from "zod";
 
 type SubmitResponse = {

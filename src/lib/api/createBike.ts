@@ -1,9 +1,11 @@
 "use client";
 
 import type * as z from "zod";
-import { BikeSchema } from "@/validations";
+import { CreateBikeSchema } from "@/validations";
 
-export async function createBike(data: z.infer<typeof BikeSchema>): Promise<{
+export async function createBike(
+  data: z.infer<typeof CreateBikeSchema>,
+): Promise<{
   success: boolean;
   message: string;
 }> {

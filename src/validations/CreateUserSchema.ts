@@ -1,16 +1,14 @@
 import * as z from "zod";
-import { UserSchemaBase } from "@/validations";
+import { UserSchemaBase } from "./base";
 
-const name = UserSchemaBase.shape.name;
-const email = UserSchemaBase.shape.email;
-const password = UserSchemaBase.shape.password;
+const { name, email, password } = UserSchemaBase.shape;
 
 export const CreateUserSchema = z
   .object({
-    name: name,
-    email: email,
-    password: password,
-    confirmPassword: z.string().nonempty("パスワードを再度入力してください。"),
+    name,
+    email,
+    password,
+    confirmPassword: z.string().min(1, "パスワードを再度入力してください。"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "パスワードが一致しません",

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/actions";
-import { BikeSchema } from "@/validations";
+import { CreateBikeSchema } from "@/validations";
 
 /* ###################################################################### */
 
@@ -74,7 +74,7 @@ export async function POST(
     const { name, mileage, memo, imageUrl } = await request.json();
 
     // バリデーションチェック
-    const validated = BikeSchema.safeParse({
+    const validated = CreateBikeSchema.safeParse({
       name,
       mileage,
       memo,
@@ -87,10 +87,10 @@ export async function POST(
 
     const result = await prisma.bike.create({
       data: {
-        name,
-        mileage,
-        memo,
-        imageUrl,
+        name: validated.data.name,
+        mileage: validated.data.mileage,
+        memo: validated.data.memo,
+        imageUrl: validated.data.imageUrl,
         user: {
           connect: {
             id: userId,

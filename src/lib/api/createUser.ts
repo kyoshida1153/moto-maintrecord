@@ -1,6 +1,6 @@
 "use client";
 
-import * as z from "zod";
+import type * as z from "zod";
 import { CreateUserSchema } from "@/validations";
 
 export async function createUser(
@@ -47,7 +47,7 @@ export async function createUser(
 
     return {
       success: false,
-      message: "変更に失敗しました。",
+      message: "アカウントの作成に失敗しました。",
     };
   }
 }

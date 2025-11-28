@@ -1,7 +1,7 @@
 import * as z from "zod";
-import { UserSchemaBase } from "@/validations";
+import { UserSchemaBase } from "./base";
 
-const password = UserSchemaBase.shape.password;
+const { password } = UserSchemaBase.shape;
 
 export const UpdateUserPasswordSchema = z
   .object({
@@ -9,7 +9,7 @@ export const UpdateUserPasswordSchema = z
     newPassword: password,
     confirmNewPassword: z
       .string()
-      .nonempty("新しいパスワードを再度入力してください。"),
+      .min(1, "新しいパスワードを再度入力してください。"),
   })
   .superRefine(({ currentPassword, newPassword, confirmNewPassword }, ctx) => {
     if (currentPassword === newPassword) {

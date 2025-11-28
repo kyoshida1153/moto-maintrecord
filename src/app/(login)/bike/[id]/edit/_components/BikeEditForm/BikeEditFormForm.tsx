@@ -47,6 +47,7 @@ export default function BikeEditFormForm({
   } = useForm<z.infer<typeof BikeUpdateFormSchema>>({
     resolver: zodResolver(BikeUpdateFormSchema),
     defaultValues: {
+      imageFile: undefined,
       name: defaultValues?.name,
       mileage: defaultValues?.mileage,
       memo: defaultValues?.memo,

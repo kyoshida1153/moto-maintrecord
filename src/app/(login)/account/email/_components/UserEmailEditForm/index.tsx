@@ -49,13 +49,12 @@ export default function UserEmailEditForm() {
     });
 
     // ここからAPIでDB操作
-    const data = {
+    const updateResponse = await updateUserEmail({
       currentEmail: values.currentEmail,
       newEmail: values.newEmail,
       confirmNewEmail: values.confirmNewEmail,
-    };
+    });
 
-    const updateResponse = await updateUserEmail(data);
     setSubmitResponse({
       message: updateResponse.message,
       status: updateResponse.success === true ? "success" : "error",

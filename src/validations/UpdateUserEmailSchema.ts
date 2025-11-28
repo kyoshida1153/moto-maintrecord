@@ -1,7 +1,7 @@
 import * as z from "zod";
-import { UserSchemaBase } from "@/validations";
+import { UserSchemaBase } from "./base";
 
-const email = UserSchemaBase.shape.email;
+const { email } = UserSchemaBase.shape;
 
 export const UpdateUserEmailSchema = z
   .object({

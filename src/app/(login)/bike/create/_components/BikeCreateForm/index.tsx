@@ -16,7 +16,7 @@ import { BikeCreateFormSchema } from "./validations";
 import type * as z from "zod";
 
 type SubmitResponse = {
-  status: "success" | "error" | undefined;
+  status: "success" | "error" | "info" | undefined;
   message: string;
 };
 
@@ -52,26 +52,30 @@ export default function BikeCreateForm() {
     });
 
     // ここから画像アップロード
-    const uploadResponse = await uploadBikeImageFile(values.imageFile);
+    const uploadResponse =
+      values.imageFile && values.imageFile.length > 0
+        ? await uploadBikeImageFile(values.imageFile)
+        : undefined;
 
-    setSubmitResponse({
-      message: uploadResponse.message,
-      status: uploadResponse.success === true ? "success" : "error",
-    });
-
-    if (uploadResponse.success === false) {
-      setTimeout(() => {
-        reset(undefined, { keepValues: true });
-      }, 300);
-      return;
+    if (uploadResponse) {
+      setSubmitResponse({
+        message: uploadResponse.message,
+        status: uploadResponse.success === true ? "success" : "error",
+      });
+      if (uploadResponse?.success === false) {
+        setTimeout(() => {
+          reset(undefined, { keepValues: true });
+        }, 300);
+        return;
+      }
     }
 
     // ここからAPIでDB操作
     const bikeResponse = await createBike({
       name: values.name,
-      imageUrl: uploadResponse.imageUrl ?? null,
-      mileage: values.mileage,
-      memo: values.memo,
+      mileage: values.mileage ?? null,
+      memo: values.memo ?? null,
+      imageUrl: uploadResponse?.imageUrl ?? null,
     });
 
     setSubmitResponse({
