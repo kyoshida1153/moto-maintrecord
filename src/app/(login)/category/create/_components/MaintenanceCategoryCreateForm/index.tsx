@@ -59,7 +59,7 @@ export default function MaintenanceCategoryCreateForm() {
 
     if (response.success === true) {
       setTimeout(() => {
-        router.push("/category");
+        router.back();
       }, 2000);
       return;
     } else {

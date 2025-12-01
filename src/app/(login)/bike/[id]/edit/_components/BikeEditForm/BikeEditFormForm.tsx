@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -12,25 +12,26 @@ import { InputFileImage, TextField, SubmitButton } from "@/components";
 import { useInputFileImageStore } from "@/components/InputFileImage/stores";
 import { uploadBikeImageFile } from "@/lib";
 import { updateBike } from "@/lib/api";
-import type { BikeUniqueSelect } from "@/app/api/bikes/[id]/route";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { BikeUpdateFormSchema } from "./validations";
 import type * as z from "zod";
+import { useBikeEditFormStore } from "./stores";
 
 type SubmitResponse = {
   status: "success" | "error" | "info" | undefined;
   message: string;
 };
 
-export default function BikeEditFormForm({
-  defaultValues,
-  bikeId,
-}: {
-  defaultValues?: BikeUniqueSelect;
-  bikeId: string;
-}) {
+export default function BikeEditFormForm() {
+  const params = useParams<{ id: string }>();
+  const bikeId = params.id;
+
+  // フォームのデフォルト値
+  const { getBikeResponse } = useBikeEditFormStore();
+  const defaultValues = getBikeResponse.result;
+
   // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
@@ -48,9 +49,9 @@ export default function BikeEditFormForm({
     resolver: zodResolver(BikeUpdateFormSchema),
     defaultValues: {
       imageFile: undefined,
-      name: defaultValues?.name,
-      mileage: defaultValues?.mileage,
-      memo: defaultValues?.memo,
+      name: defaultValues?.name ?? "",
+      mileage: defaultValues?.mileage ?? undefined,
+      memo: defaultValues?.memo ?? undefined,
     },
     mode: "onChange",
   });
@@ -93,23 +94,27 @@ export default function BikeEditFormForm({
     // ここからAPIでDB操作
     const data = {
       name: values.name,
-      mileage: values.mileage ?? null,
-      memo: values.memo ?? null,
+      mileage: values.mileage,
+      memo: values.memo,
     };
 
-    if (uploadResponse && uploadResponse.success === true) {
+    if (
       // 別の画像に変更した場合
+      uploadResponse &&
+      uploadResponse.success === true
+    ) {
       Object.assign(data, { imageUrl: uploadResponse.imageUrl });
     } else if (
+      // 画像を無しにした場合
       isChangedInputFileImage === true &&
       values.imageFile &&
       values.imageFile.length === 0
     ) {
-      // 画像を無しにした場合
       Object.assign(data, { imageUrl: null });
     }
 
-    const bikeResponse = await updateBike(data, bikeId);
+    const bikeResponse = await updateBike({ id: bikeId, data });
+
     setSubmitResponse({
       message: bikeResponse.message,
       status: bikeResponse.success === true ? "success" : "error",
@@ -117,7 +122,7 @@ export default function BikeEditFormForm({
 
     if (bikeResponse.success === true) {
       setTimeout(() => {
-        router.push("/bike");
+        router.back();
       }, 2000);
       return;
     } else {
@@ -179,6 +184,7 @@ export default function BikeEditFormForm({
               disabled={isSubmitting || isSubmitSuccessful}
               error={!!errors.mileage}
               helperText={errors.mileage?.message}
+              width="200px"
             />
           )}
         />

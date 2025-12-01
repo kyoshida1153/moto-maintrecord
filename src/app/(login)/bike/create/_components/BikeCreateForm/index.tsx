@@ -38,8 +38,8 @@ export default function BikeCreateForm() {
     defaultValues: {
       imageFile: undefined,
       name: "",
-      mileage: null,
-      memo: null,
+      mileage: undefined,
+      memo: "",
     },
     mode: "onChange",
   });
@@ -73,9 +73,9 @@ export default function BikeCreateForm() {
     // ここからAPIでDB操作
     const bikeResponse = await createBike({
       name: values.name,
-      mileage: values.mileage ?? null,
-      memo: values.memo ?? null,
-      imageUrl: uploadResponse?.imageUrl ?? null,
+      mileage: values.mileage,
+      memo: values.memo,
+      imageUrl: uploadResponse?.imageUrl ?? undefined,
     });
 
     setSubmitResponse({
@@ -85,7 +85,7 @@ export default function BikeCreateForm() {
 
     if (bikeResponse.success === true) {
       setTimeout(() => {
-        router.push("/bike");
+        router.back();
       }, 2000);
       return;
     } else {
@@ -138,10 +138,11 @@ export default function BikeCreateForm() {
             <TextField
               field={field}
               label="毎月の走行距離（km）"
-              type="text"
+              type="number"
               disabled={isSubmitting || isSubmitSuccessful}
               error={!!errors.mileage}
               helperText={errors.mileage?.message}
+              width="200px"
             />
           )}
         />

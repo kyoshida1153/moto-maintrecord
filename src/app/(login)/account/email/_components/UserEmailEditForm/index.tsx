@@ -98,7 +98,6 @@ export default function UserEmailEditForm() {
             />
           )}
         />
-
         <Controller
           name="newEmail"
           control={control}
@@ -114,7 +113,6 @@ export default function UserEmailEditForm() {
             />
           )}
         />
-
         <Controller
           name="confirmNewEmail"
           control={control}

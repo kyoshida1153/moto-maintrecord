@@ -1,54 +1,48 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 import { Loading } from "@/components";
 import { getBike } from "@/lib/api";
-import type { BikeUniqueSelect } from "@/app/api/bikes/[id]/route";
-
 import BikeEditFormForm from "./BikeEditFormForm";
+import { useBikeEditFormStore } from "./stores";
 
-type GetBikeResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-  result?: BikeUniqueSelect;
-};
+export default function BikeEditForm() {
+  const params = useParams<{ id: string }>();
+  const bikeId = params.id;
 
-export default function BikeEditForm({ bikeId }: { bikeId: string }) {
-  // フォームのdefaultValueの設定で使うもの
-  const [isLoadingGetBike, setIsLoadingGetBike] = useState<boolean>(true);
-  const [getBikeResponse, setGetBikeResponse] = useState<GetBikeResponse>({
-    status: undefined,
-    message: "",
-  });
+  const { setGetBikeResponse } = useBikeEditFormStore();
+
+  // 各データの読み込み～stateにセット
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadedStatus, setLoadedStatus] = useState<
+    "success" | "error" | undefined
+  >(undefined);
 
   // フォームのdefaultValueに設定するデータの読み込み
   useEffect(() => {
-    (async () => {
-      setIsLoadingGetBike(true);
-      const response = await getBike(bikeId);
+    Promise.all([getBike(bikeId)]).then((values) => {
       setGetBikeResponse({
-        message: response.message,
-        status: response.success === true ? "success" : "error",
-        result: response.result,
+        status: values[0].success === true ? "success" : "error",
+        message: values[0].message,
+        result: values[0].result,
       });
-      setIsLoadingGetBike(false);
-    })();
-  }, [bikeId]);
+      setLoadedStatus("success");
+      setIsLoading(false);
+    });
+  }, [setGetBikeResponse, bikeId]);
 
   return (
     <>
-      {isLoadingGetBike ? (
+      {isLoading ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
-      ) : getBikeResponse.status === "success" ? (
-        <BikeEditFormForm
-          defaultValues={getBikeResponse.result}
-          bikeId={bikeId}
-        />
+      ) : loadedStatus === "success" ? (
+        <BikeEditFormForm />
       ) : (
-        <p>{getBikeResponse.message}</p>
+        <p>読み込みに失敗しました。</p>
       )}
     </>
   );

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
 import { Loading } from "@/components";
 import {
   getBikes,
@@ -9,8 +11,6 @@ import {
 } from "@/lib/api";
 import { useMaintenanceRecordEditFormState } from "./stores";
 import MaintenanceRecordEditFormForm from "./MaintenanceRecordEditFormForm";
-
-import { useParams } from "next/navigation";
 
 export default function MaintenanceRecordEditForm() {
   const params = useParams<{ id: string }>();

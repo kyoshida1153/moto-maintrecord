@@ -93,7 +93,6 @@ export default function UserPasswordEditForm() {
             />
           )}
         />
-
         <Controller
           name="newPassword"
           control={control}
@@ -109,7 +108,6 @@ export default function UserPasswordEditForm() {
             />
           )}
         />
-
         <Controller
           name="confirmNewPassword"
           control={control}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -9,8 +9,8 @@ import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 
 import { TextField, SubmitButton } from "@/components";
+import { useMaintenanceCategoryEditFormStore } from "./stores";
 import { updateMaintenanceCategory } from "@/lib/api";
-import type { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -22,13 +22,15 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function MaintenanceCategoryEditFormForm({
-  defaultValues,
-  maintenanceCategoryId,
-}: {
-  defaultValues?: MaintenanceCategoryUniqueSelect;
-  maintenanceCategoryId: string;
-}) {
+export default function MaintenanceCategoryEditFormForm() {
+  const params = useParams<{ id: string }>();
+  const maintenanceCategoryId = params.id;
+
+  // フォームのデフォルト値
+  const { getMaintenanceCategoryResponse } =
+    useMaintenanceCategoryEditFormStore();
+  const defaultValues = getMaintenanceCategoryResponse.result;
+
   // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
@@ -45,7 +47,7 @@ export default function MaintenanceCategoryEditFormForm({
   } = useForm<z.infer<typeof MaintenanceCategoryEditFormSchema>>({
     resolver: zodResolver(MaintenanceCategoryEditFormSchema),
     defaultValues: {
-      name: defaultValues?.name,
+      name: defaultValues?.name ?? "",
     },
     mode: "onChange",
   });
@@ -73,7 +75,7 @@ export default function MaintenanceCategoryEditFormForm({
 
     if (maintenanceCategoryResponse.success === true) {
       setTimeout(() => {
-        router.push("/category");
+        router.back();
       }, 2000);
       return;
     } else {

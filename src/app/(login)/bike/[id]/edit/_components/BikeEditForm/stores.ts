@@ -11,8 +11,6 @@ type GetBikeResponse = {
 type BikeEditFormState = {
   getBikeResponse: GetBikeResponse;
   setGetBikeResponse: (getBikeResponse: GetBikeResponse) => void;
-  isLoadingGetBike: boolean;
-  setIsLoadingGetBike: (isLoadingGetBike: boolean) => void;
 };
 
 export const useBikeEditFormStore = create<BikeEditFormState>((set) => ({
@@ -23,10 +21,5 @@ export const useBikeEditFormStore = create<BikeEditFormState>((set) => ({
   setGetBikeResponse: (nextValue) =>
     set(() => ({
       getBikeResponse: nextValue,
-    })),
-  isLoadingGetBike: true,
-  setIsLoadingGetBike: (nextValue) =>
-    set(() => ({
-      isLoadingGetBike: nextValue,
     })),
 }));

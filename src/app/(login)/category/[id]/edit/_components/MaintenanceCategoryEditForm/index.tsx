@@ -1,60 +1,51 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 import { Loading } from "@/components";
 import { getMaintenanceCategory } from "@/lib/api";
-import type { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
-
 import MaintenanceCategoryEditFormForm from "./MaintenanceCategoryEditFormForm";
+import { useMaintenanceCategoryEditFormStore } from "./stores";
 
-type GetMaintenanceCategoryResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-  result?: MaintenanceCategoryUniqueSelect;
-};
+export default function MaintenanceCategoryEditForm() {
+  const params = useParams<{ id: string }>();
+  const maintenanceCategoryId = params.id;
 
-export default function MaintenanceCategoryEditForm({
-  maintenanceCategoryId,
-}: {
-  maintenanceCategoryId: string;
-}) {
-  // フォームのdefaultValueの設定で使うもの
-  const [isLoadingGetMaintenanceCategory, setIsLoadingGetMaintenanceCategory] =
-    useState<boolean>(true);
-  const [getMaintenanceCategoryResponse, setGetMaintenanceCategoryResponse] =
-    useState<GetMaintenanceCategoryResponse>({
-      status: undefined,
-      message: "",
-    });
+  const { setGetMaintenanceCategoryResponse } =
+    useMaintenanceCategoryEditFormStore();
+
+  // 各データの読み込み～stateにセット
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadedStatus, setLoadedStatus] = useState<
+    "success" | "error" | undefined
+  >(undefined);
 
   // フォームのdefaultValueに設定するデータの読み込み
   useEffect(() => {
-    (async () => {
-      setIsLoadingGetMaintenanceCategory(true);
-      const response = await getMaintenanceCategory(maintenanceCategoryId);
-      setGetMaintenanceCategoryResponse({
-        message: response.message,
-        status: response.success === true ? "success" : "error",
-        result: response.result,
-      });
-      setIsLoadingGetMaintenanceCategory(false);
-    })();
-  }, [maintenanceCategoryId]);
+    Promise.all([getMaintenanceCategory(maintenanceCategoryId)]).then(
+      (values) => {
+        setGetMaintenanceCategoryResponse({
+          status: values[0].success === true ? "success" : "error",
+          message: values[0].message,
+          result: values[0].result,
+        });
+        setLoadedStatus("success");
+        setIsLoading(false);
+      },
+    );
+  }, [setGetMaintenanceCategoryResponse, maintenanceCategoryId]);
 
   return (
     <>
-      {isLoadingGetMaintenanceCategory ? (
+      {isLoading ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
-      ) : getMaintenanceCategoryResponse.status === "success" ? (
-        <MaintenanceCategoryEditFormForm
-          defaultValues={getMaintenanceCategoryResponse.result}
-          maintenanceCategoryId={maintenanceCategoryId}
-        />
+      ) : loadedStatus === "success" ? (
+        <MaintenanceCategoryEditFormForm />
       ) : (
-        <p>{getMaintenanceCategoryResponse.message}</p>
+        <p>読み込みに失敗しました。</p>
       )}
     </>
   );

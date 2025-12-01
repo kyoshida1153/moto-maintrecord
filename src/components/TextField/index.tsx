@@ -45,6 +45,8 @@ export function TextField({
       type={type}
       variant={variant}
       sx={{
+        width: "100%",
+
         "& .MuiInputBase-input": {
           textAlign: type === "number" ? "right" : "left",
         },

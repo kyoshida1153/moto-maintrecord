@@ -123,6 +123,13 @@ export default function MaintenanceRecordEditFormForm() {
       }
     }
 
+    if (isChangedInputFileImage === false) {
+      setSubmitResponse({
+        message: "画像の更新無し。",
+        status: "info",
+      });
+    }
+
     // ここからAPIでDB操作
     const data = {
       bikeId: values.bikeId,

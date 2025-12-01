@@ -1,9 +1,7 @@
 import Link from "next/link";
 import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
-import { Button } from "@mui/material";
-import MuiLink from "@mui/material/Link";
-import { Heading } from "@/components";
+import { Heading, LinkButton } from "@/components";
 import UserNameEditForm from "./_components/UserNameEditForm";
 import type { Metadata } from "next";
 
@@ -43,19 +41,9 @@ export default function AccountPage() {
           </ul>
 
           <div className="flex justify-center border-t-1 border-gray-200 pt-6 md:pt-8">
-            <Button
-              component={MuiLink}
-              variant="outlined"
-              disableElevation
-              href="/account/delete"
-              sx={{
-                maxWidth: "fit-content",
-                px: "1.5em",
-                fontSize: "16px",
-              }}
-            >
+            <LinkButton href="/account/delete" variant="outlined">
               アカウントを削除する
-            </Button>
+            </LinkButton>
           </div>
         </div>
       </section>
