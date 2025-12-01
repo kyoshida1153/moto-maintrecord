@@ -2,31 +2,31 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/actions";
+import { UpdateMaintenanceRecordSchema } from "@/validations/UpdateMaintenanceRecordSchema";
 
 /* ###################################################################### */
 
 // 取得
 
-const maintenanceRecordUniqueSelect =
-  Prisma.validator<Prisma.MaintenanceRecordSelect>()({
-    id: true,
-    bike: {
-      select: { id: true, name: true },
-    },
-    maintenanceCategory: {
-      select: { id: true, name: true },
-    },
-    calenderDate: true,
-    isDone: true,
-    title: true,
-    cost: true,
-    memo: true,
-    mileage: true,
-    maintenanceRecordImages: {
-      select: { id: true, imageUrl: true },
-      where: { deletedAt: null },
-    },
-  });
+const maintenanceRecordUniqueSelect = {
+  id: true,
+  calenderDate: true,
+  isDone: true,
+  title: true,
+  cost: true,
+  memo: true,
+  mileage: true,
+  bike: {
+    select: { id: true, name: true },
+  },
+  maintenanceCategory: {
+    select: { id: true, name: true },
+  },
+  maintenanceRecordImages: {
+    select: { id: true, imageUrl: true },
+    where: { deletedAt: null },
+  },
+} satisfies Prisma.MaintenanceRecordSelect;
 
 export type MaintenanceRecordUniqueSelect = Prisma.MaintenanceRecordGetPayload<{
   select: typeof maintenanceRecordUniqueSelect;
@@ -57,7 +57,11 @@ export async function GET(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -69,10 +73,10 @@ export async function GET(
 
 // 編集
 
-export type MaintenanceRecordUpdateInput = Prisma.MaintenanceRecordUpdateInput;
+// export type MaintenanceRecordUpdateInput = Prisma.MaintenanceRecordUpdateInput;
 
-type MaintenanceRecordImageCreateInput =
-  Prisma.MaintenanceRecordImageCreateInput;
+// type MaintenanceRecordImageCreateInput =
+//   Prisma.MaintenanceRecordImageCreateInput;
 
 export async function PUT(
   request: NextRequest,
@@ -90,62 +94,125 @@ export async function PUT(
     const {
       bikeId,
       maintenanceCategoryId,
-      calenderDate,
+      calenderDate: calenderDateString,
       isDone,
       title,
       cost,
       memo,
       mileage,
-      maintenanceRecordImages,
-      isChangedImages,
+      maintenanceRecordImageUrls,
     } = await request.json();
 
-    // 画像変更する場合: 紐づいてる画像レコードを論理削除
-    const maintenanceRecordImagesUpdateMany = isChangedImages
-      ? {
-          where: {
-            deletedAt: null,
-          },
-          data: {
-            deletedAt: new Date(),
-          },
-        }
-      : undefined;
+    const calenderDate = new Date(calenderDateString);
+    if (isNaN(calenderDate.getTime())) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
+    console.error("calenderDate", calenderDate);
 
-    // アップロードした画像がある場合: 画像レコードを新規作成
-    const maintenanceRecordImagesCreate =
-      maintenanceRecordImages && maintenanceRecordImages.length > 0
-        ? maintenanceRecordImages.map(
-            (record: MaintenanceRecordImageCreateInput) => {
-              return {
-                imageUrl: record.imageUrl,
-              };
-            },
-          )
-        : undefined;
-
-    const data: MaintenanceRecordUpdateInput = {
-      bike: {
-        connect: {
-          id: bikeId,
-        },
-      },
-      maintenanceCategory: {
-        connect: {
-          id: maintenanceCategoryId,
-        },
-      },
+    // バリデーションチェック
+    const validated = UpdateMaintenanceRecordSchema.safeParse({
+      bikeId,
+      maintenanceCategoryId,
       calenderDate,
       isDone,
       title,
       cost,
       memo,
       mileage,
-      maintenanceRecordImages: {
-        updateMany: maintenanceRecordImagesUpdateMany,
-        create: maintenanceRecordImagesCreate,
-      },
+      maintenanceRecordImageUrls,
+    });
+
+    if (!validated.success) {
+      console.error(validated.error.issues);
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
+
+    const data = {
+      calenderDate: validated.data.calenderDate,
+      isDone: validated.data.isDone,
+      title: validated.data.title,
+      cost: validated.data.cost,
+      memo: validated.data.memo,
+      mileage: validated.data.mileage,
     };
+
+    if (
+      // 所有バイクが選択されている場合
+      validated.data.bikeId
+    ) {
+      Object.assign(data, {
+        bike: {
+          connect: {
+            id: validated.data.bikeId,
+          },
+        },
+      });
+    } else if (
+      // 所有バイクが未選択の場合
+      validated.data.bikeId === null
+    ) {
+      Object.assign(data, {
+        bikeId: null,
+      });
+    }
+
+    if (
+      // カテゴリーが選択されている場合
+      validated.data.maintenanceCategoryId
+    ) {
+      Object.assign(data, {
+        maintenanceCategory: {
+          connect: {
+            id: validated.data.maintenanceCategoryId,
+          },
+        },
+      });
+    } else if (
+      // カテゴリーが未選択の場合
+      validated.data.maintenanceCategoryId === null
+    ) {
+      Object.assign(data, {
+        maintenanceCategoryId: null,
+      });
+    }
+
+    // 画像の変更: 無しにした場合
+    if (validated.data.maintenanceRecordImageUrls === null) {
+      Object.assign(data, {
+        maintenanceRecordImages: {
+          updateMany: {
+            where: {
+              deletedAt: null,
+            },
+            data: {
+              deletedAt: new Date(),
+            },
+          },
+        },
+      });
+    }
+
+    // 画像の変更: 別の画像にした場合
+    if (
+      validated.data.maintenanceRecordImageUrls &&
+      validated.data.maintenanceRecordImageUrls?.length > 0
+    ) {
+      Object.assign(data, {
+        maintenanceRecordImages: {
+          updateMany: {
+            where: {
+              deletedAt: null,
+            },
+            data: {
+              deletedAt: new Date(),
+            },
+          },
+          create: validated.data.maintenanceRecordImageUrls.map((url) => {
+            return { imageUrl: url };
+          }),
+        },
+      });
+    }
 
     const { id } = await context.params;
     const result = await prisma.maintenanceRecord.update({
@@ -158,7 +225,11 @@ export async function PUT(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },
@@ -170,7 +241,7 @@ export async function PUT(
 // 削除（論理削除）
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   context: RouteContext<"/api/maintenance-records/[id]">,
 ) {
   // 認証チェック
@@ -182,14 +253,11 @@ export async function DELETE(
 
   // ここからDB操作
   try {
-    // 型は編集のを使用
-    const data: MaintenanceRecordUpdateInput = {
-      deletedAt: new Date(),
-    };
-
     const { id } = await context.params;
     const result = await prisma.maintenanceRecord.update({
-      data,
+      data: {
+        deletedAt: new Date(),
+      },
       where: { id, userId },
     });
 
@@ -198,7 +266,11 @@ export async function DELETE(
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },

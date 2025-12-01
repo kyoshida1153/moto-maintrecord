@@ -1,3 +1,4 @@
+export { Checkbox } from "./Checkbox";
 export { DatePicker } from "./DatePicker";
 export { Heading } from "./Heading";
 export { InputFileImage } from "./InputFileImage";

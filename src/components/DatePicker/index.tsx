@@ -4,32 +4,50 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker as MuixDatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ja } from "date-fns/locale";
+import type { FieldError, FieldValues } from "react-hook-form";
 
 export function DatePicker({
-  name,
-  label = "日付",
-  className,
-  defaultValue,
   disabled,
+  field,
+  fieldError,
+  helperText,
+  label = "日付",
+  width = "170px",
 }: {
-  name: string;
-  label?: string;
-  className?: string;
-  defaultValue?: Date;
   disabled?: boolean;
+  field: FieldValues;
+  fieldError?: FieldError;
+  helperText?: string;
+  label: string;
+  width?: string;
 }) {
-  const date = defaultValue ? defaultValue : new Date();
+  const defaultValue = field.value ? field.value : undefined;
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
-      <MuixDatePicker
-        label={label}
-        name={name}
-        defaultValue={date}
-        className={className}
-        sx={{ backgroundColor: "#fff", width: "100%", maxWidth: "170px" }}
-        disabled={disabled ? true : false}
-      />
-    </LocalizationProvider>
+    <div>
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+        <MuixDatePicker
+          defaultValue={defaultValue}
+          disabled={disabled ? true : false}
+          name={field.name}
+          ref={field.ref}
+          label={label}
+          onChange={field.onChange}
+          sx={{
+            backgroundColor: "#fff",
+            width,
+          }}
+        />
+        {fieldError?.message ? (
+          <p className="mx-[14px] mt-[3px] text-[15px] text-[#d32f2f]">
+            {fieldError.message}
+          </p>
+        ) : (
+          helperText && (
+            <p className="mx-[14px] mt-[3px] text-[15px]">※{helperText}</p>
+          )
+        )}
+      </LocalizationProvider>
+    </div>
   );
 }

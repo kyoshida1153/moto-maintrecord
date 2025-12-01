@@ -16,8 +16,9 @@ export function TextField({
   rows = 1,
   type,
   variant = "outlined",
+  width = "100%",
 }: {
-  defaultValue?: number | string | null;
+  defaultValue?: number | string;
   disabled?: boolean;
   error?: boolean;
   field: FieldValues;
@@ -28,6 +29,7 @@ export function TextField({
   rows?: number | string;
   type?: HTMLInputTypeAttribute;
   variant?: "filled" | "outlined" | "standard";
+  width?: string;
 }) {
   return (
     <MuiTextField
@@ -43,8 +45,11 @@ export function TextField({
       type={type}
       variant={variant}
       sx={{
-        width: "100%",
+        "& .MuiInputBase-input": {
+          textAlign: type === "number" ? "right" : "left",
+        },
         "& .MuiOutlinedInput-root": {
+          width: width,
           backgroundColor: "#fff",
         },
         "& .MuiFormHelperText-root": {
@@ -55,9 +60,6 @@ export function TextField({
           color: "#333",
         },
       }}
-      // onChange={(e) => {
-      //   console.log(e.target.value);
-      // }}
     />
   );
 }

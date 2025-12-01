@@ -42,16 +42,11 @@ export function InputFileImage({
 }) {
   const [previewImageUrls, setPreviewImageUrls] =
     useState<PreviewImageUrl[]>(defaultValue);
-
-  // const [isChangedInputFileImage, setIsChangedInputFileImage] =
-  //   useState<boolean>(false);
   const { isChangedInputFileImage, setIsChangedInputFileImage } =
     useInputFileImageStore();
 
   const changePreviewImageUrls = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    console.log("files", files);
-    console.log("fieldError", fieldError);
     if (!files) return setPreviewImageUrls([]);
 
     if (isChangedInputFileImage === false) {

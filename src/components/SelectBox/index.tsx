@@ -1,43 +1,43 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
+import type { FieldError, FieldValues } from "react-hook-form";
 
 export function SelectBox({
-  name,
-  label = "選択してください",
-  itemList = [],
-  defaultValue,
   disabled,
+  field,
+  fieldError,
+  helperText,
+  itemList = [],
+  label = "選択してください",
 }: {
-  name: string;
-  label?: string;
-  itemList?: { value: string | undefined; text: string }[];
-  defaultValue?: string;
   disabled?: boolean;
+  field: FieldValues;
+  fieldError?: FieldError;
+  helperText?: string;
+  itemList?: { value: string; text: string }[];
+  label?: string;
 }) {
-  const [selectValue, setSelectValue] = React.useState(defaultValue);
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectValue(event.target.value as string);
-  };
+  const [defaultValue] = useState<string>(field.value || "");
 
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box>
       <FormControl fullWidth disabled={disabled ? true : false}>
-        <InputLabel id={`select-label-${name}`}>{label}</InputLabel>
+        <InputLabel id={`select-label-${field.name}`}>{label}</InputLabel>
         <Select
-          labelId={`select-label-${name}`}
-          id={`select-${name}`}
-          value={selectValue}
           defaultValue={defaultValue}
+          id={`select-${field.name}`}
           label={label}
-          name={name}
-          onChange={handleChange}
+          labelId={`select-label-${field.name}`}
+          name={field.name}
+          ref={field.ref}
+          onChange={field.onChange}
+          onBlur={field.onBlur}
           sx={{ backgroundColor: "#fff" }}
         >
           {itemList.length > 0 &&
@@ -48,6 +48,15 @@ export function SelectBox({
             ))}
         </Select>
       </FormControl>
+      {fieldError?.message ? (
+        <p className="mx-[14px] mt-[3px] text-[15px] text-[#d32f2f]">
+          {fieldError.message}
+        </p>
+      ) : (
+        helperText && (
+          <p className="mx-[14px] mt-[3px] text-[15px]">※{helperText}</p>
+        )
+      )}
     </Box>
   );
 }

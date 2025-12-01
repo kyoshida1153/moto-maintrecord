@@ -10,24 +10,24 @@ import {
   endOfYear,
   parseISO,
 } from "date-fns";
+import { CreateMaintenanceRecordSchema } from "@/validations/CreateMaintenanceRecordSchema";
 
 /* ###################################################################### */
 
 // 一覧取得
 
-const maintenanceRecordSelect =
-  Prisma.validator<Prisma.MaintenanceRecordSelect>()({
-    id: true,
-    title: true,
-    cost: true,
-    calenderDate: true,
-    bike: {
-      select: { name: true },
-    },
-    maintenanceCategory: {
-      select: { name: true },
-    },
-  });
+const maintenanceRecordSelect = {
+  id: true,
+  title: true,
+  cost: true,
+  calenderDate: true,
+  bike: {
+    select: { name: true },
+  },
+  maintenanceCategory: {
+    select: { name: true },
+  },
+} satisfies Prisma.MaintenanceRecordSelect;
 
 export type MaintenanceRecordSelect = Prisma.MaintenanceRecordGetPayload<{
   select: typeof maintenanceRecordSelect;
@@ -51,6 +51,7 @@ export async function GET(
 
     const where = { deletedAt: null };
     Object.assign(where, { userId: userId });
+
     // 年、月での取得範囲
     const dateString = params.get("date") || "";
     if (isDateYyyyMm(dateString)) {
@@ -114,8 +115,6 @@ export async function GET(
 
 // 登録
 
-export type MaintenanceRecordCreateInput = Prisma.MaintenanceRecordCreateInput;
-
 export async function POST(
   request: Request,
 ): Promise<NextResponse<{ message: string }>> {
@@ -129,15 +128,15 @@ export async function POST(
   // ここからDB操作
   try {
     const {
+      bikeId,
+      maintenanceCategoryId,
       calenderDate: calenderDateString,
       isDone,
       title,
       cost,
-      bikeId,
-      maintenanceCategoryId,
       memo,
       mileage,
-      maintenanceRecordImages,
+      maintenanceRecordImageUrls,
     } = await request.json();
 
     const calenderDate = new Date(calenderDateString);
@@ -145,55 +144,85 @@ export async function POST(
       return NextResponse.json({ message: "Bad Request" }, { status: 400 });
     }
 
-    const data: MaintenanceRecordCreateInput = {
+    // バリデーションチェック
+    const validated = CreateMaintenanceRecordSchema.safeParse({
+      bikeId,
+      maintenanceCategoryId,
       calenderDate,
       isDone,
       title,
       cost,
       memo,
       mileage,
+      maintenanceRecordImageUrls,
+    });
+
+    if (!validated.success) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
+
+    const data = {
+      calenderDate: validated.data.calenderDate,
+      isDone: validated.data.isDone,
+      title: validated.data.title,
+      cost: validated.data.cost,
+      memo: validated.data.memo,
+      mileage: validated.data.mileage,
       user: {
         connect: {
           id: userId,
         },
       },
-      bike: {
-        connect: {
-          id: bikeId,
-        },
-      },
-      maintenanceCategory: {
-        connect: {
-          id: maintenanceCategoryId,
-        },
-      },
     };
 
-    let result = null;
-
-    if (!maintenanceRecordImages) {
-      result = await prisma.maintenanceRecord.create({
-        data,
-      });
-    } else if (maintenanceRecordImages?.length > 0) {
-      result = await prisma.maintenanceRecord.create({
-        data: {
-          ...data,
-          maintenanceRecordImages: {
-            create: maintenanceRecordImages,
+    // 所有バイクが選択されている場合
+    if (validated.data.bikeId) {
+      Object.assign(data, {
+        bike: {
+          connect: {
+            id: validated.data.bikeId,
           },
         },
       });
-    } else {
-      throw false;
     }
+
+    // カテゴリーが選択されている場合
+    if (validated.data.maintenanceCategoryId) {
+      Object.assign(data, {
+        maintenanceCategory: {
+          connect: {
+            id: validated.data.maintenanceCategoryId,
+          },
+        },
+      });
+    }
+
+    // アップロードした画像がある場合
+    if (
+      validated.data.maintenanceRecordImageUrls &&
+      validated.data.maintenanceRecordImageUrls?.length > 0
+    ) {
+      Object.assign(data, {
+        maintenanceRecordImages: {
+          create: validated.data.maintenanceRecordImageUrls.map((imageUrl) => {
+            return { imageUrl };
+          }),
+        },
+      });
+    }
+
+    const result = await prisma.maintenanceRecord.create({ data });
 
     if (result) {
       return NextResponse.json({ message: "Success" }, { status: 201 });
     } else {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },

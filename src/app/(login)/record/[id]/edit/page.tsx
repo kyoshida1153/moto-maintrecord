@@ -8,17 +8,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function MaintenanceRecordEditPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+export default async function MaintenanceRecordEditPage() {
   return (
     <>
       <Heading level={1}>整備・出費記録の編集</Heading>
       <div className="max-w-lg">
-        <MaintenanceRecordEditForm maintenanceRecordId={id} />
+        <MaintenanceRecordEditForm />
       </div>
     </>
   );

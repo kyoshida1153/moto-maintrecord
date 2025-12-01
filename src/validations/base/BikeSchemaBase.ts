@@ -28,7 +28,7 @@ export const BikeSchemaBase = z.object({
   mileage: z.preprocess((value) => {
     const valueStr = String(value);
 
-    if (/^[\d]+$/.test(valueStr)) {
+    if (/^-?\d+$/.test(valueStr)) {
       return parseInt(valueStr);
     } else if (valueStr === "") {
       return null;

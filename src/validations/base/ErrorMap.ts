@@ -11,6 +11,8 @@ export const ErrorMap: z.ZodErrorMap = (issue, ctx) => {
         }
       case "number":
         return { message: "半角数字を入力してください。" };
+      case "date":
+        return { message: "正しい日付を入力してください。" };
       default:
         break;
     }
@@ -20,6 +22,9 @@ export const ErrorMap: z.ZodErrorMap = (issue, ctx) => {
   if (issue.code === z.ZodIssueCode.invalid_string) {
     if (issue.validation === "email") {
       return { message: "正しいメールアドレスを入力してください。" };
+    }
+    if (issue.validation === "uuid") {
+      return { message: "正しい値を入力してください。" };
     }
   }
 
