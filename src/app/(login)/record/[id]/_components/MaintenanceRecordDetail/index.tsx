@@ -100,10 +100,17 @@ export default function MaintenanceRecordDetail({
                 金額
               </MaintenanceRecordDetailHeading>
               <p>
-                <span className="font-alphanumeric">
-                  {getMaintenanceRecordResponse.result?.cost.toLocaleString()}
-                </span>
-                <span className="ml-[1px] text-sm">円</span>
+                {typeof getMaintenanceRecordResponse.result?.cost ===
+                "number" ? (
+                  <>
+                    <span className="font-alphanumeric">
+                      {getMaintenanceRecordResponse.result?.cost.toLocaleString()}
+                    </span>
+                    <span className="ml-[1px] text-sm">円</span>
+                  </>
+                ) : (
+                  <span className="text-gray-400">登録なし</span>
+                )}
               </p>
             </MaintenanceRecordDetailSection>
 
@@ -183,7 +190,8 @@ export default function MaintenanceRecordDetail({
                 走行距離
               </MaintenanceRecordDetailHeading>
               <p>
-                {getMaintenanceRecordResponse.result?.mileage ? (
+                {typeof getMaintenanceRecordResponse.result?.mileage ===
+                "number" ? (
                   <>
                     <span className="font-alphanumeric">
                       {getMaintenanceRecordResponse.result.mileage.toLocaleString()}

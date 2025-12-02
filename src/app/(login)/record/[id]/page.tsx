@@ -14,6 +14,7 @@ export default async function MaintenanceRecordDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   return (
     <>
       <Heading level={1}>整備・出費記録の詳細</Heading>

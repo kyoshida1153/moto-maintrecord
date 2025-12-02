@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 
 import { Loading } from "@/components";
 import {
@@ -12,22 +11,24 @@ import {
 import { useMaintenanceRecordEditFormState } from "./stores";
 import MaintenanceRecordEditFormForm from "./MaintenanceRecordEditFormForm";
 
-export default function MaintenanceRecordEditForm() {
-  const params = useParams<{ id: string }>();
-  const maintenanceRecordId = params.id;
-
+export default function MaintenanceRecordEditForm({
+  maintenanceRecordId,
+}: {
+  maintenanceRecordId: string;
+}) {
   const {
     setGetBikesResponse,
     setGetMaintenanceCategoriesResponse,
+    getMaintenanceRecordResponse,
     setGetMaintenanceRecordResponse,
   } = useMaintenanceRecordEditFormState();
 
-  // 各データの読み込み～stateにセット
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadedStatus, setLoadedStatus] = useState<
     "success" | "error" | undefined
   >(undefined);
 
+  // 必要なデータの読み込み～セット
   useEffect(() => {
     Promise.all([
       getBikes(),
@@ -66,9 +67,15 @@ export default function MaintenanceRecordEditForm() {
           <Loading size="36px" />
         </div>
       ) : loadedStatus === "success" ? (
-        <MaintenanceRecordEditFormForm />
+        <MaintenanceRecordEditFormForm
+          maintenanceRecordId={maintenanceRecordId}
+        />
       ) : (
-        <p>読み込みに失敗しました。</p>
+        <p>
+          {getMaintenanceRecordResponse.message
+            ? getMaintenanceRecordResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
       )}
     </>
   );

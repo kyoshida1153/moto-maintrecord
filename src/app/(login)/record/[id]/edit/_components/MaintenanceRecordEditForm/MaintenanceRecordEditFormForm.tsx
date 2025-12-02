@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -31,10 +31,11 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function MaintenanceRecordEditFormForm() {
-  const params = useParams<{ id: string }>();
-  const maintenanceRecordId = params.id;
-
+export default function MaintenanceRecordEditFormForm({
+  maintenanceRecordId,
+}: {
+  maintenanceRecordId: string;
+}) {
   const {
     getBikesResponse,
     getMaintenanceCategoriesResponse,
@@ -153,7 +154,7 @@ export default function MaintenanceRecordEditFormForm() {
     } else if (
       // 画像を無しにした場合
       isChangedInputFileImage === true &&
-      values.imageFiles &&
+      Array.isArray(values.imageFiles) &&
       values.imageFiles.length === 0
     ) {
       Object.assign(data, { maintenanceRecordImageUrls: null });
