@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -22,10 +22,11 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function MaintenanceCategoryEditFormForm() {
-  const params = useParams<{ id: string }>();
-  const maintenanceCategoryId = params.id;
-
+export default function MaintenanceCategoryEditFormForm({
+  maintenanceCategoryId,
+}: {
+  maintenanceCategoryId: string;
+}) {
   // フォームのデフォルト値
   const { getMaintenanceCategoryResponse } =
     useMaintenanceCategoryEditFormStore();

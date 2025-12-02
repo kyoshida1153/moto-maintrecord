@@ -1,27 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 
 import { Loading } from "@/components";
 import { getMaintenanceCategory } from "@/lib/api";
 import MaintenanceCategoryEditFormForm from "./MaintenanceCategoryEditFormForm";
 import { useMaintenanceCategoryEditFormStore } from "./stores";
 
-export default function MaintenanceCategoryEditForm() {
-  const params = useParams<{ id: string }>();
-  const maintenanceCategoryId = params.id;
-
-  const { setGetMaintenanceCategoryResponse } =
+export default function MaintenanceCategoryEditForm({
+  maintenanceCategoryId,
+}: {
+  maintenanceCategoryId: string;
+}) {
+  const { getMaintenanceCategoryResponse, setGetMaintenanceCategoryResponse } =
     useMaintenanceCategoryEditFormStore();
 
-  // 各データの読み込み～stateにセット
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadedStatus, setLoadedStatus] = useState<
     "success" | "error" | undefined
   >(undefined);
 
-  // フォームのdefaultValueに設定するデータの読み込み
+  // 必要なデータの読み込み～セット
   useEffect(() => {
     Promise.all([getMaintenanceCategory(maintenanceCategoryId)]).then(
       (values) => {
@@ -30,7 +29,13 @@ export default function MaintenanceCategoryEditForm() {
           message: values[0].message,
           result: values[0].result,
         });
-        setLoadedStatus("success");
+
+        if (values[0].success === true) {
+          setLoadedStatus("success");
+        } else {
+          setLoadedStatus("error");
+        }
+
         setIsLoading(false);
       },
     );
@@ -43,9 +48,15 @@ export default function MaintenanceCategoryEditForm() {
           <Loading size="36px" />
         </div>
       ) : loadedStatus === "success" ? (
-        <MaintenanceCategoryEditFormForm />
+        <MaintenanceCategoryEditFormForm
+          maintenanceCategoryId={maintenanceCategoryId}
+        />
       ) : (
-        <p>読み込みに失敗しました。</p>
+        <p>
+          {getMaintenanceCategoryResponse.message
+            ? getMaintenanceCategoryResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
       )}
     </>
   );

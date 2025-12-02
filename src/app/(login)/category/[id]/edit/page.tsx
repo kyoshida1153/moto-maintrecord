@@ -14,6 +14,7 @@ export default async function MaintenanceCategoryEditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   return (
     <>
       <Heading level={1}>カテゴリーの編集</Heading>

@@ -14,6 +14,7 @@ export default async function MaintenanceCategoryDeletePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   return (
     <div className="max-w-xl">
       <Heading level={1}>カテゴリーの削除</Heading>
