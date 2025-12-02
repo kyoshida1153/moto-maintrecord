@@ -1,26 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 
 import { Loading } from "@/components";
 import { getBike } from "@/lib/api";
 import BikeEditFormForm from "./BikeEditFormForm";
 import { useBikeEditFormStore } from "./stores";
 
-export default function BikeEditForm() {
-  const params = useParams<{ id: string }>();
-  const bikeId = params.id;
+export default function BikeEditForm({ bikeId }: { bikeId: string }) {
+  const { getBikeResponse, setGetBikeResponse } = useBikeEditFormStore();
 
-  const { setGetBikeResponse } = useBikeEditFormStore();
-
-  // 各データの読み込み～stateにセット
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadedStatus, setLoadedStatus] = useState<
     "success" | "error" | undefined
   >(undefined);
 
-  // フォームのdefaultValueに設定するデータの読み込み
+  // 必要なデータの読み込み～セット
   useEffect(() => {
     Promise.all([getBike(bikeId)]).then((values) => {
       setGetBikeResponse({
@@ -28,7 +23,13 @@ export default function BikeEditForm() {
         message: values[0].message,
         result: values[0].result,
       });
-      setLoadedStatus("success");
+
+      if (values[0].success === true) {
+        setLoadedStatus("success");
+      } else {
+        setLoadedStatus("error");
+      }
+
       setIsLoading(false);
     });
   }, [setGetBikeResponse, bikeId]);
@@ -40,9 +41,13 @@ export default function BikeEditForm() {
           <Loading size="36px" />
         </div>
       ) : loadedStatus === "success" ? (
-        <BikeEditFormForm />
+        <BikeEditFormForm bikeId={bikeId} />
       ) : (
-        <p>読み込みに失敗しました。</p>
+        <p>
+          {getBikeResponse.message
+            ? getBikeResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
       )}
     </>
   );

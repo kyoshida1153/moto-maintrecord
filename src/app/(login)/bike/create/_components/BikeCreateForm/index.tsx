@@ -75,7 +75,7 @@ export default function BikeCreateForm() {
       name: values.name,
       mileage: values.mileage,
       memo: values.memo,
-      imageUrl: uploadResponse?.imageUrl ?? undefined,
+      imageUrl: uploadResponse?.result ?? undefined,
     });
 
     setSubmitResponse({

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -24,10 +24,7 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function BikeEditFormForm() {
-  const params = useParams<{ id: string }>();
-  const bikeId = params.id;
-
+export default function BikeEditFormForm({ bikeId }: { bikeId: string }) {
   // フォームのデフォルト値
   const { getBikeResponse } = useBikeEditFormStore();
   const defaultValues = getBikeResponse.result;
@@ -103,7 +100,7 @@ export default function BikeEditFormForm() {
       uploadResponse &&
       uploadResponse.success === true
     ) {
-      Object.assign(data, { imageUrl: uploadResponse.imageUrl });
+      Object.assign(data, { imageUrl: uploadResponse.result });
     } else if (
       // 画像を無しにした場合
       isChangedInputFileImage === true &&

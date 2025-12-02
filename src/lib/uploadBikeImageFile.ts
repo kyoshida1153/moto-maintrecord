@@ -12,7 +12,7 @@ const FileImageArraySchema = z.array(FileImageSchema);
 type Response = {
   success: boolean;
   message: string;
-  imageUrl?: string;
+  result?: string;
 };
 
 export async function uploadBikeImageFile(
@@ -37,7 +37,6 @@ export async function uploadBikeImageFile(
       return {
         success: true,
         message: "画像未選択。デフォルトの画像を設定。",
-        imageUrl: "",
       };
     }
 
@@ -66,7 +65,7 @@ export async function uploadBikeImageFile(
     return {
       success: true,
       message: "画像のアップロードに成功しました。",
-      imageUrl: data.publicUrl,
+      result: data.publicUrl,
     };
   } catch (error) {
     if (error instanceof Error) {

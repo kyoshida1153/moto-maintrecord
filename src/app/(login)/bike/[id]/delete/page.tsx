@@ -14,6 +14,7 @@ export default async function BikeDeletePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   return (
     <>
       <Heading level={1}>所有バイクの削除</Heading>

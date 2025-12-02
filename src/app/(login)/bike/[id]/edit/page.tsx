@@ -14,6 +14,7 @@ export default async function BikeEditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   return (
     <>
       <Heading level={1}>所有バイクの編集</Heading>

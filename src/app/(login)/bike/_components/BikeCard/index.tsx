@@ -30,7 +30,7 @@ export default function BikeCard({ id, name, mileage, imageUrl }: Bike) {
           <h2 className="line-clamp-1 text-lg md:text-xl">{name}</h2>
           <p className="text-sm">
             毎月の走行距離：{" "}
-            {mileage ? (
+            {typeof mileage === "number" ? (
               <>
                 <span className="font-alphanumeric mr-0.5 text-base">
                   {mileage.toLocaleString()}

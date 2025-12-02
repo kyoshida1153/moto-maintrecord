@@ -2,18 +2,23 @@
 
 import { Button } from "@mui/material";
 import Link from "@mui/material/Link";
+import { ReactElement } from "react";
 
 export function LinkButton({
   children,
-  variant = "text",
   disabled,
+  endIcon,
   href,
+  startIcon,
+  variant = "text",
   onClick,
 }: {
   children: string;
-  variant: "text" | "contained" | "outlined";
   disabled?: boolean;
+  endIcon?: ReactElement;
   href: string;
+  startIcon?: ReactElement;
+  variant: "text" | "contained" | "outlined";
   onClick?: () => void;
 }) {
   return (
@@ -22,12 +27,17 @@ export function LinkButton({
       variant={variant}
       disableElevation
       type="submit"
+      endIcon={endIcon}
       href={href}
+      startIcon={startIcon}
       sx={{
-        backgroundColor: "#fff",
         fontSize: "16px",
-        px: "1.5em",
+        // px: "1.5em",
         whiteSpace: "nowrap",
+
+        "&.MuiButton-outlined": {
+          backgroundColor: "#fff",
+        },
       }}
       disabled={disabled}
       onClick={onClick}
