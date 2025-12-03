@@ -24,7 +24,7 @@ export async function createMaintenanceCategory(
     if (response.ok) {
       return {
         success: true,
-        message: "カテゴリーの登録に成功しました。",
+        message: "登録に成功しました。",
       };
     }
 
@@ -32,12 +32,12 @@ export async function createMaintenanceCategory(
       case 400:
         return {
           success: false,
-          message: `カテゴリーの登録が中断されました。入力内容を確認してください。`,
+          message: "登録が中断されました。入力内容を確認してください。",
         };
       default:
         return {
           success: false,
-          message: "カテゴリーの登録に失敗しました。",
+          message: "登録に失敗しました。",
         };
     }
   } catch (error) {
@@ -47,7 +47,7 @@ export async function createMaintenanceCategory(
 
     return {
       success: false,
-      message: "カテゴリーの登録に失敗しました。",
+      message: "登録に失敗しました。",
     };
   }
 }

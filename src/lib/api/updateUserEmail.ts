@@ -24,7 +24,7 @@ export async function updateUserEmail(
     if (response.ok) {
       return {
         success: true,
-        message: "変更に成功しました。",
+        message: "更新に成功しました。",
       };
     }
 
@@ -32,12 +32,12 @@ export async function updateUserEmail(
       case 400:
         return {
           success: false,
-          message: `変更が中断されました。入力内容を確認してください。`,
+          message: `更新が中断されました。入力内容を確認してください。`,
         };
       default:
         return {
           success: false,
-          message: "変更に失敗しました。",
+          message: "更新に失敗しました。",
         };
     }
   } catch (error) {
@@ -47,7 +47,7 @@ export async function updateUserEmail(
 
     return {
       success: false,
-      message: "変更に失敗しました。",
+      message: "更新に失敗しました。",
     };
   }
 }

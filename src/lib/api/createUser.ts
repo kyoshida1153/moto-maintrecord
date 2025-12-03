@@ -24,7 +24,7 @@ export async function createUser(
     if (response.ok) {
       return {
         success: true,
-        message: "アカウントの作成に成功しました。",
+        message: "アカウント作成に成功しました。",
       };
     }
 
@@ -32,12 +32,12 @@ export async function createUser(
       case 400:
         return {
           success: false,
-          message: `アカウントの作成が中断されました。入力内容を確認してください。`,
+          message: `アカウント作成が中断されました。入力内容を確認してください。`,
         };
       default:
         return {
           success: false,
-          message: "アカウントの作成に失敗しました。",
+          message: "アカウント作成に失敗しました。",
         };
     }
   } catch (error) {
@@ -47,7 +47,7 @@ export async function createUser(
 
     return {
       success: false,
-      message: "アカウントの作成に失敗しました。",
+      message: "アカウント作成に失敗しました。",
     };
   }
 }

@@ -24,7 +24,7 @@ export async function createMaintenanceRecord(
     if (response.ok) {
       return {
         success: true,
-        message: "整備・出費記録の登録に成功しました。",
+        message: "登録に成功しました。",
       };
     }
 
@@ -32,12 +32,12 @@ export async function createMaintenanceRecord(
       case 400:
         return {
           success: false,
-          message: `整備・出費記録の登録が中断されました。入力内容を確認してください。`,
+          message: "登録が中断されました。入力内容を確認してください。",
         };
       default:
         return {
           success: false,
-          message: "整備・出費記録の登録に失敗しました。",
+          message: "登録に失敗しました。",
         };
     }
   } catch (error) {
@@ -47,7 +47,7 @@ export async function createMaintenanceRecord(
 
     return {
       success: false,
-      message: "整備・出費記録の登録に失敗しました。",
+      message: "登録に失敗しました。",
     };
   }
 }

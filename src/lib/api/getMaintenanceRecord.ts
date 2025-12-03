@@ -22,7 +22,7 @@ export async function getMaintenanceRecord(id: string): Promise<{
       const { result } = await response.json();
       return {
         success: true,
-        message: "整備・出費記録の読み込みに成功しました。",
+        message: "読み込みに成功しました。",
         result,
       };
     }
@@ -31,12 +31,12 @@ export async function getMaintenanceRecord(id: string): Promise<{
       case 400:
         return {
           success: false,
-          message: `整備・出費記録の読み込みが中断されました。`,
+          message: "読み込みが中断されました。",
         };
       default:
         return {
           success: false,
-          message: "整備・出費記録の読み込みに失敗しました。",
+          message: "読み込みに失敗しました。",
         };
     }
   } catch (error) {
@@ -46,7 +46,7 @@ export async function getMaintenanceRecord(id: string): Promise<{
 
     return {
       success: false,
-      message: "整備・出費記録の読み込みに失敗しました。",
+      message: "読み込みに失敗しました。",
     };
   }
 }

@@ -31,7 +31,7 @@ export async function getBikes(): Promise<{
       case 400:
         return {
           success: false,
-          message: `読み込みが中断されました。`,
+          message: "読み込みが中断されました。",
         };
       default:
         return {

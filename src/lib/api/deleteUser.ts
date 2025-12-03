@@ -15,7 +15,7 @@ export async function deleteUser(): Promise<{
     if (response.ok) {
       return {
         success: true,
-        message: "アカウントの削除に成功しました。",
+        message: "削除に成功しました。",
       };
     }
 
@@ -23,12 +23,12 @@ export async function deleteUser(): Promise<{
       case 400:
         return {
           success: false,
-          message: `アカウントの削除が中断されました。`,
+          message: "削除が中断されました。",
         };
       default:
         return {
           success: false,
-          message: "アカウントの削除に失敗しました。",
+          message: "削除に失敗しました。",
         };
     }
   } catch (error) {
@@ -38,7 +38,7 @@ export async function deleteUser(): Promise<{
 
     return {
       success: false,
-      message: "アカウントの削除に失敗しました。",
+      message: "削除に失敗しました。",
     };
   }
 }
