@@ -38,7 +38,7 @@ export async function PUT(request: NextRequest) {
       data: {
         email: validated.data.newEmail,
       },
-      where: { id: userId },
+      where: { id: userId, deletedAt: null },
     });
 
     if (result) {

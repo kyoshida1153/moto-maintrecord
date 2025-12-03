@@ -16,8 +16,8 @@ import { isDateYyyy, isDateYyyyMm } from "@/utils";
 // maintenance_category_idで集計したcostの合計値を取得
 
 export type MaintenanceRecordAggregateCostByCategory = {
-  id: string;
-  name: string;
+  id: string | null;
+  name: string | null;
   cost_str: string; // BigInt型だとJSONシリアライズ時にエラーが起きるためString型に
 };
 
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest): Promise<
     >`
     SELECT
       MAKE_T.id AS id,
-      MAKE_T.name AS name,
+      COALESCE(MAKE_T.name, '未分類') AS name,
       MAKE_T.cost::VARCHAR AS cost_str
     FROM
       (

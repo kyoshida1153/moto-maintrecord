@@ -72,7 +72,7 @@ export async function GET(request: NextRequest): Promise<
     >`
     SELECT
       MAKE_T.id AS id,
-      MAKE_T.name AS name,
+      COALESCE(MAKE_T.name, '未分類') AS name,
       MAKE_T.cost::VARCHAR AS cost_str
     FROM
       (

@@ -87,7 +87,7 @@ export async function PUT(
       data: {
         name: validated.data.name,
       },
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
     });
 
     if (result) {
@@ -129,7 +129,7 @@ export async function DELETE(
       data: {
         deletedAt: new Date(),
       },
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
     });
 
     if (result) {

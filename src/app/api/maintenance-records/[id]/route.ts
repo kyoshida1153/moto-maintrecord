@@ -24,7 +24,9 @@ const maintenanceRecordUniqueSelect = {
   },
   maintenanceRecordImages: {
     select: { id: true, imageUrl: true },
-    where: { deletedAt: null },
+    where: {
+      deletedAt: null,
+    },
   },
 } satisfies Prisma.MaintenanceRecordSelect;
 
@@ -47,9 +49,13 @@ export async function GET(
   try {
     const { id } = await context.params;
 
-    const result = await prisma.maintenanceRecord.findUnique({
+    const result = await prisma.maintenanceRecord.findFirst({
       select: maintenanceRecordUniqueSelect,
-      where: { id, userId },
+      where: {
+        id,
+        userId,
+        deletedAt: null,
+      },
     });
 
     if (result) {
@@ -72,11 +78,6 @@ export async function GET(
 /* ###################################################################### */
 
 // 編集
-
-// export type MaintenanceRecordUpdateInput = Prisma.MaintenanceRecordUpdateInput;
-
-// type MaintenanceRecordImageCreateInput =
-//   Prisma.MaintenanceRecordImageCreateInput;
 
 export async function PUT(
   request: NextRequest,
@@ -107,7 +108,6 @@ export async function PUT(
     if (isNaN(calenderDate.getTime())) {
       return NextResponse.json({ message: "Bad Request" }, { status: 400 });
     }
-    console.error("calenderDate", calenderDate);
 
     // バリデーションチェック
     const validated = UpdateMaintenanceRecordSchema.safeParse({
@@ -217,7 +217,7 @@ export async function PUT(
     const { id } = await context.params;
     const result = await prisma.maintenanceRecord.update({
       data,
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
     });
 
     if (result) {
@@ -258,7 +258,7 @@ export async function DELETE(
       data: {
         deletedAt: new Date(),
       },
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
     });
 
     if (result) {

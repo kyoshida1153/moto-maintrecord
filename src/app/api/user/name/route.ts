@@ -29,7 +29,7 @@ export async function PUT(request: NextRequest) {
       data: {
         name: validated.data.name,
       },
-      where: { id: userId },
+      where: { id: userId, deletedAt: null },
     });
 
     if (result) {

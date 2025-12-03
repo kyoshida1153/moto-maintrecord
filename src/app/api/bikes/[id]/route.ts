@@ -37,7 +37,7 @@ export async function GET(
 
     const result = await prisma.bike.findUnique({
       select: bikeUniqueSelect,
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
     });
 
     if (result) {
@@ -96,7 +96,7 @@ export async function PUT(
         memo: validated.data.memo,
         imageUrl: validated.data.imageUrl,
       },
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
     });
 
     if (result) {
@@ -138,7 +138,7 @@ export async function DELETE(
       data: {
         deletedAt: new Date(),
       },
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
     });
 
     if (result) {

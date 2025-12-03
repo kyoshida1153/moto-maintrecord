@@ -61,7 +61,7 @@ export async function PUT(request: NextRequest) {
       data: {
         hashedPassword,
       },
-      where: { id: userId },
+      where: { id: userId, deletedAt: null },
     });
 
     if (result) {
