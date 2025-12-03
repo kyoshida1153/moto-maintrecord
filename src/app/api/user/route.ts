@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { getCurrentUser } from "@/actions";
+import { getCurrentUser } from "@/lib/auth";
 import { CreateUserSchema } from "@/validations";
 
 /* ###################################################################### */

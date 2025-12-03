@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
-import { getCurrentUser } from "@/actions";
+import { getCurrentUser } from "@/lib/auth";
 import { CreateMaintenanceCategorySchema } from "@/validations";
 
 /* ###################################################################### */

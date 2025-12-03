@@ -3,7 +3,7 @@
 import path from "node:path";
 import crypto from "node:crypto";
 import { supabase } from "@/lib";
-import { getCurrentUser } from "@/actions";
+import { getCurrentUser } from "@/lib/auth";
 
 import * as z from "zod";
 import { FileImageSchema } from "@/validations";

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import bcrypt from "bcrypt";
-import { getCurrentUser } from "@/actions";
+import { getCurrentUser } from "@/lib/auth";
 import { UpdateUserPasswordSchema } from "@/validations";
 
 /* ###################################################################### */

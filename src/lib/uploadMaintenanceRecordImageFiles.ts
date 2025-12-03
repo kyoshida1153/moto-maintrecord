@@ -2,7 +2,7 @@
 
 import path from "node:path";
 import crypto from "node:crypto";
-import { getCurrentUser } from "@/actions";
+import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
