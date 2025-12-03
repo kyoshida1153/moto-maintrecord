@@ -16,21 +16,23 @@ export default function UserNameEditForm() {
 
   // 必要なデータの読み込み～セット
   useEffect(() => {
-    Promise.all([getUser()]).then((values) => {
+    (async () => {
+      const response = await getUser();
+
       setGetUserResponse({
-        status: values[0].success === true ? "success" : "error",
-        message: values[0].message,
-        result: values[0].result,
+        status: response.success === true ? "success" : "error",
+        message: response.message,
+        result: response.result,
       });
 
-      if (values[0].success === true) {
+      if (response.success === true) {
         setLoadedStatus("success");
       } else {
         setLoadedStatus("error");
       }
 
       setIsLoading(false);
-    });
+    })();
   }, [setGetUserResponse]);
 
   return (

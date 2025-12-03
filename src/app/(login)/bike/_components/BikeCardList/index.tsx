@@ -3,58 +3,75 @@
 import { useEffect, useState } from "react";
 import { Loading } from "@/components";
 import BikeCard from "../BikeCard";
+import { getBikes } from "@/lib/api";
 import type { BikeSelect } from "@/app/api/bikes/route";
 
-async function findBikes(): Promise<BikeSelect[] | false> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
-
-  if (response.ok) {
-    const { result: data } = await response.json();
-    return data;
-  } else {
-    return false;
-  }
-}
+type GetBikesResponse = {
+  status: "success" | "error" | undefined;
+  message: string;
+  result?: BikeSelect[];
+};
 
 export default function BikeCardList() {
-  const [bikes, setBikes] = useState<BikeSelect[]>([]);
-  const [bikesLoading, setBikesLoading] = useState<boolean>(true);
+  const [getBikesResponse, setGetBikesResponse] = useState<GetBikesResponse>({
+    status: undefined,
+    message: "",
+  });
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadedStatus, setLoadedStatus] = useState<
+    "success" | "error" | undefined
+  >(undefined);
+
+  // 必要なデータの読み込み～セット
   useEffect(() => {
     (async () => {
-      const result = await findBikes();
-      setBikesLoading(false);
-      if (result) setBikes(result);
+      const response = await getBikes();
+      setGetBikesResponse({
+        status: response.success === true ? "success" : "error",
+        message: response.message,
+        result: response.result,
+      });
+
+      if (response.success === true) {
+        setLoadedStatus("success");
+      } else {
+        setLoadedStatus("error");
+      }
+
+      setIsLoading(false);
     })();
   }, []);
 
   return (
-    <div className="my-4 flex flex-col gap-4 md:my-6">
-      {bikesLoading ? (
+    <>
+      {isLoading ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
-      ) : bikes && bikes.length > 0 ? (
-        bikes?.map((bike) => (
-          <BikeCard
-            key={bike.id}
-            id={bike.id}
-            name={bike.name}
-            mileage={bike.mileage}
-            imageUrl={bike.imageUrl}
-          />
-        ))
+      ) : loadedStatus === "success" ? (
+        getBikesResponse.result && getBikesResponse.result.length > 0 ? (
+          <div className="my-4 flex flex-col gap-4 md:my-6">
+            {getBikesResponse.result.map((item) => (
+              <BikeCard
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                mileage={item.mileage}
+                imageUrl={item.imageUrl}
+              />
+            ))}
+          </div>
+        ) : (
+          <p>所有バイクはまだ登録されていません。</p>
+        )
       ) : (
-        <p>所有バイクはまだ登録されていません。</p>
+        <p>
+          {getBikesResponse.message
+            ? getBikesResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
       )}
-    </div>
+    </>
   );
 }

@@ -22,23 +22,22 @@ export default function MaintenanceCategoryDeleteForm({
 
   // 必要なデータの読み込み～セット
   useEffect(() => {
-    Promise.all([getMaintenanceCategory(maintenanceCategoryId)]).then(
-      (values) => {
-        setGetMaintenanceCategoryResponse({
-          status: values[0].success === true ? "success" : "error",
-          message: values[0].message,
-          result: values[0].result,
-        });
+    (async () => {
+      const response = await getMaintenanceCategory(maintenanceCategoryId);
+      setGetMaintenanceCategoryResponse({
+        status: response.success === true ? "success" : "error",
+        message: response.message,
+        result: response.result,
+      });
 
-        if (values[0].success === true) {
-          setLoadedStatus("success");
-        } else {
-          setLoadedStatus("error");
-        }
+      if (response.success === true) {
+        setLoadedStatus("success");
+      } else {
+        setLoadedStatus("error");
+      }
 
-        setIsLoading(false);
-      },
-    );
+      setIsLoading(false);
+    })();
   }, [setGetMaintenanceCategoryResponse, maintenanceCategoryId]);
 
   return (

@@ -31,25 +31,31 @@ export default function MaintenanceRecordEditForm({
   // 必要なデータの読み込み～セット
   useEffect(() => {
     Promise.all([
-      getBikes(),
-      getMaintenanceCategories(),
-      getMaintenanceRecord(maintenanceRecordId),
-    ]).then((values) => {
-      setGetBikesResponse({
-        status: values[0].success === true ? "success" : "error",
-        message: values[0].message,
-        result: values[0].result,
-      });
-      setGetMaintenanceCategoriesResponse({
-        status: values[1].success === true ? "success" : "error",
-        message: values[1].message,
-        result: values[1].result,
-      });
-      setGetMaintenanceRecordResponse({
-        status: values[2].success === true ? "success" : "error",
-        message: values[2].message,
-        result: values[2].result,
-      });
+      (async () => {
+        const response = await getBikes();
+        setGetBikesResponse({
+          status: response.success === true ? "success" : "error",
+          message: response.message,
+          result: response.result,
+        });
+      })(),
+      (async () => {
+        const response = await getMaintenanceCategories();
+        setGetMaintenanceCategoriesResponse({
+          status: response.success === true ? "success" : "error",
+          message: response.message,
+          result: response.result,
+        });
+      })(),
+      (async () => {
+        const response = await getMaintenanceRecord(maintenanceRecordId);
+        setGetMaintenanceRecordResponse({
+          status: response.success === true ? "success" : "error",
+          message: response.message,
+          result: response.result,
+        });
+      })(),
+    ]).then(() => {
       setLoadedStatus("success");
       setIsLoading(false);
     });

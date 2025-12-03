@@ -22,21 +22,22 @@ export default function MaintenanceRecordDeleteForm({
 
   // 必要なデータの読み込み～セット
   useEffect(() => {
-    Promise.all([getMaintenanceRecord(maintenanceRecordId)]).then((values) => {
+    (async () => {
+      const response = await getMaintenanceRecord(maintenanceRecordId);
       setGetMaintenanceRecordResponse({
-        status: values[0].success === true ? "success" : "error",
-        message: values[0].message,
-        result: values[0].result,
+        status: response.success === true ? "success" : "error",
+        message: response.message,
+        result: response.result,
       });
 
-      if (values[0].success === true) {
+      if (response.success === true) {
         setLoadedStatus("success");
       } else {
         setLoadedStatus("error");
       }
 
       setIsLoading(false);
-    });
+    })();
   }, [setGetMaintenanceRecordResponse, maintenanceRecordId]);
 
   return (

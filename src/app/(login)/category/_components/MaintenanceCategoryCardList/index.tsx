@@ -3,61 +3,76 @@
 import { useEffect, useState } from "react";
 import { Loading } from "@/components";
 import MaintenanceCategoryCard from "../MaintenanceCategoryCard";
+import { getMaintenanceCategories } from "@/lib/api";
 import type { MaintenanceCategorySelect } from "@/app/api/maintenance-categories/route";
 
-async function findMaintenanceCategories(): Promise<
-  MaintenanceCategorySelect[] | false
-> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/maintenance-categories/`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
-
-  if (response.ok) {
-    const { result: data } = await response.json();
-    return data;
-  } else {
-    return false;
-  }
-}
+type GetMaintenanceCategoriesResponse = {
+  status: "success" | "error" | undefined;
+  message: string;
+  result?: MaintenanceCategorySelect[];
+};
 
 export default function MaintenanceCategoryCardList() {
-  const [maintenanceCategories, setMaintenanceCategories] = useState<
-    MaintenanceCategorySelect[]
-  >([]);
-  const [isLoadingMaintenanceCategories, setIsLoadingMaintenanceCategories] =
-    useState<boolean>(true);
+  const [
+    getMaintenanceCategoriesResponse,
+    setGetMaintenanceCategoriesResponse,
+  ] = useState<GetMaintenanceCategoriesResponse>({
+    status: undefined,
+    message: "",
+  });
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadedStatus, setLoadedStatus] = useState<
+    "success" | "error" | undefined
+  >(undefined);
 
   useEffect(() => {
     (async () => {
-      const result = await findMaintenanceCategories();
-      setIsLoadingMaintenanceCategories(false);
-      if (result) setMaintenanceCategories(result);
+      const response = await getMaintenanceCategories();
+      setGetMaintenanceCategoriesResponse({
+        status: response.success === true ? "success" : "error",
+        message: response.message,
+        result: response.result,
+      });
+
+      if (response.success === true) {
+        setLoadedStatus("success");
+      } else {
+        setLoadedStatus("error");
+      }
+
+      setIsLoading(false);
     })();
   }, []);
 
   return (
-    <div className="my-4 flex flex-col gap-4 md:my-6">
-      {isLoadingMaintenanceCategories ? (
+    <>
+      {isLoading ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
-      ) : maintenanceCategories && maintenanceCategories.length > 0 ? (
-        maintenanceCategories?.map((maintenanceCategory) => (
-          <MaintenanceCategoryCard
-            key={maintenanceCategory.id}
-            id={maintenanceCategory.id}
-            name={maintenanceCategory.name}
-          />
-        ))
+      ) : loadedStatus === "success" ? (
+        getMaintenanceCategoriesResponse.result &&
+        getMaintenanceCategoriesResponse.result.length > 0 ? (
+          <div className="my-4 flex flex-col gap-4 md:my-6">
+            {getMaintenanceCategoriesResponse.result.map((item) => (
+              <MaintenanceCategoryCard
+                key={item.id}
+                id={item.id}
+                name={item.name}
+              />
+            ))}
+          </div>
+        ) : (
+          <p>カテゴリーはまだ登録されていません。</p>
+        )
       ) : (
-        <p>カテゴリーはまだ登録されていません。</p>
+        <p>
+          {getMaintenanceCategoriesResponse.message
+            ? getMaintenanceCategoriesResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
       )}
-    </div>
+    </>
   );
 }
