@@ -15,7 +15,6 @@ export default function LoginLayoutWrapper({
     useHeaderStore();
 
   useEffect(() => {
-    console.log("useEffect", session);
     setIsLoadingGetLoginUser(true);
 
     if (!session?.user?.email) {

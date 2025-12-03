@@ -7,15 +7,14 @@ import { useUserNameEditFormStore } from "./stores";
 import UserNameEditFormForm from "./UserNameEditFormForm";
 
 export default function UserNameEditForm() {
-  const { setGetUserResponse } = useUserNameEditFormStore();
-
-  // 各データの読み込み～stateにセット
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadedStatus, setLoadedStatus] = useState<
     "success" | "error" | undefined
   >(undefined);
 
-  // フォームのdefaultValueに設定するデータの読み込み
+  const { getUserResponse, setGetUserResponse } = useUserNameEditFormStore();
+
+  // 必要なデータの読み込み～セット
   useEffect(() => {
     Promise.all([getUser()]).then((values) => {
       setGetUserResponse({
@@ -23,7 +22,13 @@ export default function UserNameEditForm() {
         message: values[0].message,
         result: values[0].result,
       });
-      setLoadedStatus("success");
+
+      if (values[0].success === true) {
+        setLoadedStatus("success");
+      } else {
+        setLoadedStatus("error");
+      }
+
       setIsLoading(false);
     });
   }, [setGetUserResponse]);
@@ -37,7 +42,11 @@ export default function UserNameEditForm() {
       ) : loadedStatus === "success" ? (
         <UserNameEditFormForm />
       ) : (
-        <p>読み込みに失敗しました。</p>
+        <p>
+          {getUserResponse.message
+            ? getUserResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
       )}
     </>
   );
