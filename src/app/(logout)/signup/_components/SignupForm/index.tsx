@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import { TextField, SubmitButton, OAuthButtonGoogle } from "@/components";
+import { TextField, SubmitButton, LoginButtonOAuth } from "@/components";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -212,7 +212,7 @@ export default function SignupForm() {
       </div>
 
       <div className="mx-auto flex max-w-[300px] flex-col justify-center gap-4 md:gap-4">
-        <OAuthButtonGoogle />
+        <LoginButtonOAuth provider="google" />
       </div>
     </div>
   );
