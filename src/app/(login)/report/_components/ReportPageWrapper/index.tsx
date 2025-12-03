@@ -12,11 +12,11 @@ import {
 } from "@/lib/api";
 import { isDateYyyyMm } from "@/utils";
 
-import useReportBarChartStore from "../ReportBarChart/store";
-import useReportTableStore from "../ReportTable/store";
-import useReportDonutChartByBikesStore from "../ReportDonutChartByBikes/store";
-import useReportDonutChartByCategoriesStore from "../ReportDonutChartByCategories/store";
-import useReportNavigationStore from "../ReportNavigation/store";
+import { useReportBarChartStore } from "../ReportBarChart/stores";
+import { useReportTableStore } from "../ReportTable/stores";
+import { useReportDonutChartByBikesStore } from "../ReportDonutChartByBikes/stores";
+import { useReportDonutChartByCategoriesStore } from "../ReportDonutChartByCategories/stores";
+import { useReportNavigationStore } from "../ReportNavigation/stores";
 
 export default function ReportPageWrapper({
   children,

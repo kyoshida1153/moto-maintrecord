@@ -18,20 +18,20 @@ type ReportNavigationState = {
   ) => void;
 };
 
-const useReportNavigationStore = create<ReportNavigationState>((set) => ({
-  getMaintenanceRecordsCalenderDateByYearsResponse: {
-    status: undefined,
-    message: "",
-  },
-  setGetMaintenanceRecordsCalenderDateByYearsResponse: (nextValue) =>
-    set(() => ({
-      getMaintenanceRecordsCalenderDateByYearsResponse: nextValue,
-    })),
-  isLoadingGetMaintenanceRecordsCalenderDateByYears: true,
-  setIsLoadingGetMaintenanceRecordsCalenderDateByYears: (nextValue) =>
-    set(() => ({
-      isLoadingGetMaintenanceRecordsCalenderDateByYears: nextValue,
-    })),
-}));
-
-export default useReportNavigationStore;
+export const useReportNavigationStore = create<ReportNavigationState>(
+  (set) => ({
+    getMaintenanceRecordsCalenderDateByYearsResponse: {
+      status: undefined,
+      message: "",
+    },
+    setGetMaintenanceRecordsCalenderDateByYearsResponse: (nextValue) =>
+      set(() => ({
+        getMaintenanceRecordsCalenderDateByYearsResponse: nextValue,
+      })),
+    isLoadingGetMaintenanceRecordsCalenderDateByYears: true,
+    setIsLoadingGetMaintenanceRecordsCalenderDateByYears: (nextValue) =>
+      set(() => ({
+        isLoadingGetMaintenanceRecordsCalenderDateByYears: nextValue,
+      })),
+  }),
+);

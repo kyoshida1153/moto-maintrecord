@@ -8,7 +8,7 @@ import { useMediaQuery } from "@mui/material";
 import { Loading } from "@/components";
 import BarChartHorizontal from "./BarChartHorizontal";
 import BarChartVertical from "./BarChartVertical";
-import useReportBarChartStore from "./store";
+import { useReportBarChartStore } from "./stores";
 
 export default function ReportBarChart() {
   const {

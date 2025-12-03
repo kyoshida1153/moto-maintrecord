@@ -5,7 +5,7 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import HeaderIcon from "./HeaderIcon";
 import { Loading } from "@/components";
-import useHeaderStore from "./store";
+import { useHeaderStore } from "./stores";
 
 export default function HeaderMenuLogin() {
   const { getLoginUserResponse, isLoadingGetLoginUser } = useHeaderStore();

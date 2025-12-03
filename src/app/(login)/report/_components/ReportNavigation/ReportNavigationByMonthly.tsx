@@ -8,7 +8,7 @@ import { ja } from "date-fns/locale";
 import { isDateYyyy, isDateYyyyMm } from "@/utils";
 import { Loading } from "@/components";
 import SelectBoxLink from "./SelectBoxLink";
-import useReportNavigationStore from "./store";
+import { useReportNavigationStore } from "./stores";
 
 export default function ReportNavigationByMonthly() {
   // URLパラメーターを元にセレクトボックスのdefaultValueを作成

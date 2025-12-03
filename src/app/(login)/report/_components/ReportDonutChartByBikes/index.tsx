@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useReportDonutChartByBikesStore from "./store";
+import { useReportDonutChartByBikesStore } from "./stores";
 import { Loading } from "@/components";
 import DonutChart from "../DonutChart";
 

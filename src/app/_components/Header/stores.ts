@@ -16,7 +16,7 @@ type HeaderState = {
   setIsLoadingGetLoginUser: (isLoadingGetLoginUser: boolean) => void;
 };
 
-const useHeaderStore = create<HeaderState>((set) => ({
+export const useHeaderStore = create<HeaderState>((set) => ({
   getLoginUserResponse: {
     status: undefined,
     message: "",
@@ -31,5 +31,3 @@ const useHeaderStore = create<HeaderState>((set) => ({
       isLoadingGetLoginUser: nextValue,
     })),
 }));
-
-export default useHeaderStore;

@@ -9,9 +9,9 @@ import {
   getMaintenanceRecordsTotalCost,
 } from "@/lib/api";
 import { isDateYyyyMm } from "@/utils";
-import useMaintenanceRecordsListStore from "@/components/MaintenanceRecordsList/store";
-import useMaintenanceRecordsCalendarStore from "../MaintenanceRecordsCalendar/store";
-import useMaintenanceRecordsTotalCostStore from "../MaintenanceRecordsTotalCost/store";
+import { useMaintenanceRecordsListStore } from "@/components/MaintenanceRecordsList/stores";
+import { useMaintenanceRecordsCalendarStore } from "../MaintenanceRecordsCalendar/stores";
+import { useMaintenanceRecordsTotalCostStore } from "../MaintenanceRecordsTotalCost/stores";
 
 export default function TopPageWrapper({
   children,

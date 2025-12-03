@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import type { Session } from "next-auth";
-import useHeaderStore from "@/app/_components/Header/store";
+import { useHeaderStore } from "@/app/_components/Header/stores";
 
 export default function LoginLayoutWrapper({
   children,

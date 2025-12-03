@@ -35,8 +35,8 @@ type MaintenanceRecordsListState = {
   ) => void;
 };
 
-const useMaintenanceRecordsListStore = create<MaintenanceRecordsListState>(
-  (set) => ({
+export const useMaintenanceRecordsListStore =
+  create<MaintenanceRecordsListState>((set) => ({
     getMaintenanceRecordsResponse: { status: undefined, message: "" },
     setGetMaintenanceRecordsResponse: (nextValue) =>
       set(() => ({
@@ -60,7 +60,4 @@ const useMaintenanceRecordsListStore = create<MaintenanceRecordsListState>(
       set(() => ({
         isLoadingGetMaintenanceRecordsCount: nextValue,
       })),
-  }),
-);
-
-export default useMaintenanceRecordsListStore;
+  }));

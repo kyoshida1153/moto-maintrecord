@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
 import { Loading } from "@/components";
-import useReportTableStore from "./store";
+import { useReportTableStore } from "./stores";
 
 export default function ReportTable() {
   const {

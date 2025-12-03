@@ -19,7 +19,7 @@ type ReportDonutChartByCategoriesState = {
   ) => void;
 };
 
-const useReportDonutChartByCategoriesStore =
+export const useReportDonutChartByCategoriesStore =
   create<ReportDonutChartByCategoriesState>((set) => ({
     getMaintenanceRecordsTotalCostByCategoriesResponse: {
       status: undefined,
@@ -36,5 +36,3 @@ const useReportDonutChartByCategoriesStore =
         isLoadingGetMaintenanceRecordsTotalCostByCategories: nextValue,
       })),
   }));
-
-export default useReportDonutChartByCategoriesStore;

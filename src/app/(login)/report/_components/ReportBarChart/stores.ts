@@ -11,7 +11,7 @@ type GetMaintenanceRecordsTotalCostResponse = {
   totalCost: number;
 };
 
-type ReportTableState = {
+type ReportBarChartState = {
   getMaintenanceRecordsTotalCostResponse: GetMaintenanceRecordsTotalCostResponse;
   setGetMaintenanceRecordsTotalCostResponse: (
     getMaintenanceRecordsTotalCostResponse: GetMaintenanceRecordsTotalCostResponse,
@@ -22,7 +22,7 @@ type ReportTableState = {
   ) => void;
 };
 
-const useReportTableStore = create<ReportTableState>((set) => ({
+export const useReportBarChartStore = create<ReportBarChartState>((set) => ({
   getMaintenanceRecordsTotalCostResponse: {
     status: undefined,
     message: "",
@@ -38,5 +38,3 @@ const useReportTableStore = create<ReportTableState>((set) => ({
       isLoadingGetMaintenanceRecordsTotalCost: nextValue,
     })),
 }));
-
-export default useReportTableStore;

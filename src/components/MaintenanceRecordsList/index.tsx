@@ -7,7 +7,7 @@ import { ja } from "date-fns/locale";
 import { Loading } from "@/components";
 import MaintenanceRecordsListCard from "./MaintenanceRecordsListCard";
 import MaintenanceRecordsListPagination from "./MaintenanceRecordsListPagination";
-import useMaintenanceRecordsListStore from "./store";
+import { useMaintenanceRecordsListStore } from "./stores";
 import type { MaintenanceRecordSelect } from "@/app/api/maintenance-records/route";
 
 type Props = {

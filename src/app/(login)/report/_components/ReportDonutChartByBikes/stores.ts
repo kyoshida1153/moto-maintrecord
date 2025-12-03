@@ -19,8 +19,8 @@ type ReportDonutChartByBikesState = {
   ) => void;
 };
 
-const useReportDonutChartByBikesStore = create<ReportDonutChartByBikesState>(
-  (set) => ({
+export const useReportDonutChartByBikesStore =
+  create<ReportDonutChartByBikesState>((set) => ({
     getMaintenanceRecordsTotalCostByBikesResponse: {
       status: undefined,
       message: "",
@@ -35,7 +35,4 @@ const useReportDonutChartByBikesStore = create<ReportDonutChartByBikesState>(
       set(() => ({
         isLoadingGetMaintenanceRecordsTotalCostByBikes: nextValue,
       })),
-  }),
-);
-
-export default useReportDonutChartByBikesStore;
+  }));

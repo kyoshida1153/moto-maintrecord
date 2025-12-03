@@ -7,7 +7,7 @@ import Pagination from "@mui/material/Pagination";
 import { PaginationItem } from "@mui/material";
 import { Loading } from "@/components";
 import { isNumber } from "@/utils";
-import useMaintenanceRecordsListStore from "./store";
+import { useMaintenanceRecordsListStore } from "./stores";
 
 export default function MaintenanceRecordsListPagination() {
   const {

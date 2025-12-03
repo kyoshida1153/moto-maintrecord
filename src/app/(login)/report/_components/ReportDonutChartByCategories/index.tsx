@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useReportDonutChartByCategoriesStore from "./store";
+import { useReportDonutChartByCategoriesStore } from "./stores";
 import { Loading } from "@/components";
 import DonutChart from "../DonutChart";
 
@@ -23,7 +23,7 @@ export default function ReportDonutChartByCategories() {
     const newChartData =
       getMaintenanceRecordsTotalCostByCategoriesResponse.result &&
       getMaintenanceRecordsTotalCostByCategoriesResponse.result.map((item) => ({
-        label: item.name,
+        label: item.name ?? "",
         value: Number(item.cost_str),
       }));
 

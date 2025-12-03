@@ -13,7 +13,7 @@ import { UpdateUserNameSchema } from "@/validations";
 import type * as z from "zod";
 
 import { useSession } from "next-auth/react";
-import useHeaderStore from "@/app/_components/Header/store";
+import { useHeaderStore } from "@/app/_components/Header/stores";
 import { useUserNameEditFormStore } from "./stores";
 
 type SubmitResponse = {

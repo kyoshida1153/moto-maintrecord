@@ -13,7 +13,7 @@ import { Loading } from "@/components";
 import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
 import HeaderIcon from "./HeaderIcon";
 import { useWindowSize } from "./hooks";
-import useHeaderStore from "./store";
+import { useHeaderStore } from "./stores";
 
 export default function HeaderSpDrawer() {
   const [drawerStatus, setDrawerStatus] = useState<

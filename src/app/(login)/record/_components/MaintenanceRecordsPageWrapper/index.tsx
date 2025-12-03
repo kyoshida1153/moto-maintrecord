@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getMaintenanceRecords, getMaintenanceRecordsCount } from "@/lib/api";
-import useMaintenanceRecordsListStore from "@/components/MaintenanceRecordsList/store";
+import { useMaintenanceRecordsListStore } from "@/components/MaintenanceRecordsList/stores";
 
 export default function MaintenanceRecordsPageWrapper({
   children,

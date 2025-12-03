@@ -17,7 +17,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import { Loading } from "@/components";
-import useMaintenanceRecordsCalendarStore from "./store";
+import { useMaintenanceRecordsCalendarStore } from "./stores";
 import { isDateYyyyMm } from "@/utils";
 import type { MaintenanceRecordSelect } from "@/app/api/maintenance-records/route";
 

@@ -18,7 +18,7 @@ type MaintenanceRecordsTotalCostStore = {
   ) => void;
 };
 
-const useMaintenanceRecordsTotalCostStore =
+export const useMaintenanceRecordsTotalCostStore =
   create<MaintenanceRecordsTotalCostStore>((set) => ({
     getMaintenanceRecordsTotalCostResponse: { status: undefined, message: "" },
     setGetMaintenanceRecordsTotalCostResponse: (nextValue) =>
@@ -32,5 +32,3 @@ const useMaintenanceRecordsTotalCostStore =
         isLoadingGetMaintenanceRecordsTotalCost: nextValue,
       })),
   }));
-
-export default useMaintenanceRecordsTotalCostStore;

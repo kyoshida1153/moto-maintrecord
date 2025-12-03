@@ -19,7 +19,7 @@ type MaintenanceRecordsCalendarState = {
   ) => void;
 };
 
-const useMaintenanceRecordsCalendarStore =
+export const useMaintenanceRecordsCalendarStore =
   create<MaintenanceRecordsCalendarState>((set) => ({
     getMaintenanceRecordsResponse: { status: undefined, message: "" },
     setGetMaintenanceRecordsResponse: (nextValue) =>
@@ -33,5 +33,3 @@ const useMaintenanceRecordsCalendarStore =
         isLoadingGetMaintenanceRecords: nextValue,
       })),
   }));
-
-export default useMaintenanceRecordsCalendarStore;
