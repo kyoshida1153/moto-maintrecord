@@ -22,7 +22,7 @@ const maintenanceRecordSelect = {
   cost: true,
   calenderDate: true,
   bike: {
-    select: { name: true },
+    select: { name: true, imageUrl: true },
   },
   maintenanceCategory: {
     select: { name: true },

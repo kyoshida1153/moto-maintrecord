@@ -74,6 +74,7 @@ export function MaintenanceRecordsList({ pagination = true }: Props) {
                               }
                               bikeName={record.bike?.name ?? ""}
                               cost={record.cost}
+                              bikeImageUrl={record.bike?.imageUrl ?? ""}
                             />
                           ),
                         )}
