@@ -17,7 +17,7 @@ const maintenanceRecordUniqueSelect = {
   memo: true,
   mileage: true,
   bike: {
-    select: { id: true, name: true },
+    select: { id: true, name: true, imageUrl: true },
   },
   maintenanceCategory: {
     select: { id: true, name: true },

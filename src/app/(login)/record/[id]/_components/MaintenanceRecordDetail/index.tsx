@@ -29,34 +29,44 @@ export default function MaintenanceRecordDetail({
 }: {
   maintenanceRecordId: string;
 }) {
-  // フォームのdefaultValueの設定で使うもの
   const [getMaintenanceRecordResponse, setGetMaintenanceRecordResponse] =
     useState<GetMaintenanceRecordResponse>({
       status: undefined,
       message: "",
     });
-  const [isLoadingGetMaintenanceRecord, setIsLoadingGetMaintenanceRecord] =
-    useState<boolean>(true);
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadedStatus, setLoadedStatus] = useState<
+    "success" | "error" | undefined
+  >(undefined);
+
+  // 必要なデータの読み込み～セット
   useEffect(() => {
     (async () => {
       const response = await getMaintenanceRecord(maintenanceRecordId);
-      setIsLoadingGetMaintenanceRecord(false);
       setGetMaintenanceRecordResponse({
         status: response.success === true ? "success" : "error",
         message: response.message,
         result: response.result,
       });
+
+      if (response.success === true) {
+        setLoadedStatus("success");
+      } else {
+        setLoadedStatus("error");
+      }
+
+      setIsLoading(false);
     })();
   }, [maintenanceRecordId]);
 
   return (
     <>
-      {isLoadingGetMaintenanceRecord ? (
+      {isLoading ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
-      ) : getMaintenanceRecordResponse.status === "success" ? (
+      ) : loadedStatus === "success" ? (
         <div className="display rounded border border-solid border-[var(--border-color-gray)] bg-white p-6 md:p-8">
           <div className="flex flex-col gap-8 md:gap-10">
             <MaintenanceRecordDetailSection>
@@ -104,7 +114,7 @@ export default function MaintenanceRecordDetail({
                 "number" ? (
                   <>
                     <span className="font-alphanumeric">
-                      {getMaintenanceRecordResponse.result?.cost.toLocaleString()}
+                      {getMaintenanceRecordResponse.result.cost.toLocaleString()}
                     </span>
                     <span className="ml-[1px] text-sm">円</span>
                   </>
@@ -118,11 +128,35 @@ export default function MaintenanceRecordDetail({
               <MaintenanceRecordDetailHeading>
                 所有バイク
               </MaintenanceRecordDetailHeading>
-              <p>
-                {getMaintenanceRecordResponse.result?.bike?.name ?? (
+              {getMaintenanceRecordResponse.result?.bike?.name ? (
+                <p className="flex items-center gap-2">
+                  <Link
+                    href={`/bike/${getMaintenanceRecordResponse.result.bike.id}`}
+                    className="flex items-center gap-2 text-[var(--link-color)] transition-opacity duration-200 hover:opacity-70"
+                  >
+                    <span className="w-[36px] min-w-[36px]">
+                      <Image
+                        src={
+                          getMaintenanceRecordResponse.result.bike.imageUrl
+                            ? getMaintenanceRecordResponse.result.bike.imageUrl
+                            : "/assets/img/bike-default.svg"
+                        }
+                        alt=""
+                        width={36}
+                        height={36}
+                        className="aspect-square w-full rounded-full border border-gray-300 bg-white object-cover"
+                      />
+                    </span>
+                    <span className="line-clamp-3 leading-snug md:line-clamp-2">
+                      {getMaintenanceRecordResponse.result.bike.name}
+                    </span>
+                  </Link>
+                </p>
+              ) : (
+                <p>
                   <span className="text-gray-400">登録なし</span>
-                )}
-              </p>
+                </p>
+              )}
             </MaintenanceRecordDetailSection>
 
             <MaintenanceRecordDetailSection>
@@ -140,8 +174,8 @@ export default function MaintenanceRecordDetail({
                 メモ
               </MaintenanceRecordDetailHeading>
               <p className="whitespace-pre-line">
-                {getMaintenanceRecordResponse.result?.memo &&
-                getMaintenanceRecordResponse.result.memo.length > 0 ? (
+                {typeof getMaintenanceRecordResponse.result?.memo ===
+                "string" ? (
                   getMaintenanceRecordResponse.result.memo
                 ) : (
                   <span className="text-gray-400">登録なし</span>
@@ -236,7 +270,11 @@ export default function MaintenanceRecordDetail({
           </div>
         </div>
       ) : (
-        <p>{getMaintenanceRecordResponse.message}</p>
+        <p>
+          {getMaintenanceRecordResponse.message
+            ? getMaintenanceRecordResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
       )}
     </>
   );
