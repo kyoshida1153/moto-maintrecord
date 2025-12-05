@@ -7,7 +7,7 @@ type GetBikeResponse = {
   result?: BikeUniqueSelect;
 };
 
-type BikeDeleteFormState = {
+type BikeDetailState = {
   getBikeResponse: GetBikeResponse;
   setGetBikeResponse: (getBikeResponse: GetBikeResponse) => void;
 
@@ -15,7 +15,7 @@ type BikeDeleteFormState = {
   setIsLoadingGetBike: (isLoadingGetBike: boolean) => void;
 };
 
-export const useBikeDeleteFormStore = create<BikeDeleteFormState>((set) => ({
+export const useBikeDetailStore = create<BikeDetailState>((set) => ({
   getBikeResponse: {
     status: undefined,
     message: "",

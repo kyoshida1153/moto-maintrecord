@@ -10,7 +10,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export type Bike = Prisma.BikeGetPayload<{
+type Bike = Prisma.BikeGetPayload<{
   select: {
     id: true;
     name: true;
@@ -19,7 +19,7 @@ export type Bike = Prisma.BikeGetPayload<{
   };
 }>;
 
-export default function BikeCard({ id, name, mileage, imageUrl }: Bike) {
+export default function BikeListCard({ id, name, mileage, imageUrl }: Bike) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {

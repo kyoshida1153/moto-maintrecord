@@ -1,3 +1,4 @@
+export { Breadcrumbs } from "./Breadcrumbs";
 export { Checkbox } from "./Checkbox";
 export { DatePicker } from "./DatePicker";
 export { Heading } from "./Heading";

@@ -1,5 +1,6 @@
-import { Heading } from "@/components";
+import { Breadcrumbs, Heading } from "@/components";
 import BikeEditForm from "./_components/BikeEditForm";
+import BikeEditPageWrapper from "./_components/BikeEditPageWrapper";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,11 +17,14 @@ export default async function BikeEditPage({
   const { id } = await params;
 
   return (
-    <>
+    <BikeEditPageWrapper bikeId={id}>
+      <div className="mb-4">
+        <Breadcrumbs />
+      </div>
       <Heading level={1}>所有バイクの編集</Heading>
       <div className="max-w-lg">
-        <BikeEditForm bikeId={id} />
+        <BikeEditForm />
       </div>
-    </>
+    </BikeEditPageWrapper>
   );
 }
