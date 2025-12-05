@@ -1,5 +1,6 @@
-import { Heading } from "@/components";
+import { Breadcrumbs, Heading } from "@/components";
 import MaintenanceCategoryDeleteForm from "./_components/MaintenanceCategoryDeleteForm";
+import MaintenanceCategoryDeletePageWrapper from "./_components/MaintenanceCategoryDeletePageWrapper";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,9 +17,14 @@ export default async function MaintenanceCategoryDeletePage({
   const { id } = await params;
 
   return (
-    <div className="max-w-xl">
-      <Heading level={1}>カテゴリーの削除</Heading>
-      <MaintenanceCategoryDeleteForm maintenanceCategoryId={id} />
-    </div>
+    <MaintenanceCategoryDeletePageWrapper maintenanceCategoryId={id}>
+      <div className="mb-4">
+        <Breadcrumbs />
+      </div>
+      <div className="max-w-xl">
+        <Heading level={1}>カテゴリーの削除</Heading>
+        <MaintenanceCategoryDeleteForm />
+      </div>
+    </MaintenanceCategoryDeletePageWrapper>
   );
 }

@@ -8,7 +8,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
 import { deleteMaintenanceCategory } from "@/lib/api";
-import { useMaintenanceRecordCategoryFormStore } from "./stores";
+import { useMaintenanceRecordCategoryDeleteFormStore } from "./stores";
 import { LinkButton, SubmitButton } from "@/components";
 
 type SubmitResponse = {
@@ -22,7 +22,7 @@ export default function MaintenanceCategoryDeleteFormForm({
   maintenanceCategoryId: string;
 }) {
   const { getMaintenanceCategoryResponse } =
-    useMaintenanceRecordCategoryFormStore();
+    useMaintenanceRecordCategoryDeleteFormStore();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);

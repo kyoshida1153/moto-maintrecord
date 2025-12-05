@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import type { MaintenanceCategoryUniqueSelect } from "@/app/api/maintenance-categories/[id]/route";
 
 type GetMaintenanceCategoryResponse = {
@@ -13,6 +12,11 @@ type MaintenanceCategoryEditFormState = {
   setGetMaintenanceCategoryResponse: (
     getMaintenanceCategoryResponse: GetMaintenanceCategoryResponse,
   ) => void;
+
+  isLoadingGetMaintenanceCategory: boolean;
+  setIsLoadingGetMaintenanceCategory: (
+    isLoadingGetMaintenanceCategory: boolean,
+  ) => void;
 };
 
 export const useMaintenanceCategoryEditFormStore =
@@ -24,5 +28,11 @@ export const useMaintenanceCategoryEditFormStore =
     setGetMaintenanceCategoryResponse: (nextValue) =>
       set(() => ({
         getMaintenanceCategoryResponse: nextValue,
+      })),
+
+    isLoadingGetMaintenanceCategory: true,
+    setIsLoadingGetMaintenanceCategory: (nextValue) =>
+      set(() => ({
+        isLoadingGetMaintenanceCategory: nextValue,
       })),
   }));
