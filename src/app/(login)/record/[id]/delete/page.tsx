@@ -1,4 +1,5 @@
-import { Heading } from "@/components";
+import { Breadcrumbs, Heading } from "@/components";
+import MaintenanceRecordDeletePageWrapper from "./_components/MaintenanceRecordDeletePageWrapper";
 import MaintenanceRecordDeleteForm from "./_components/MaintenanceRecordDeleteForm";
 import type { Metadata } from "next";
 
@@ -14,12 +15,16 @@ export default async function MaintenanceRecordDeletePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   return (
-    <>
+    <MaintenanceRecordDeletePageWrapper maintenanceRecordId={id}>
+      <div className="mb-4">
+        <Breadcrumbs />
+      </div>
       <Heading level={1}>整備・出費記録の削除</Heading>
       <div className="max-w-xl">
         <MaintenanceRecordDeleteForm maintenanceRecordId={id} />
       </div>
-    </>
+    </MaintenanceRecordDeletePageWrapper>
   );
 }

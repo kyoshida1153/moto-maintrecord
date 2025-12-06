@@ -35,6 +35,11 @@ type MaintenanceRecordEditFormState = {
   setGetMaintenanceRecordResponse: (
     getMaintenanceRecordResponse: GetMaintenanceRecordResponse,
   ) => void;
+
+  isLoadingMaintenanceRecordEditForm: boolean;
+  setIsLoadingMaintenanceRecordEditForm: (
+    isLoadingMaintenanceRecordEditForm: boolean,
+  ) => void;
 };
 
 export const useMaintenanceRecordEditFormState =
@@ -64,5 +69,11 @@ export const useMaintenanceRecordEditFormState =
     setGetMaintenanceRecordResponse: (nextValue) =>
       set(() => ({
         getMaintenanceRecordResponse: nextValue,
+      })),
+
+    isLoadingMaintenanceRecordEditForm: true,
+    setIsLoadingMaintenanceRecordEditForm: (nextValue) =>
+      set(() => ({
+        isLoadingMaintenanceRecordEditForm: nextValue,
       })),
   }));

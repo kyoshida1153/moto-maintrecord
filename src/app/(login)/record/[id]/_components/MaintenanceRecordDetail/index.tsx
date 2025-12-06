@@ -1,12 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-
-import { getMaintenanceRecord } from "@/lib/api";
 
 import CheckIcon from "@mui/icons-material/Check";
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -16,57 +13,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Loading } from "@/components";
 import MaintenanceRecordDetailHeading from "./MaintenanceRecordDetailHeading";
 import MaintenanceRecordDetailSection from "./MaintenanceRecordDetailSection";
-import type { MaintenanceRecordUniqueSelect } from "@/app/api/maintenance-records/[id]/route";
+import { useMaintenanceRecordDetailStore } from "./stores";
 
-type GetMaintenanceRecordResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-  result?: MaintenanceRecordUniqueSelect;
-};
-
-export default function MaintenanceRecordDetail({
-  maintenanceRecordId,
-}: {
-  maintenanceRecordId: string;
-}) {
-  const [getMaintenanceRecordResponse, setGetMaintenanceRecordResponse] =
-    useState<GetMaintenanceRecordResponse>({
-      status: undefined,
-      message: "",
-    });
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [loadedStatus, setLoadedStatus] = useState<
-    "success" | "error" | undefined
-  >(undefined);
-
-  // 必要なデータの読み込み～セット
-  useEffect(() => {
-    (async () => {
-      const response = await getMaintenanceRecord(maintenanceRecordId);
-      setGetMaintenanceRecordResponse({
-        status: response.success === true ? "success" : "error",
-        message: response.message,
-        result: response.result,
-      });
-
-      if (response.success === true) {
-        setLoadedStatus("success");
-      } else {
-        setLoadedStatus("error");
-      }
-
-      setIsLoading(false);
-    })();
-  }, [maintenanceRecordId]);
+export default function MaintenanceRecordDetail() {
+  const { getMaintenanceRecordResponse, isLoadingGetMaintenanceRecordDetail } =
+    useMaintenanceRecordDetailStore();
 
   return (
     <>
-      {isLoading ? (
+      {isLoadingGetMaintenanceRecordDetail ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
-      ) : loadedStatus === "success" ? (
+      ) : getMaintenanceRecordResponse.status === "success" ? (
         <div className="display rounded border border-solid border-[var(--border-color-gray)] bg-white p-6 md:p-8">
           <div className="flex flex-col gap-8 md:gap-10">
             <MaintenanceRecordDetailSection>
@@ -241,7 +200,7 @@ export default function MaintenanceRecordDetail({
             <ul className="flex justify-center gap-2 border-t-1 border-gray-200 pt-2">
               <li>
                 <Link
-                  href={`/record/${maintenanceRecordId}/edit`}
+                  href={`/record/${getMaintenanceRecordResponse?.result?.id}/edit`}
                   className="flex items-center gap-1 rounded-[4px] px-4 py-2 text-base transition-colors duration-200 hover:bg-[#f6f7f9]"
                 >
                   <EditSquareIcon sx={{ fontSize: "18px" }} />
@@ -249,17 +208,17 @@ export default function MaintenanceRecordDetail({
                 </Link>
               </li>
               {/* <li>
-            <Link
-              href={`/record/1/duplicate`}
-              className="flex items-center gap-1 rounded-[4px] px-4 py-2 text-base transition-colors duration-200 hover:bg-[#f6f7f9]"
-            >
-              <ContentCopyIcon sx={{ fontSize: "18px" }} />
-              <span>コピー</span>
-            </Link>
-          </li> */}
+                <Link
+                  href={`/record/1/duplicate`}
+                  className="flex items-center gap-1 rounded-[4px] px-4 py-2 text-base transition-colors duration-200 hover:bg-[#f6f7f9]"
+                >
+                  <ContentCopyIcon sx={{ fontSize: "18px" }} />
+                  <span>コピー</span>
+                </Link>
+              </li> */}
               <li>
                 <Link
-                  href={`/record/${maintenanceRecordId}/delete`}
+                  href={`/record/${getMaintenanceRecordResponse?.result?.id}/delete`}
                   className="flex items-center gap-1 rounded-[4px] px-4 py-2 text-base transition-colors duration-200 hover:bg-[#f6f7f9]"
                 >
                   <DeleteIcon sx={{ fontSize: "18px" }} />

@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import type { MaintenanceRecordUniqueSelect } from "@/app/api/maintenance-records/[id]/route";
 
 type GetMaintenanceRecordResponse = {
@@ -8,20 +7,20 @@ type GetMaintenanceRecordResponse = {
   result?: MaintenanceRecordUniqueSelect;
 };
 
-type MaintenanceRecordDeleteFormState = {
+type MaintenanceRecordDetailState = {
   getMaintenanceRecordResponse: GetMaintenanceRecordResponse;
   setGetMaintenanceRecordResponse: (
     getMaintenanceRecordResponse: GetMaintenanceRecordResponse,
   ) => void;
 
-  isLoadingMaintenanceRecordDeleteForm: boolean;
-  setIsLoadingMaintenanceRecordDeleteForm: (
-    isLoadingMaintenanceRecordDeleteForm: boolean,
+  isLoadingGetMaintenanceRecordDetail: boolean;
+  setIsLoadingGetMaintenanceRecordDetail: (
+    isLoadingGetMaintenanceRecordDetail: boolean,
   ) => void;
 };
 
-export const useMaintenanceRecordDeleteFormStore =
-  create<MaintenanceRecordDeleteFormState>((set) => ({
+export const useMaintenanceRecordDetailStore =
+  create<MaintenanceRecordDetailState>((set) => ({
     getMaintenanceRecordResponse: {
       status: undefined,
       message: "",
@@ -31,9 +30,9 @@ export const useMaintenanceRecordDeleteFormStore =
         getMaintenanceRecordResponse: nextValue,
       })),
 
-    isLoadingMaintenanceRecordDeleteForm: true,
-    setIsLoadingMaintenanceRecordDeleteForm: (nextValue) =>
+    isLoadingGetMaintenanceRecordDetail: true,
+    setIsLoadingGetMaintenanceRecordDetail: (nextValue) =>
       set(() => ({
-        isLoadingMaintenanceRecordDeleteForm: nextValue,
+        isLoadingGetMaintenanceRecordDetail: nextValue,
       })),
   }));

@@ -18,9 +18,15 @@ type GetMaintenanceCategoriesResponse = {
 type MaintenanceRecordCreateFormState = {
   getBikesResponse: GetBikesResponse;
   setGetBikesResponse: (getBikesResponse: GetBikesResponse) => void;
+
   getMaintenanceCategoriesResponse: GetMaintenanceCategoriesResponse;
   setGetMaintenanceCategoriesResponse: (
     getMaintenanceCategoriesResponse: GetMaintenanceCategoriesResponse,
+  ) => void;
+
+  isLoadingMaintenanceRecordCreateForm: boolean;
+  setIsLoadingMaintenanceRecordCreateForm: (
+    isLoadingMaintenanceRecordCreateForm: boolean,
   ) => void;
 };
 
@@ -34,6 +40,7 @@ export const useMaintenanceRecordCreateFormState =
       set(() => ({
         getBikesResponse: nextValue,
       })),
+
     getMaintenanceCategoriesResponse: {
       status: undefined,
       message: "",
@@ -41,5 +48,11 @@ export const useMaintenanceRecordCreateFormState =
     setGetMaintenanceCategoriesResponse: (nextValue) =>
       set(() => ({
         getMaintenanceCategoriesResponse: nextValue,
+      })),
+
+    isLoadingMaintenanceRecordCreateForm: true,
+    setIsLoadingMaintenanceRecordCreateForm: (nextValue) =>
+      set(() => ({
+        isLoadingMaintenanceRecordCreateForm: nextValue,
       })),
   }));

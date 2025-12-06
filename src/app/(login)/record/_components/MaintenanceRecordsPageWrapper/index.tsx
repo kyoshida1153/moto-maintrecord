@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getMaintenanceRecords, getMaintenanceRecordsCount } from "@/lib/api";
 import { useMaintenanceRecordsListStore } from "@/components/MaintenanceRecordsList/stores";
+import { useBreadcrumbsStore } from "@/components/Breadcrumbs/stores";
 
 export default function MaintenanceRecordsPageWrapper({
   children,
@@ -16,6 +17,8 @@ export default function MaintenanceRecordsPageWrapper({
     setGetMaintenanceRecordsCountResponse,
     setIsLoadingGetMaintenanceRecordsCount,
   } = useMaintenanceRecordsListStore();
+  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
+    useBreadcrumbsStore();
 
   const searchParams = useSearchParams();
   const page = searchParams.get("page") || "";
@@ -27,16 +30,8 @@ export default function MaintenanceRecordsPageWrapper({
       (async () => {
         setIsLoadingGetMaintenanceRecords(true);
         const response = await getMaintenanceRecords({ page, date, order });
-        if (response.success === false) {
-          setGetMaintenanceRecordsResponse({
-            status: "error",
-            message: response.message,
-          });
-          setIsLoadingGetMaintenanceRecords(false);
-          return;
-        }
         setGetMaintenanceRecordsResponse({
-          status: "success",
+          status: response.success === true ? "success" : "error",
           message: response.message,
           result: response.result,
         });
@@ -45,20 +40,21 @@ export default function MaintenanceRecordsPageWrapper({
       (async () => {
         setIsLoadingGetMaintenanceRecordsCount(true);
         const response = await getMaintenanceRecordsCount({ date });
-        if (response.success === false) {
-          setGetMaintenanceRecordsCountResponse({
-            status: "error",
-            message: response.message,
-          });
-          setIsLoadingGetMaintenanceRecordsCount(false);
-          return;
-        }
         setGetMaintenanceRecordsCountResponse({
-          status: "success",
+          status: response.success === true ? "success" : "error",
           message: response.message,
           result: response.result,
         });
         setIsLoadingGetMaintenanceRecordsCount(false);
+      })(),
+      (async () => {
+        setIsLoadingGetBreadcrumbItems(true);
+        setBreadcrumbItems([
+          {
+            text: "整備・出費記録",
+          },
+        ]);
+        setIsLoadingGetBreadcrumbItems(false);
       })(),
     ]);
   }, [
@@ -68,6 +64,8 @@ export default function MaintenanceRecordsPageWrapper({
     setIsLoadingGetMaintenanceRecords,
     setGetMaintenanceRecordsCountResponse,
     setIsLoadingGetMaintenanceRecordsCount,
+    setBreadcrumbItems,
+    setIsLoadingGetBreadcrumbItems,
   ]);
 
   return <>{children}</>;
