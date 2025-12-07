@@ -11,6 +11,9 @@ type GetUserResponse = {
 type UserNameEditFormState = {
   getUserResponse: GetUserResponse;
   setGetUserResponse: (getUserResponse: GetUserResponse) => void;
+
+  isLoadingNameEditForm: boolean;
+  setIsLoadingNameEditForm: (isLoadingNameEditForm: boolean) => void;
 };
 
 export const useUserNameEditFormStore = create<UserNameEditFormState>(
@@ -22,6 +25,12 @@ export const useUserNameEditFormStore = create<UserNameEditFormState>(
     setGetUserResponse: (nextValue) =>
       set(() => ({
         getUserResponse: nextValue,
+      })),
+
+    isLoadingNameEditForm: true,
+    setIsLoadingNameEditForm: (nextValue) =>
+      set(() => ({
+        isLoadingNameEditForm: nextValue,
       })),
   }),
 );

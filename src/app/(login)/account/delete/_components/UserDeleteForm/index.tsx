@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Box } from "@mui/material";
@@ -9,21 +9,17 @@ import ErrorIcon from "@mui/icons-material/Error";
 import WarningIcon from "@mui/icons-material/Warning";
 
 import { LinkButton, Loading, SubmitButton } from "@/components";
-import { getUser, deleteUser } from "@/lib/api";
-import type { UserUniqueSelect } from "@/app/api/user/route";
-
-type GetUserResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-  defaultValue?: UserUniqueSelect;
-};
+import { deleteUser } from "@/lib/api";
+import { useUserDeleteFormStore } from "./stores";
 
 type SubmitResponse = {
   status: "success" | "error" | undefined;
   message: string;
 };
 
-export default function AccountDeleteForm() {
+export default function UserDeleteForm() {
+  const { getUserResponse, isLoadingUserDeleteForm } = useUserDeleteFormStore();
+
   // フォームの送信開始～終了で使うもの
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
@@ -65,30 +61,9 @@ export default function AccountDeleteForm() {
     }
   };
 
-  // 削除対象のユーザー名の表示で使うもの
-  const [isLoadingGetUser, setIsLoadingGetUser] = useState<boolean>(true);
-  const [getUserResponse, setGetUserResponse] = useState<GetUserResponse>({
-    status: undefined,
-    message: "",
-  });
-
-  // 削除対象のユーザー名の読み込み
-  useEffect(() => {
-    (async () => {
-      setIsLoadingGetUser(true);
-      const response = await getUser();
-      setGetUserResponse({
-        status: response.success === true ? "success" : "error",
-        message: response.message,
-        defaultValue: response.result,
-      });
-      setIsLoadingGetUser(false);
-    })();
-  }, []);
-
   return (
     <>
-      {isLoadingGetUser ? (
+      {isLoadingUserDeleteForm ? (
         <div className="w-ful flex justify-center py-4">
           <Loading size="36px" />
         </div>
@@ -163,7 +138,11 @@ export default function AccountDeleteForm() {
           </div>
         </Box>
       ) : (
-        <p>{getUserResponse.message}</p>
+        <p>
+          {getUserResponse.message
+            ? getUserResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
       )}
     </>
   );

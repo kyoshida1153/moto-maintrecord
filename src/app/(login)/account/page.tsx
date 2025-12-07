@@ -1,8 +1,9 @@
 import Link from "next/link";
 import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
-import { Heading, LinkButton } from "@/components";
+import { Breadcrumbs, Heading, LinkButton } from "@/components";
 import UserNameEditForm from "./_components/UserNameEditForm";
+import AccountPageWrapper from "./_components/AccountPageWrapper";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -13,7 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function AccountPage() {
   return (
-    <>
+    <AccountPageWrapper>
+      <div className="mb-4">
+        <Breadcrumbs />
+      </div>
       <Heading level={1}>アカウント管理</Heading>
       <section className="display max-w-lg rounded border border-solid border-[var(--border-color-gray)] bg-white p-6 md:p-8">
         <div className="flex flex-col gap-6 md:gap-8">
@@ -47,6 +51,6 @@ export default function AccountPage() {
           </div>
         </div>
       </section>
-    </>
+    </AccountPageWrapper>
   );
 }
