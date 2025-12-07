@@ -1,4 +1,4 @@
-import { Heading } from "@/components";
+import { Breadcrumbs, Heading } from "@/components";
 import ReportPageWrapper from "./_components/ReportPageWrapper";
 import ReportNavigation from "./_components/ReportNavigation";
 import ReportBarChart from "./_components/ReportBarChart";
@@ -16,6 +16,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function ReportPage() {
   return (
     <ReportPageWrapper>
+      <div className="mb-4">
+        <Breadcrumbs />
+      </div>
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8">
         <Heading level={1}>レポート</Heading>
         <div className="mb-4 md:mb-6">

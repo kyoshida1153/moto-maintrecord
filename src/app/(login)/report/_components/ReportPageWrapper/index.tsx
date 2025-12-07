@@ -10,8 +10,9 @@ import {
   getMaintenanceRecordsTotalCostByCategories,
   getMaintenanceRecordsCalenderDateByYears,
 } from "@/lib/api";
-import { isDateYyyyMm } from "@/utils";
+import { isDateYyyy, isDateYyyyMm } from "@/utils";
 
+import { useBreadcrumbsStore } from "@/components/Breadcrumbs/stores";
 import { useReportBarChartStore } from "../ReportBarChart/stores";
 import { useReportTableStore } from "../ReportTable/stores";
 import { useReportDonutChartByBikesStore } from "../ReportDonutChartByBikes/stores";
@@ -23,6 +24,7 @@ export default function ReportPageWrapper({
 }: {
   children: React.ReactNode;
 }) {
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
   const {
     setGetMaintenanceRecordsTotalCostResponse,
     setIsLoadingGetMaintenanceRecordsTotalCost,
@@ -51,6 +53,41 @@ export default function ReportPageWrapper({
 
   useEffect(() => {
     Promise.all([
+      // パンくずリストの設定
+      (async () => {
+        setIsLoadingBreadcrumbs(true);
+
+        const bradcrumbItems = [];
+
+        if (isDateYyyy(date)) {
+          bradcrumbItems.push({
+            text: "レポート",
+            href: "/report",
+          });
+          bradcrumbItems.push({
+            text: `${date}年`,
+          });
+        } else if (isDateYyyyMm(date)) {
+          const year = date.split("-")[0];
+          const month = date.split("-")[1].replace(/^0+/, "");
+
+          bradcrumbItems.push({
+            text: "レポート",
+            href: "/report",
+          });
+          bradcrumbItems.push({
+            text: `${year}年${month}月`,
+          });
+        } else {
+          bradcrumbItems.push({
+            text: "レポート",
+          });
+        }
+
+        setBreadcrumbItems(bradcrumbItems);
+        setIsLoadingBreadcrumbs(false);
+      })(),
+
       // 月別 or 日別の出費（棒グラフ、表）
       (async () => {
         setIsLoadingGetMaintenanceRecordsTotalCost(true);
@@ -197,6 +234,8 @@ export default function ReportPageWrapper({
     ]);
   }, [
     date,
+    setBreadcrumbItems,
+    setIsLoadingBreadcrumbs,
     setGetMaintenanceRecordsTotalCostResponse,
     setIsLoadingGetMaintenanceRecordsTotalCost,
     setGetMaintenanceRecordsTotalCostResponseTable,
