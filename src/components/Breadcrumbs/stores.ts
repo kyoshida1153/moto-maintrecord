@@ -11,10 +11,8 @@ type BreadcrumbsState = {
   getBreadcrumbItems: GetBreadcrumbItems;
   setBreadcrumbItems: (getBreadcrumbItems: GetBreadcrumbItems) => void;
 
-  isLoadingGetBreadcrumbItems: boolean;
-  setIsLoadingGetBreadcrumbItems: (
-    isLoadingGetBreadcrumbItems: boolean,
-  ) => void;
+  isLoadingBreadcrumbs: boolean;
+  setIsLoadingBreadcrumbs: (isLoadingBreadcrumbs: boolean) => void;
 };
 
 export const useBreadcrumbsStore = create<BreadcrumbsState>((set) => ({
@@ -24,9 +22,9 @@ export const useBreadcrumbsStore = create<BreadcrumbsState>((set) => ({
       getBreadcrumbItems: nextValue,
     })),
 
-  isLoadingGetBreadcrumbItems: true,
-  setIsLoadingGetBreadcrumbItems: (nextValue) =>
+  isLoadingBreadcrumbs: true,
+  setIsLoadingBreadcrumbs: (nextValue) =>
     set(() => ({
-      isLoadingGetBreadcrumbItems: nextValue,
+      isLoadingBreadcrumbs: nextValue,
     })),
 }));

@@ -23,7 +23,7 @@ export default async function BikeDeletePage({
       </div>
       <Heading level={1}>所有バイクの削除</Heading>
       <div className="max-w-xl">
-        <BikeDeleteForm />
+        <BikeDeleteForm bikeId={id} />
       </div>
     </BikeDeletePageWrapper>
   );

@@ -13,9 +13,9 @@ type MaintenanceCategoryDeleteFormState = {
     getMaintenanceCategoryResponse: GetMaintenanceCategoryResponse,
   ) => void;
 
-  isLoadingGetMaintenanceCategory: boolean;
-  setIsLoadingGetMaintenanceCategory: (
-    isLoadingGetMaintenanceCategory: boolean,
+  isLoadingMaintenanceRecordCategoryDeleteForm: boolean;
+  setIsLoadingMaintenanceRecordCategoryDeleteForm: (
+    isLoadingMaintenanceRecordCategoryDeleteForm: boolean,
   ) => void;
 };
 
@@ -30,9 +30,9 @@ export const useMaintenanceRecordCategoryDeleteFormStore =
         getMaintenanceCategoryResponse: nextValue,
       })),
 
-    isLoadingGetMaintenanceCategory: true,
-    setIsLoadingGetMaintenanceCategory: (nextValue) =>
+    isLoadingMaintenanceRecordCategoryDeleteForm: true,
+    setIsLoadingMaintenanceRecordCategoryDeleteForm: (nextValue) =>
       set(() => ({
-        isLoadingGetMaintenanceCategory: nextValue,
+        isLoadingMaintenanceRecordCategoryDeleteForm: nextValue,
       })),
   }));

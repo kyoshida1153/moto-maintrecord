@@ -5,11 +5,11 @@ import BikeListCard from "./BikeListCard";
 import { useBikeCardListStore } from "./stores";
 
 export default function BikeList() {
-  const { getBikesResponse, isLoadingGetBikes } = useBikeCardListStore();
+  const { getBikesResponse, isLoadingBikeList } = useBikeCardListStore();
 
   return (
     <>
-      {isLoadingGetBikes ? (
+      {isLoadingBikeList ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>

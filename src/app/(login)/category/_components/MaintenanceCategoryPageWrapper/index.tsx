@@ -10,35 +10,43 @@ export default function MaintenanceCategoryPageWrapper({
 }: {
   children: React.ReactNode;
 }) {
-  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
   const {
     setGetMaintenanceCategoriesResponse,
-    setIsLoadingGetMaintenanceCategories,
+    setIsLoadingMaintenanceCategoryCardList,
   } = useMaintenanceCategoryCardListStore();
 
   useEffect(() => {
+    // 各コンポーネントを読み込み中にする
+    setIsLoadingBreadcrumbs(true);
+    setIsLoadingMaintenanceCategoryCardList(true);
+
     (async () => {
+      // 表示に必要なデータの読み込み
       const response = await getMaintenanceCategories();
+
       setGetMaintenanceCategoriesResponse({
         status: response.success === true ? "success" : "error",
         message: response.message,
         result: response.result,
       });
-      setIsLoadingGetMaintenanceCategories(false);
-    })();
 
-    setBreadcrumbItems([
-      {
-        text: "カテゴリー",
-      },
-    ]);
-    setIsLoadingGetBreadcrumbItems(false);
+      // パンくずリストの設定
+      setBreadcrumbItems([
+        {
+          text: "カテゴリー",
+        },
+      ]);
+
+      // 各コンポーネントを読み込み完了にする
+      setIsLoadingBreadcrumbs(false);
+      setIsLoadingMaintenanceCategoryCardList(false);
+    })();
   }, [
     setGetMaintenanceCategoriesResponse,
-    setIsLoadingGetMaintenanceCategories,
+    setIsLoadingMaintenanceCategoryCardList,
     setBreadcrumbItems,
-    setIsLoadingGetBreadcrumbItems,
+    setIsLoadingBreadcrumbs,
   ]);
 
   return <>{children}</>;

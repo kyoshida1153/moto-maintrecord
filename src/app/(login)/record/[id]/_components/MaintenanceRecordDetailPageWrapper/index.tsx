@@ -14,16 +14,15 @@ export default function MaintenanceRecordDetailPageWrapper({
   children: React.ReactNode;
   maintenanceRecordId: string;
 }) {
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
   const {
     setGetMaintenanceRecordResponse,
     setIsLoadingGetMaintenanceRecordDetail,
   } = useMaintenanceRecordDetailStore();
-  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
 
   useEffect(() => {
     // 各コンポーネントを読み込み中にする
-    setIsLoadingGetBreadcrumbItems(true);
+    setIsLoadingBreadcrumbs(true);
     setIsLoadingGetMaintenanceRecordDetail(true);
 
     (async () => {
@@ -54,7 +53,7 @@ export default function MaintenanceRecordDetailPageWrapper({
       ]);
 
       // 各コンポーネントを読み込み完了にする
-      setIsLoadingGetBreadcrumbItems(false);
+      setIsLoadingBreadcrumbs(false);
       setIsLoadingGetMaintenanceRecordDetail(false);
     })();
   }, [
@@ -62,7 +61,7 @@ export default function MaintenanceRecordDetailPageWrapper({
     setGetMaintenanceRecordResponse,
     setIsLoadingGetMaintenanceRecordDetail,
     setBreadcrumbItems,
-    setIsLoadingGetBreadcrumbItems,
+    setIsLoadingBreadcrumbs,
   ]);
 
   return <>{children}</>;

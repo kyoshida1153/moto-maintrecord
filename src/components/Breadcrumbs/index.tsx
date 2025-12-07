@@ -8,12 +8,11 @@ import { Loading } from "@/components";
 import { useBreadcrumbsStore } from "./stores";
 
 export function Breadcrumbs() {
-  const { getBreadcrumbItems, isLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
+  const { getBreadcrumbItems, isLoadingBreadcrumbs } = useBreadcrumbsStore();
 
   return (
     <>
-      {isLoadingGetBreadcrumbItems ? (
+      {isLoadingBreadcrumbs ? (
         <div className="flex w-full justify-center md:justify-start">
           <Loading size="24px" />
         </div>

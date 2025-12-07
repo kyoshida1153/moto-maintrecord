@@ -23,7 +23,7 @@ export default async function MaintenanceCategoryEditPage({
       </div>
       <Heading level={1}>カテゴリーの編集</Heading>
       <div className="max-w-lg">
-        <MaintenanceCategoryEditForm />
+        <MaintenanceCategoryEditForm maintenanceCategoryId={id} />
       </div>
     </MaintenanceCategoryEditPageWrapper>
   );

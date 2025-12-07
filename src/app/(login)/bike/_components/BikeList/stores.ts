@@ -11,8 +11,8 @@ type BikeCardListState = {
   getBikesResponse: GetBikesResponse;
   setGetBikesResponse: (getBikesResponse: GetBikesResponse) => void;
 
-  isLoadingGetBikes: boolean;
-  setIsLoadingGetBikes: (isLoadingGetBikes: boolean) => void;
+  isLoadingBikeList: boolean;
+  setIsLoadingBikeList: (isLoadingGetBikes: boolean) => void;
 };
 
 export const useBikeCardListStore = create<BikeCardListState>((set) => ({
@@ -25,9 +25,9 @@ export const useBikeCardListStore = create<BikeCardListState>((set) => ({
       getBikesResponse: nextValue,
     })),
 
-  isLoadingGetBikes: true,
-  setIsLoadingGetBikes: (nextValue) =>
+  isLoadingBikeList: true,
+  setIsLoadingBikeList: (nextValue) =>
     set(() => ({
-      isLoadingGetBikes: nextValue,
+      isLoadingBikeList: nextValue,
     })),
 }));

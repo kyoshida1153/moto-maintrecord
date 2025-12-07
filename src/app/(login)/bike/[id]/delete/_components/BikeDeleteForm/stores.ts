@@ -11,8 +11,8 @@ type BikeDeleteFormState = {
   getBikeResponse: GetBikeResponse;
   setGetBikeResponse: (getBikeResponse: GetBikeResponse) => void;
 
-  isLoadingGetBike: boolean;
-  setIsLoadingGetBike: (isLoadingGetBike: boolean) => void;
+  isLoadingBikeDeleteForm: boolean;
+  setIsLoadingBikeDeleteForm: (isLoadingGetBike: boolean) => void;
 };
 
 export const useBikeDeleteFormStore = create<BikeDeleteFormState>((set) => ({
@@ -25,9 +25,9 @@ export const useBikeDeleteFormStore = create<BikeDeleteFormState>((set) => ({
       getBikeResponse: nextValue,
     })),
 
-  isLoadingGetBike: true,
-  setIsLoadingGetBike: (nextValue) =>
+  isLoadingBikeDeleteForm: true,
+  setIsLoadingBikeDeleteForm: (nextValue) =>
     set(() => ({
-      isLoadingGetBike: nextValue,
+      isLoadingBikeDeleteForm: nextValue,
     })),
 }));

@@ -13,9 +13,9 @@ type MaintenanceCategoryCardListState = {
     getMaintenanceCategoriesResponse: GetMaintenanceCategoriesResponse,
   ) => void;
 
-  isLoadingGetMaintenanceCategories: boolean;
-  setIsLoadingGetMaintenanceCategories: (
-    isLoadingGetMaintenanceCategories: boolean,
+  isLoadingMaintenanceCategoryCardList: boolean;
+  setIsLoadingMaintenanceCategoryCardList: (
+    isLoadingMaintenanceCategoryCardList: boolean,
   ) => void;
 };
 
@@ -30,9 +30,9 @@ export const useMaintenanceCategoryCardListStore =
         getMaintenanceCategoriesResponse: nextValue,
       })),
 
-    isLoadingGetMaintenanceCategories: true,
-    setIsLoadingGetMaintenanceCategories: (nextValue) =>
+    isLoadingMaintenanceCategoryCardList: true,
+    setIsLoadingMaintenanceCategoryCardList: (nextValue) =>
       set(() => ({
-        isLoadingGetMaintenanceCategories: nextValue,
+        isLoadingMaintenanceCategoryCardList: nextValue,
       })),
   }));

@@ -12,41 +12,49 @@ export default function MaintenanceCategoryDeletePageWrapper({
   children: React.ReactNode;
   maintenanceCategoryId: string;
 }) {
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
   const {
     setGetMaintenanceCategoryResponse,
-    setIsLoadingGetMaintenanceCategory,
+    setIsLoadingMaintenanceRecordCategoryDeleteForm,
   } = useMaintenanceRecordCategoryDeleteFormStore();
-  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
 
   useEffect(() => {
+    // 各コンポーネントを読み込み中にする
+    setIsLoadingBreadcrumbs(true);
+    setIsLoadingMaintenanceRecordCategoryDeleteForm(true);
+
     (async () => {
+      // 表示に必要なデータの読み込み
       const response = await getMaintenanceCategory(maintenanceCategoryId);
 
+      // 表示に必要なデータを各コンポーネント用ストアにセット
       setGetMaintenanceCategoryResponse({
         status: response.success === true ? "success" : "error",
         message: response.message,
         result: response.result,
       });
-      setIsLoadingGetMaintenanceCategory(false);
 
+      // パンくずリストの設定
       setBreadcrumbItems([
         {
           text: "カテゴリー",
           href: "/category",
         },
         {
-          text: "削除",
+          text: `${response?.result?.name ?? "データ無し"}: 削除`,
         },
       ]);
-      setIsLoadingGetBreadcrumbItems(false);
+
+      // 各コンポーネントを読み込み完了にする
+      setIsLoadingBreadcrumbs(false);
+      setIsLoadingMaintenanceRecordCategoryDeleteForm(false);
     })();
   }, [
     maintenanceCategoryId,
     setGetMaintenanceCategoryResponse,
-    setIsLoadingGetMaintenanceCategory,
+    setIsLoadingMaintenanceRecordCategoryDeleteForm,
     setBreadcrumbItems,
-    setIsLoadingGetBreadcrumbItems,
+    setIsLoadingBreadcrumbs,
   ]);
 
   return <>{children}</>;

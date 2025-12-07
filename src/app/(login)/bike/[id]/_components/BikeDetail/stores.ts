@@ -11,8 +11,10 @@ type BikeDetailState = {
   getBikeResponse: GetBikeResponse;
   setGetBikeResponse: (getBikeResponse: GetBikeResponse) => void;
 
-  isLoadingGetBike: boolean;
-  setIsLoadingGetBike: (isLoadingGetBike: boolean) => void;
+  isLoadingBikeDetail: boolean;
+  setIsLoadingBikeDetail: (isLoadingGetBike: boolean) => void;
+  // isLoadingGetBike: boolean;
+  // setIsLoadingGetBike: (isLoadingGetBike: boolean) => void;
 };
 
 export const useBikeDetailStore = create<BikeDetailState>((set) => ({
@@ -25,9 +27,9 @@ export const useBikeDetailStore = create<BikeDetailState>((set) => ({
       getBikeResponse: nextValue,
     })),
 
-  isLoadingGetBike: true,
-  setIsLoadingGetBike: (nextValue) =>
+  isLoadingBikeDetail: true,
+  setIsLoadingBikeDetail: (nextValue) =>
     set(() => ({
-      isLoadingGetBike: nextValue,
+      isLoadingBikeDetail: nextValue,
     })),
 }));

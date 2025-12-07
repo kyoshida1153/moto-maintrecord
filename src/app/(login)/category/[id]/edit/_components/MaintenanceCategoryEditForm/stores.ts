@@ -13,9 +13,9 @@ type MaintenanceCategoryEditFormState = {
     getMaintenanceCategoryResponse: GetMaintenanceCategoryResponse,
   ) => void;
 
-  isLoadingGetMaintenanceCategory: boolean;
-  setIsLoadingGetMaintenanceCategory: (
-    isLoadingGetMaintenanceCategory: boolean,
+  isLoadingMaintenanceCategoryEditForm: boolean;
+  setIsLoadingMaintenanceCategoryEditForm: (
+    isLoadingMaintenanceCategoryEditForm: boolean,
   ) => void;
 };
 
@@ -30,9 +30,9 @@ export const useMaintenanceCategoryEditFormStore =
         getMaintenanceCategoryResponse: nextValue,
       })),
 
-    isLoadingGetMaintenanceCategory: true,
-    setIsLoadingGetMaintenanceCategory: (nextValue) =>
+    isLoadingMaintenanceCategoryEditForm: true,
+    setIsLoadingMaintenanceCategoryEditForm: (nextValue) =>
       set(() => ({
-        isLoadingGetMaintenanceCategory: nextValue,
+        isLoadingMaintenanceCategoryEditForm: nextValue,
       })),
   }));

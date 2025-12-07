@@ -8,10 +8,13 @@ export default function BikeCreatePageWrapper({
 }: {
   children: React.ReactNode;
 }) {
-  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
 
   useEffect(() => {
+    // 各コンポーネントを読み込み中にする
+    setIsLoadingBreadcrumbs(true);
+
+    // パンくずリストの設定
     setBreadcrumbItems([
       {
         text: "所有バイク",
@@ -21,8 +24,10 @@ export default function BikeCreatePageWrapper({
         text: "登録",
       },
     ]);
-    setIsLoadingGetBreadcrumbItems(false);
-  }, [setBreadcrumbItems, setIsLoadingGetBreadcrumbItems]);
+
+    // 各コンポーネントを読み込み完了にする
+    setIsLoadingBreadcrumbs(false);
+  }, [setBreadcrumbItems, setIsLoadingBreadcrumbs]);
 
   return <>{children}</>;
 }

@@ -13,11 +13,11 @@ import BikeDetailHeading from "./BikeDetailHeading";
 import { useBikeDetailStore } from "./stores";
 
 export default function BikeDetail() {
-  const { getBikeResponse, isLoadingGetBike } = useBikeDetailStore();
+  const { getBikeResponse, isLoadingBikeDetail } = useBikeDetailStore();
 
   return (
     <>
-      {isLoadingGetBike ? (
+      {isLoadingBikeDetail ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>

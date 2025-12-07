@@ -7,12 +7,12 @@ import { useMaintenanceCategoryCardListStore } from "./stores";
 export default function MaintenanceCategoryCardList() {
   const {
     getMaintenanceCategoriesResponse,
-    isLoadingGetMaintenanceCategories,
+    isLoadingMaintenanceCategoryCardList,
   } = useMaintenanceCategoryCardListStore();
 
   return (
     <>
-      {isLoadingGetMaintenanceCategories ? (
+      {isLoadingMaintenanceCategoryCardList ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>

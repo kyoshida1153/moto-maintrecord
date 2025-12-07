@@ -19,8 +19,7 @@ export default function MaintenanceRecordEditPageWrapper({
   children: React.ReactNode;
   maintenanceRecordId: string;
 }) {
-  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
   const {
     setGetBikesResponse,
     setGetMaintenanceCategoriesResponse,
@@ -30,7 +29,7 @@ export default function MaintenanceRecordEditPageWrapper({
 
   useEffect(() => {
     // 各コンポーネントを読み込み中にする
-    setIsLoadingGetBreadcrumbItems(true);
+    setIsLoadingBreadcrumbs(true);
     setIsLoadingMaintenanceRecordEditForm(true);
 
     Promise.all([
@@ -79,12 +78,12 @@ export default function MaintenanceRecordEditPageWrapper({
       ]);
 
       // 各コンポーネントを読み込み完了にする
-      setIsLoadingGetBreadcrumbItems(false);
+      setIsLoadingBreadcrumbs(false);
       setIsLoadingMaintenanceRecordEditForm(false);
     });
   }, [
     setBreadcrumbItems,
-    setIsLoadingGetBreadcrumbItems,
+    setIsLoadingBreadcrumbs,
     setGetBikesResponse,
     setGetMaintenanceCategoriesResponse,
     setGetMaintenanceRecordResponse,

@@ -15,8 +15,7 @@ export default function MaintenanceRecordDeletePageWrapper({
   children: React.ReactNode;
   maintenanceRecordId: string;
 }) {
-  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
   const {
     setGetMaintenanceRecordResponse,
     setIsLoadingMaintenanceRecordDeleteForm,
@@ -24,7 +23,7 @@ export default function MaintenanceRecordDeletePageWrapper({
 
   useEffect(() => {
     // 各コンポーネントを読み込み中にする
-    setIsLoadingGetBreadcrumbItems(true);
+    setIsLoadingBreadcrumbs(true);
     setIsLoadingMaintenanceRecordDeleteForm(true);
 
     (async () => {
@@ -61,12 +60,12 @@ export default function MaintenanceRecordDeletePageWrapper({
       ]);
 
       // 各コンポーネントを読み込み完了にする
-      setIsLoadingGetBreadcrumbItems(false);
+      setIsLoadingBreadcrumbs(false);
       setIsLoadingMaintenanceRecordDeleteForm(false);
     })();
   }, [
     setBreadcrumbItems,
-    setIsLoadingGetBreadcrumbItems,
+    setIsLoadingBreadcrumbs,
     setGetMaintenanceRecordResponse,
     setIsLoadingMaintenanceRecordDeleteForm,
     maintenanceRecordId,

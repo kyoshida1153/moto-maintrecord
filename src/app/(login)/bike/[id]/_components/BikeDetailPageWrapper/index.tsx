@@ -12,21 +12,26 @@ export default function BikeDetailPageWrapper({
   children: React.ReactNode;
   bikeId: string;
 }) {
-  const { setGetBikeResponse, setIsLoadingGetBike } = useBikeDetailStore();
-  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
+  const { setGetBikeResponse, setIsLoadingBikeDetail } = useBikeDetailStore();
 
   useEffect(() => {
+    // 各コンポーネントを読み込み中にする
+    setIsLoadingBreadcrumbs(true);
+    setIsLoadingBikeDetail(true);
+
     (async () => {
+      // 表示に必要なデータの読み込み
       const response = await getBike(bikeId);
 
+      // 表示に必要なデータを各コンポーネント用ストアにセット
       setGetBikeResponse({
         status: response.success === true ? "success" : "error",
         message: response.message,
         result: response.result,
       });
-      setIsLoadingGetBike(false);
 
+      // パンくずリストの設定
       setBreadcrumbItems([
         {
           text: "所有バイク",
@@ -36,14 +41,17 @@ export default function BikeDetailPageWrapper({
           text: response?.result?.name ?? "データ無し",
         },
       ]);
-      setIsLoadingGetBreadcrumbItems(false);
+
+      // 各コンポーネントを読み込み完了にする
+      setIsLoadingBreadcrumbs(false);
+      setIsLoadingBikeDetail(false);
     })();
   }, [
     bikeId,
     setGetBikeResponse,
-    setIsLoadingGetBike,
+    setIsLoadingBikeDetail,
     setBreadcrumbItems,
-    setIsLoadingGetBreadcrumbItems,
+    setIsLoadingBreadcrumbs,
   ]);
 
   return <>{children}</>;

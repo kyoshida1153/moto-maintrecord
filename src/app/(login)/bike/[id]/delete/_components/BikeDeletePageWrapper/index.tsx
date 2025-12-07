@@ -12,21 +12,27 @@ export default function BikeDeletePageWrapper({
   children: React.ReactNode;
   bikeId: string;
 }) {
-  const { setGetBikeResponse, setIsLoadingGetBike } = useBikeDeleteFormStore();
-  const { setBreadcrumbItems, setIsLoadingGetBreadcrumbItems } =
-    useBreadcrumbsStore();
+  const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
+  const { setGetBikeResponse, setIsLoadingBikeDeleteForm } =
+    useBikeDeleteFormStore();
 
   useEffect(() => {
+    // 各コンポーネントを読み込み中にする
+    setIsLoadingBreadcrumbs(true);
+    setIsLoadingBikeDeleteForm(true);
+
     (async () => {
+      // 表示に必要なデータの読み込み
       const response = await getBike(bikeId);
 
+      // 表示に必要なデータを各コンポーネント用ストアにセット
       setGetBikeResponse({
         status: response.success === true ? "success" : "error",
         message: response.message,
         result: response.result,
       });
-      setIsLoadingGetBike(false);
 
+      // パンくずリストの設定
       setBreadcrumbItems([
         {
           text: "所有バイク",
@@ -42,14 +48,17 @@ export default function BikeDeletePageWrapper({
           text: "削除",
         },
       ]);
-      setIsLoadingGetBreadcrumbItems(false);
+
+      // 各コンポーネントを読み込み完了にする
+      setIsLoadingBreadcrumbs(false);
+      setIsLoadingBikeDeleteForm(false);
     })();
   }, [
     bikeId,
     setGetBikeResponse,
-    setIsLoadingGetBike,
+    setIsLoadingBikeDeleteForm,
     setBreadcrumbItems,
-    setIsLoadingGetBreadcrumbItems,
+    setIsLoadingBreadcrumbs,
   ]);
 
   return <>{children}</>;

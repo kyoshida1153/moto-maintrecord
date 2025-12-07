@@ -5,11 +5,11 @@ import BikeEditFormForm from "./BikeEditFormForm";
 import { useBikeEditFormStore } from "./stores";
 
 export default function BikeEditForm() {
-  const { getBikeResponse, isLoadingGetBike } = useBikeEditFormStore();
+  const { getBikeResponse, isLoadingBikeEditForm } = useBikeEditFormStore();
 
   return (
     <>
-      {isLoadingGetBike ? (
+      {isLoadingBikeEditForm ? (
         <div className="flex w-full justify-center py-4">
           <Loading size="36px" />
         </div>
