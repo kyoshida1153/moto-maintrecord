@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/lib/auth";
 import Header from "../_components/Header";
 
 export default async function LogoutLayout({
@@ -8,7 +7,7 @@ export default async function LogoutLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (session?.user) {
     redirect("/top");
   }

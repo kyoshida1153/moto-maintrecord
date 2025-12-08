@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 
@@ -9,7 +8,7 @@ type User = Prisma.UserGetPayload<Prisma.UserDefaultArgs>;
 export async function getCurrentUser(): Promise<User | null> {
   try {
     // セッション情報取得
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     // ログインしていない場合
     if (!session?.user?.email) {

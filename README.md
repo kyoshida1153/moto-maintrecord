@@ -39,15 +39,16 @@ demo0101
 
 ## 使用技術
 
-| カテゴリー              | 技術                                                                                  |
-| ----------------------- | ------------------------------------------------------------------------------------- |
-| 基本構成                | Next.js 15 (App Router, Route Handlers)<br>React 19<br>TypeScript 5<br>Tailwind CSS 4 |
-| UIライブラリ            | Material UI (MUI), FullCalendar                                                       |
-| データベース/ストレージ | Supabase                                                                              |
-| ORM                     | Prisma                                                                                |
-| 認証機能                | NextAuth 4                                                                            |
-| 状態管理                | zustand                                                                               |
-| リンター/フォーマッター | ESLint, Prettier                                                                      |
+| カテゴリー              | 技術                                                                        |
+| ----------------------- | --------------------------------------------------------------------------- |
+| 基本構成                | Next.js (App Router, Route Handlers)<br>React<br>TypeScript<br>Tailwind CSS |
+| UIライブラリ            | Material UI (MUI), FullCalendar                                             |
+| データベース/ストレージ | Supabase                                                                    |
+| ORM                     | Prisma                                                                      |
+| 認証機能                | Auth.js (NextAuth.js v5)                                                    |
+| 状態管理                | zustand                                                                     |
+| リンター/フォーマッター | ESLint, Prettier                                                            |
+| バリデーション          | Zod, React Hook Form                                                        |
 
 ## ワイヤーフレーム
 
@@ -65,8 +66,6 @@ demo0101
 
 ## 今後予定している機能
 
-- フォームのバリデーション
-- 整備・出費記録の詳細
 - 整備・出費記録のコピー機能
 - レポートの絞り込み機能: 所有バイク別、カテゴリー別
 - 整備・出費記録の一括編集・削除機能
