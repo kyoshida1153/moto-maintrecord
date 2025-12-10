@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";

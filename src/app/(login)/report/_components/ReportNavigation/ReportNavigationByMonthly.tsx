@@ -6,8 +6,7 @@ import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
 import { isDateYyyy, isDateYyyyMm } from "@/utils";
-import { Loading } from "@/components";
-import SelectBoxLink from "./SelectBoxLink";
+import SelectBoxLink from "./_SelectBoxLink";
 import { useReportNavigationStore } from "./stores";
 
 export default function ReportNavigationByMonthly() {
@@ -30,10 +29,8 @@ export default function ReportNavigationByMonthly() {
     : currentYear;
 
   // ここからセレクトボックス内の選択肢を作成
-  const {
-    getMaintenanceRecordsCalenderDateByYearsResponse,
-    isLoadingGetMaintenanceRecordsCalenderDateByYears,
-  } = useReportNavigationStore();
+  const { getMaintenanceRecordsCalenderDateByYearsResponse } =
+    useReportNavigationStore();
 
   const [itemList, setItemList] =
     useState<{ value: string | undefined; text: string }[]>();
@@ -71,20 +68,12 @@ export default function ReportNavigationByMonthly() {
       ? true
       : false;
   return (
-    <>
-      {isLoadingGetMaintenanceRecordsCalenderDateByYears ? (
-        <div className="flex w-full min-w-[120px] items-center justify-center">
-          <Loading size="24px" />
-        </div>
-      ) : (
-        <SelectBoxLink
-          name="month"
-          label="月を選択"
-          itemList={itemList}
-          defaultValue={defaultValue}
-          disabled={isDisabled}
-        />
-      )}
-    </>
+    <SelectBoxLink
+      name="month"
+      label="月を選択"
+      itemList={itemList}
+      defaultValue={defaultValue}
+      disabled={isDisabled}
+    />
   );
 }

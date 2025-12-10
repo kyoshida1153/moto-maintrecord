@@ -11,10 +11,8 @@ import BarChartVertical from "./BarChartVertical";
 import { useReportBarChartStore } from "./stores";
 
 export default function ReportBarChart() {
-  const {
-    getMaintenanceRecordsTotalCostResponse,
-    isLoadingGetMaintenanceRecordsTotalCost,
-  } = useReportBarChartStore();
+  const { getMaintenanceRecordsTotalCostResponse, isLoadingReportBarChart } =
+    useReportBarChartStore();
 
   // const isPc = useMediaQuery("(min-width:768px)");
   const isPc = useMediaQuery("(min-width:1024px)");
@@ -41,26 +39,28 @@ export default function ReportBarChart() {
 
   return (
     <>
-      {isLoadingGetMaintenanceRecordsTotalCost ? (
+      {isLoadingReportBarChart ? (
         <div className="flex w-full justify-center">
           <Loading size="36px" />
         </div>
       ) : getMaintenanceRecordsTotalCostResponse.status === "success" ? (
-        getMaintenanceRecordsTotalCostResponse.totalCost === 0 ? (
-          <div className="w-full min-w-[300px] text-center">
-            <p>該当データなし</p>
-          </div>
-        ) : isPc === true ? (
-          <BarChartVertical
-            chartData={chartData}
-            groupBy={getMaintenanceRecordsTotalCostResponse.groupBy}
-          />
-        ) : (
-          <BarChartHorizontal
-            chartData={chartData}
-            groupBy={getMaintenanceRecordsTotalCostResponse.groupBy}
-          />
-        )
+        <div className="display rounded border border-solid border-[var(--border-color-gray)] bg-white py-6 md:py-8">
+          {getMaintenanceRecordsTotalCostResponse.totalCost === 0 ? (
+            <div className="w-full min-w-[300px] text-center">
+              <p>該当データなし</p>
+            </div>
+          ) : isPc === true ? (
+            <BarChartVertical
+              chartData={chartData}
+              groupBy={getMaintenanceRecordsTotalCostResponse.groupBy}
+            />
+          ) : (
+            <BarChartHorizontal
+              chartData={chartData}
+              groupBy={getMaintenanceRecordsTotalCostResponse.groupBy}
+            />
+          )}
+        </div>
       ) : (
         <div className="flex w-full justify-center">
           <p>{getMaintenanceRecordsTotalCostResponse.message}</p>

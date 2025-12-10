@@ -12,10 +12,9 @@ type ReportNavigationState = {
   setGetMaintenanceRecordsCalenderDateByYearsResponse: (
     getMaintenanceRecordsCalenderDateByYearsResponse: GetMaintenanceRecordsCalenderDateByYearsResponse,
   ) => void;
-  isLoadingGetMaintenanceRecordsCalenderDateByYears: boolean;
-  setIsLoadingGetMaintenanceRecordsCalenderDateByYears: (
-    isLoadingGetMaintenanceRecordsCalenderDateByYears: boolean,
-  ) => void;
+
+  isLoadingReportNavigation: boolean;
+  setIsLoadingReportNavigation: (isLoadingReportNavigation: boolean) => void;
 };
 
 export const useReportNavigationStore = create<ReportNavigationState>(
@@ -28,10 +27,11 @@ export const useReportNavigationStore = create<ReportNavigationState>(
       set(() => ({
         getMaintenanceRecordsCalenderDateByYearsResponse: nextValue,
       })),
-    isLoadingGetMaintenanceRecordsCalenderDateByYears: true,
-    setIsLoadingGetMaintenanceRecordsCalenderDateByYears: (nextValue) =>
+
+    isLoadingReportNavigation: true,
+    setIsLoadingReportNavigation: (nextValue) =>
       set(() => ({
-        isLoadingGetMaintenanceRecordsCalenderDateByYears: nextValue,
+        isLoadingReportNavigation: nextValue,
       })),
   }),
 );

@@ -16,10 +16,9 @@ type ReportTableState = {
   setGetMaintenanceRecordsTotalCostResponse: (
     getMaintenanceRecordsTotalCostResponse: GetMaintenanceRecordsTotalCostResponse,
   ) => void;
-  isLoadingGetMaintenanceRecordsTotalCost: boolean;
-  setIsLoadingGetMaintenanceRecordsTotalCost: (
-    isLoadingGetMaintenanceRecordsTotalCost: boolean,
-  ) => void;
+
+  isLoadingReportTable: boolean;
+  setIsLoadingReportTable: (isLoadingReportTable: boolean) => void;
 };
 
 export const useReportTableStore = create<ReportTableState>((set) => ({
@@ -32,9 +31,10 @@ export const useReportTableStore = create<ReportTableState>((set) => ({
     set(() => ({
       getMaintenanceRecordsTotalCostResponse: nextValue,
     })),
-  isLoadingGetMaintenanceRecordsTotalCost: true,
-  setIsLoadingGetMaintenanceRecordsTotalCost: (nextValue) =>
+
+  isLoadingReportTable: true,
+  setIsLoadingReportTable: (nextValue) =>
     set(() => ({
-      isLoadingGetMaintenanceRecordsTotalCost: nextValue,
+      isLoadingReportTable: nextValue,
     })),
 }));

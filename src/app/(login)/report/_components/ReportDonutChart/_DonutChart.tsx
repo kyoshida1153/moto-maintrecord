@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { DefaultizedPieValueType } from "@mui/x-charts/models";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { legendClasses } from "@mui/x-charts/ChartsLegend";

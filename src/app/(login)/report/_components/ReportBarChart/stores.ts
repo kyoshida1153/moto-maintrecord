@@ -16,10 +16,9 @@ type ReportBarChartState = {
   setGetMaintenanceRecordsTotalCostResponse: (
     getMaintenanceRecordsTotalCostResponse: GetMaintenanceRecordsTotalCostResponse,
   ) => void;
-  isLoadingGetMaintenanceRecordsTotalCost: boolean;
-  setIsLoadingGetMaintenanceRecordsTotalCost: (
-    isLoadingGetMaintenanceRecordsTotalCost: boolean,
-  ) => void;
+
+  isLoadingReportBarChart: boolean;
+  setIsLoadingReportBarChart: (isLoadingReportBarChart: boolean) => void;
 };
 
 export const useReportBarChartStore = create<ReportBarChartState>((set) => ({
@@ -32,9 +31,10 @@ export const useReportBarChartStore = create<ReportBarChartState>((set) => ({
     set(() => ({
       getMaintenanceRecordsTotalCostResponse: nextValue,
     })),
-  isLoadingGetMaintenanceRecordsTotalCost: true,
-  setIsLoadingGetMaintenanceRecordsTotalCost: (nextValue) =>
+
+  isLoadingReportBarChart: true,
+  setIsLoadingReportBarChart: (nextValue) =>
     set(() => ({
-      isLoadingGetMaintenanceRecordsTotalCost: nextValue,
+      isLoadingReportBarChart: nextValue,
     })),
 }));

@@ -1,17 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useReportDonutChartByCategoriesStore } from "./stores";
-import { Loading } from "@/components";
-import DonutChart from "../DonutChart";
+import { useReportDonutChartStore } from "./stores";
+import DonutChart from "./_DonutChart";
 
 export default function ReportDonutChartByCategories() {
   const chartName = "カテゴリー";
 
-  const {
-    getMaintenanceRecordsTotalCostByCategoriesResponse,
-    isLoadingGetMaintenanceRecordsTotalCostByCategories,
-  } = useReportDonutChartByCategoriesStore();
+  const { getMaintenanceRecordsTotalCostByCategoriesResponse } =
+    useReportDonutChartStore();
 
   const [chartData, setChartData] = useState<
     { label: string; value: number }[]
@@ -32,12 +29,8 @@ export default function ReportDonutChartByCategories() {
 
   return (
     <>
-      {isLoadingGetMaintenanceRecordsTotalCostByCategories ? (
-        <div className="flex w-full justify-center py-4">
-          <Loading size="36px" />
-        </div>
-      ) : getMaintenanceRecordsTotalCostByCategoriesResponse.status ===
-        "success" ? (
+      {getMaintenanceRecordsTotalCostByCategoriesResponse.status ===
+      "success" ? (
         getMaintenanceRecordsTotalCostByCategoriesResponse.totalCost === 0 ? (
           <div className="w-full py-4 text-center">
             <p>該当データなし</p>

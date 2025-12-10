@@ -14,9 +14,8 @@ import { isDateYyyy, isDateYyyyMm } from "@/utils";
 
 import { useBreadcrumbsStore } from "@/components/Breadcrumbs/stores";
 import { useReportBarChartStore } from "../ReportBarChart/stores";
+import { useReportDonutChartStore } from "../ReportDonutChart/stores";
 import { useReportTableStore } from "../ReportTable/stores";
-import { useReportDonutChartByBikesStore } from "../ReportDonutChartByBikes/stores";
-import { useReportDonutChartByCategoriesStore } from "../ReportDonutChartByCategories/stores";
 import { useReportNavigationStore } from "../ReportNavigation/stores";
 
 export default function ReportPageWrapper({
@@ -26,37 +25,37 @@ export default function ReportPageWrapper({
 }) {
   const { setBreadcrumbItems, setIsLoadingBreadcrumbs } = useBreadcrumbsStore();
   const {
+    setGetMaintenanceRecordsCalenderDateByYearsResponse,
+    setIsLoadingReportNavigation,
+  } = useReportNavigationStore();
+  const {
     setGetMaintenanceRecordsTotalCostResponse,
-    setIsLoadingGetMaintenanceRecordsTotalCost,
+    setIsLoadingReportBarChart,
   } = useReportBarChartStore();
+  const {
+    setGetMaintenanceRecordsTotalCostByBikesResponse,
+    setGetMaintenanceRecordsTotalCostByCategoriesResponse,
+    setIsLoadingReportDonutChart,
+  } = useReportDonutChartStore();
   const {
     setGetMaintenanceRecordsTotalCostResponse:
       setGetMaintenanceRecordsTotalCostResponseTable,
-    setIsLoadingGetMaintenanceRecordsTotalCost:
-      setIsLoadingGetMaintenanceRecordsTotalCostTable,
+    setIsLoadingReportTable,
   } = useReportTableStore();
-  const {
-    setGetMaintenanceRecordsTotalCostByBikesResponse,
-    setIsLoadingGetMaintenanceRecordsTotalCostByBikes,
-  } = useReportDonutChartByBikesStore();
-  const {
-    setGetMaintenanceRecordsTotalCostByCategoriesResponse,
-    setIsLoadingGetMaintenanceRecordsTotalCostByCategories,
-  } = useReportDonutChartByCategoriesStore();
-  const {
-    setGetMaintenanceRecordsCalenderDateByYearsResponse,
-    setIsLoadingGetMaintenanceRecordsCalenderDateByYears,
-  } = useReportNavigationStore();
 
   const searchParams = useSearchParams();
   const date = searchParams.get("date") || "";
 
   useEffect(() => {
-    Promise.all([
-      // パンくずリストの設定
-      (async () => {
-        setIsLoadingBreadcrumbs(true);
+    setIsLoadingBreadcrumbs(true);
+    setIsLoadingReportNavigation(true);
+    setIsLoadingReportBarChart(true);
+    setIsLoadingReportDonutChart(true);
+    setIsLoadingReportTable(true);
 
+    Promise.all([
+      // パンくずリスト
+      (async () => {
         const bradcrumbItems = [];
 
         if (isDateYyyy(date)) {
@@ -85,14 +84,10 @@ export default function ReportPageWrapper({
         }
 
         setBreadcrumbItems(bradcrumbItems);
-        setIsLoadingBreadcrumbs(false);
       })(),
 
-      // 月別 or 日別の出費（棒グラフ、表）
+      // ReportBarChart, ReportTable用のデータをセット
       (async () => {
-        setIsLoadingGetMaintenanceRecordsTotalCost(true);
-        setIsLoadingGetMaintenanceRecordsTotalCostTable(true);
-
         const groupBy = isDateYyyyMm(date) ? "day" : "month";
 
         const response =
@@ -107,7 +102,6 @@ export default function ReportPageWrapper({
             result: undefined,
             totalCost: 0,
           });
-          setIsLoadingGetMaintenanceRecordsTotalCost(false);
 
           setGetMaintenanceRecordsTotalCostResponseTable({
             status: "error",
@@ -115,7 +109,6 @@ export default function ReportPageWrapper({
             result: undefined,
             totalCost: 0,
           });
-          setIsLoadingGetMaintenanceRecordsTotalCostTable(false);
           return;
         }
 
@@ -133,7 +126,6 @@ export default function ReportPageWrapper({
           groupBy,
           totalCost,
         });
-        setIsLoadingGetMaintenanceRecordsTotalCost(false);
 
         setGetMaintenanceRecordsTotalCostResponseTable({
           status: "success",
@@ -142,12 +134,10 @@ export default function ReportPageWrapper({
           groupBy,
           totalCost,
         });
-        setIsLoadingGetMaintenanceRecordsTotalCostTable(false);
       })(),
 
-      // 所有バイク別の出費
+      // ReportDonutChartByBikes用のデータをセット
       (async () => {
-        setIsLoadingGetMaintenanceRecordsTotalCostByBikes(true);
         const response = await getMaintenanceRecordsTotalCostByBikes({ date });
 
         if (response.success === false) {
@@ -157,7 +147,6 @@ export default function ReportPageWrapper({
             result: undefined,
             totalCost: 0,
           });
-          setIsLoadingGetMaintenanceRecordsTotalCostByBikes(false);
           return;
         }
 
@@ -167,18 +156,17 @@ export default function ReportPageWrapper({
               0,
             )
           : 0;
+
         setGetMaintenanceRecordsTotalCostByBikesResponse({
           status: "success",
           message: response.message,
           result: response.result,
           totalCost,
         });
-        setIsLoadingGetMaintenanceRecordsTotalCostByBikes(false);
       })(),
 
-      // カテゴリー別の出費
+      // ReportDonutChartByCategories用のデータをセット
       (async () => {
-        setIsLoadingGetMaintenanceRecordsTotalCostByCategories(true);
         const response = await getMaintenanceRecordsTotalCostByCategories({
           date,
         });
@@ -190,7 +178,6 @@ export default function ReportPageWrapper({
             result: undefined,
             totalCost: 0,
           });
-          setIsLoadingGetMaintenanceRecordsTotalCostByCategories(false);
           return;
         }
 
@@ -200,18 +187,17 @@ export default function ReportPageWrapper({
               0,
             )
           : 0;
+
         setGetMaintenanceRecordsTotalCostByCategoriesResponse({
           status: "success",
           message: response.message,
           result: response.result,
           totalCost,
         });
-        setIsLoadingGetMaintenanceRecordsTotalCostByCategories(false);
       })(),
 
-      // 記録のある年
+      // ReportNavigation用のデータをセット
       (async () => {
-        setIsLoadingGetMaintenanceRecordsCalenderDateByYears(true);
         const response = await getMaintenanceRecordsCalenderDateByYears();
 
         if (response.success === false) {
@@ -220,7 +206,6 @@ export default function ReportPageWrapper({
             message: response.message,
             result: undefined,
           });
-          setIsLoadingGetMaintenanceRecordsCalenderDateByYears(false);
           return;
         }
 
@@ -229,23 +214,31 @@ export default function ReportPageWrapper({
           message: response.message,
           result: response.result,
         });
-        setIsLoadingGetMaintenanceRecordsCalenderDateByYears(false);
       })(),
-    ]);
+    ]).then(() => {
+      setIsLoadingBreadcrumbs(false);
+      setIsLoadingReportNavigation(false);
+      setIsLoadingReportBarChart(false);
+      setIsLoadingReportDonutChart(false);
+      setIsLoadingReportTable(false);
+    });
   }, [
     date,
     setBreadcrumbItems,
     setIsLoadingBreadcrumbs,
+
     setGetMaintenanceRecordsTotalCostResponse,
-    setIsLoadingGetMaintenanceRecordsTotalCost,
+    setIsLoadingReportBarChart,
+
     setGetMaintenanceRecordsTotalCostResponseTable,
-    setIsLoadingGetMaintenanceRecordsTotalCostTable,
+    setIsLoadingReportTable,
+
     setGetMaintenanceRecordsTotalCostByBikesResponse,
-    setIsLoadingGetMaintenanceRecordsTotalCostByBikes,
     setGetMaintenanceRecordsTotalCostByCategoriesResponse,
-    setIsLoadingGetMaintenanceRecordsTotalCostByCategories,
+    setIsLoadingReportDonutChart,
+
     setGetMaintenanceRecordsCalenderDateByYearsResponse,
-    setIsLoadingGetMaintenanceRecordsCalenderDateByYears,
+    setIsLoadingReportNavigation,
   ]);
 
   return <>{children}</>;
