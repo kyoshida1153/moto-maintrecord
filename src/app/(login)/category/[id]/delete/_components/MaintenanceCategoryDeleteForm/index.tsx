@@ -4,11 +4,7 @@ import { Loading } from "@/components";
 import { useMaintenanceRecordCategoryDeleteFormStore } from "./stores";
 import MaintenanceCategoryDeleteFormForm from "./MaintenanceCategoryDeleteFormForm";
 
-export default function MaintenanceCategoryDeleteForm({
-  maintenanceCategoryId,
-}: {
-  maintenanceCategoryId: string;
-}) {
+export default function MaintenanceCategoryDeleteForm() {
   const { isLoadingMaintenanceRecordCategoryDeleteForm } =
     useMaintenanceRecordCategoryDeleteFormStore();
 
@@ -19,9 +15,7 @@ export default function MaintenanceCategoryDeleteForm({
           <Loading size="36px" />
         </div>
       ) : (
-        <MaintenanceCategoryDeleteFormForm
-          maintenanceCategoryId={maintenanceCategoryId}
-        />
+        <MaintenanceCategoryDeleteFormForm />
       )}
     </>
   );

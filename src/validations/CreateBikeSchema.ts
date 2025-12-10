@@ -1,3 +1,3 @@
 import { BikeSchemaBase } from "./base";
 
-export const CreateBikeSchema = BikeSchemaBase;
+export const CreateBikeSchema = BikeSchemaBase.omit({ id: true });

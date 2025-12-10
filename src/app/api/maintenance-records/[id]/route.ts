@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/lib/auth";
-import { UpdateMaintenanceRecordSchema } from "@/validations/UpdateMaintenanceRecordSchema";
+import {
+  DeleteMaintenanceRecordSchema,
+  UpdateMaintenanceRecordSchema,
+} from "@/validations";
 
 /* ###################################################################### */
 
@@ -35,8 +38,8 @@ export type MaintenanceRecordUniqueSelect = Prisma.MaintenanceRecordGetPayload<{
 }>;
 
 export async function GET(
-  _request: NextRequest,
-  context: RouteContext<"/api/maintenance-records/[id]">,
+  _req: NextRequest,
+  ctx: RouteContext<"/api/maintenance-records/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -47,7 +50,7 @@ export async function GET(
 
   // ここからDB操作
   try {
-    const { id } = await context.params;
+    const { id } = await ctx.params;
 
     const result = await prisma.maintenanceRecord.findFirst({
       select: maintenanceRecordUniqueSelect,
@@ -80,8 +83,8 @@ export async function GET(
 // 編集
 
 export async function PUT(
-  request: NextRequest,
-  context: RouteContext<"/api/maintenance-records/[id]">,
+  req: NextRequest,
+  ctx: RouteContext<"/api/maintenance-records/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -92,6 +95,7 @@ export async function PUT(
 
   // ここからDB操作
   try {
+    const { id } = await ctx.params;
     const {
       bikeId,
       maintenanceCategoryId,
@@ -102,7 +106,7 @@ export async function PUT(
       memo,
       mileage,
       maintenanceRecordImageUrls,
-    } = await request.json();
+    } = await req.json();
 
     const calenderDate = new Date(calenderDateString);
     if (isNaN(calenderDate.getTime())) {
@@ -111,6 +115,7 @@ export async function PUT(
 
     // バリデーションチェック
     const validated = UpdateMaintenanceRecordSchema.safeParse({
+      id,
       bikeId,
       maintenanceCategoryId,
       calenderDate,
@@ -214,10 +219,9 @@ export async function PUT(
       });
     }
 
-    const { id } = await context.params;
     const result = await prisma.maintenanceRecord.update({
       data,
-      where: { id, userId, deletedAt: null },
+      where: { id: validated.data.id, userId, deletedAt: null },
     });
 
     if (result) {
@@ -241,8 +245,8 @@ export async function PUT(
 // 削除（論理削除）
 
 export async function DELETE(
-  _request: NextRequest,
-  context: RouteContext<"/api/maintenance-records/[id]">,
+  _req: NextRequest,
+  ctx: RouteContext<"/api/maintenance-records/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -253,12 +257,22 @@ export async function DELETE(
 
   // ここからDB操作
   try {
-    const { id } = await context.params;
+    const { id } = await ctx.params;
+
+    // バリデーションチェック
+    const validated = DeleteMaintenanceRecordSchema.safeParse({
+      id,
+    });
+
+    if (!validated.success) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
+
     const result = await prisma.maintenanceRecord.update({
       data: {
         deletedAt: new Date(),
       },
-      where: { id, userId, deletedAt: null },
+      where: { id: validated.data.id, userId, deletedAt: null },
     });
 
     if (result) {

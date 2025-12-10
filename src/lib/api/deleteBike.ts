@@ -1,12 +1,17 @@
 "use client";
 
-export async function deleteBike(bikeId: string): Promise<{
+import type * as z from "zod";
+import { DeleteBikeSchema } from "@/validations";
+
+type DeleteBikeId = z.infer<typeof DeleteBikeSchema.shape.id>;
+
+export async function deleteBike(id: DeleteBikeId): Promise<{
   success: boolean;
   message: string;
 }> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/${bikeId}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/bikes/${id}`,
       {
         method: "DELETE",
       },

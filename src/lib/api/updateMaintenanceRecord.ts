@@ -1,14 +1,22 @@
 "use client";
 
 import type * as z from "zod";
-import { UpdateMaintenanceRecordSchema } from "@/validations/UpdateMaintenanceRecordSchema";
+import { UpdateMaintenanceRecordSchema } from "@/validations";
+
+type UpdateMaintenanceRecordId = z.infer<
+  typeof UpdateMaintenanceRecordSchema.shape.id
+>;
+type UpdateMaintenanceRecordOmitId = Omit<
+  z.infer<typeof UpdateMaintenanceRecordSchema>,
+  "id"
+>;
 
 export async function updateMaintenanceRecord({
   id,
   data,
 }: {
-  id: string;
-  data: z.infer<typeof UpdateMaintenanceRecordSchema>;
+  id: UpdateMaintenanceRecordId;
+  data: UpdateMaintenanceRecordOmitId;
 }): Promise<{
   success: boolean;
   message: string;

@@ -10,7 +10,7 @@ import {
   endOfYear,
   parseISO,
 } from "date-fns";
-import { CreateMaintenanceRecordSchema } from "@/validations/CreateMaintenanceRecordSchema";
+import { CreateMaintenanceRecordSchema } from "@/validations";
 
 /* ###################################################################### */
 

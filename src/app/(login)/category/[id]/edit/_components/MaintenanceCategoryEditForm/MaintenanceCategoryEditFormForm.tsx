@@ -22,15 +22,10 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function MaintenanceCategoryEditFormForm({
-  maintenanceCategoryId,
-}: {
-  maintenanceCategoryId: string;
-}) {
+export default function MaintenanceCategoryEditFormForm() {
   // フォームのデフォルト値
   const { getMaintenanceCategoryResponse } =
     useMaintenanceCategoryEditFormStore();
-  const defaultValues = getMaintenanceCategoryResponse.result;
 
   // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
@@ -48,7 +43,8 @@ export default function MaintenanceCategoryEditFormForm({
   } = useForm<z.infer<typeof MaintenanceCategoryEditFormSchema>>({
     resolver: zodResolver(MaintenanceCategoryEditFormSchema),
     defaultValues: {
-      name: defaultValues?.name ?? "",
+      id: getMaintenanceCategoryResponse.result?.id ?? "",
+      name: getMaintenanceCategoryResponse.result?.name ?? "",
     },
     mode: "onChange",
   });
@@ -63,10 +59,10 @@ export default function MaintenanceCategoryEditFormForm({
     });
 
     // ここからAPIでDB操作
-    const maintenanceCategoryResponse = await updateMaintenanceCategory(
-      { name: values.name },
-      maintenanceCategoryId,
-    );
+    const maintenanceCategoryResponse = await updateMaintenanceCategory({
+      id: values.id,
+      data: { name: values.name },
+    });
 
     setSubmitResponse({
       message: maintenanceCategoryResponse.message,
@@ -96,6 +92,18 @@ export default function MaintenanceCategoryEditFormForm({
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-4 md:gap-6">
+            <Controller
+              name="id"
+              control={control}
+              render={({ field }) => (
+                <input
+                  type="hidden"
+                  name={field.name}
+                  ref={field.ref}
+                  value={field.value}
+                />
+              )}
+            />
             <Controller
               name="name"
               control={control}

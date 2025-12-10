@@ -4,6 +4,8 @@ import { ErrorMap } from "./ErrorMap";
 z.setErrorMap(ErrorMap);
 
 export const MaintenanceCategorySchemaBase = z.object({
+  id: z.string().uuid(),
+
   name: z
     .string()
     .min(1)

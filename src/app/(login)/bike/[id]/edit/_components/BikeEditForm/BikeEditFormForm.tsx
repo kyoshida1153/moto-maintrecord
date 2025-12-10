@@ -24,10 +24,9 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function BikeEditFormForm({ bikeId }: { bikeId: string }) {
+export default function BikeEditFormForm() {
   // フォームのデフォルト値
   const { getBikeResponse } = useBikeEditFormStore();
-  const defaultValues = getBikeResponse.result;
 
   // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
@@ -45,10 +44,11 @@ export default function BikeEditFormForm({ bikeId }: { bikeId: string }) {
   } = useForm<z.infer<typeof BikeUpdateFormSchema>>({
     resolver: zodResolver(BikeUpdateFormSchema),
     defaultValues: {
+      id: getBikeResponse.result?.id ?? "",
       imageFile: undefined,
-      name: defaultValues?.name ?? "",
-      mileage: defaultValues?.mileage ?? undefined,
-      memo: defaultValues?.memo ?? undefined,
+      name: getBikeResponse.result?.name ?? "",
+      mileage: getBikeResponse.result?.mileage ?? undefined,
+      memo: getBikeResponse.result?.memo ?? undefined,
     },
     mode: "onChange",
   });
@@ -81,12 +81,12 @@ export default function BikeEditFormForm({ bikeId }: { bikeId: string }) {
       }
     }
 
-    if (isChangedInputFileImage === false) {
-      setSubmitResponse({
-        message: "画像の更新無し。",
-        status: "info",
-      });
-    }
+    // if (isChangedInputFileImage === false) {
+    //   setSubmitResponse({
+    //     message: "画像の更新無し。",
+    //     status: "info",
+    //   });
+    // }
 
     // ここからAPIでDB操作
     const data = {
@@ -110,7 +110,7 @@ export default function BikeEditFormForm({ bikeId }: { bikeId: string }) {
       Object.assign(data, { imageUrl: null });
     }
 
-    const bikeResponse = await updateBike({ id: bikeId, data });
+    const bikeResponse = await updateBike({ id: values.id, data });
 
     setSubmitResponse({
       message: bikeResponse.message,
@@ -131,115 +131,137 @@ export default function BikeEditFormForm({ bikeId }: { bikeId: string }) {
   };
 
   return (
-    <Box
-      component="form"
-      className="mt-6 md:mt-8"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="flex flex-col gap-4 md:gap-6">
-        <Controller
-          name="imageFile"
-          control={control}
-          render={({ field }) => (
-            <InputFileImage
-              multiple={false}
-              label="バイクの写真"
-              defaultValue={
-                defaultValues?.imageUrl
-                  ? [{ imageUrl: defaultValues?.imageUrl }]
-                  : undefined
-              }
-              disabled={isSubmitting || isSubmitSuccessful}
-              field={field}
-              fieldError={errors.imageFile}
+    <>
+      {getBikeResponse.status === "success" ? (
+        <Box
+          component="form"
+          className="mt-6 md:mt-8"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="flex flex-col gap-4 md:gap-6">
+            <Controller
+              name="id"
+              control={control}
+              render={({ field }) => (
+                <input
+                  type="hidden"
+                  name={field.name}
+                  ref={field.ref}
+                  value={field.value}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          name="name"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              required={true}
-              field={field}
-              label="バイクの名前"
-              type="text"
-              disabled={isSubmitting || isSubmitSuccessful}
-              error={!!errors.name}
-              helperText={errors.name?.message}
+            <Controller
+              name="imageFile"
+              control={control}
+              render={({ field }) => (
+                <InputFileImage
+                  multiple={false}
+                  label="バイクの写真"
+                  defaultValue={
+                    getBikeResponse.result?.imageUrl
+                      ? [{ imageUrl: getBikeResponse.result?.imageUrl }]
+                      : undefined
+                  }
+                  disabled={isSubmitting || isSubmitSuccessful}
+                  field={field}
+                  fieldError={errors.imageFile}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          name="mileage"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              field={field}
-              label="毎月の走行距離（km）"
-              type="text"
-              disabled={isSubmitting || isSubmitSuccessful}
-              error={!!errors.mileage}
-              helperText={errors.mileage?.message}
-              width="200px"
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  required={true}
+                  field={field}
+                  label="バイクの名前"
+                  type="text"
+                  disabled={isSubmitting || isSubmitSuccessful}
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          name="memo"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              field={field}
-              label="メモ"
-              multiline={true}
-              type="text"
-              disabled={isSubmitting || isSubmitSuccessful}
-              error={!!errors.memo}
-              helperText={errors.memo?.message}
-              rows={5}
+            <Controller
+              name="mileage"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  field={field}
+                  label="毎月の走行距離（km）"
+                  type="number"
+                  disabled={isSubmitting || isSubmitSuccessful}
+                  error={!!errors.mileage}
+                  helperText={errors.mileage?.message}
+                  width="200px"
+                />
+              )}
             />
-          )}
-        />
+            <Controller
+              name="memo"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  field={field}
+                  label="メモ"
+                  multiline={true}
+                  type="text"
+                  disabled={isSubmitting || isSubmitSuccessful}
+                  error={!!errors.memo}
+                  helperText={errors.memo?.message}
+                  rows={5}
+                />
+              )}
+            />
 
-        {submitResponse.status === "success" ? (
-          <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
-            <CheckCircleIcon />
-            <span className="whitespace-pre-wrap">
-              {submitResponse.message}
-            </span>
-          </p>
-        ) : submitResponse.status === "error" ? (
-          <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
-            <ErrorIcon />
-            <span className="whitespace-pre-wrap">
-              {submitResponse.message}
-            </span>
-          </p>
-        ) : submitResponse.status === "info" ? (
-          <p className="flex items-center gap-1 text-[var(--icon-color-info)]">
-            <InfoIcon />
-            <span className="whitespace-pre-wrap">
-              {submitResponse.message}
-            </span>
-          </p>
-        ) : (
-          ""
-        )}
+            {submitResponse.status === "success" ? (
+              <p className="flex items-center gap-1 text-[var(--icon-color-success)]">
+                <CheckCircleIcon />
+                <span className="whitespace-pre-wrap">
+                  {submitResponse.message}
+                </span>
+              </p>
+            ) : submitResponse.status === "error" ? (
+              <p className="flex items-center gap-1 text-[var(--icon-color-error)]">
+                <ErrorIcon />
+                <span className="whitespace-pre-wrap">
+                  {submitResponse.message}
+                </span>
+              </p>
+            ) : submitResponse.status === "info" ? (
+              <p className="flex items-center gap-1 text-[var(--icon-color-info)]">
+                <InfoIcon />
+                <span className="whitespace-pre-wrap">
+                  {submitResponse.message}
+                </span>
+              </p>
+            ) : (
+              ""
+            )}
 
-        <div className="flex justify-center md:justify-end">
-          <SubmitButton
-            variant="contained"
-            isSubmitting={isSubmitting}
-            isSubmitSuccessful={isSubmitSuccessful}
-            labels={{
-              default: "保存",
-              isSubmitting: "送信中",
-              isSubmitSuccessful: "送信完了",
-            }}
-          />
-        </div>
-      </div>
-    </Box>
+            <div className="flex justify-center md:justify-end">
+              <SubmitButton
+                variant="contained"
+                isSubmitting={isSubmitting}
+                isSubmitSuccessful={isSubmitSuccessful}
+                labels={{
+                  default: "保存",
+                  isSubmitting: "送信中",
+                  isSubmitSuccessful: "送信完了",
+                }}
+              />
+            </div>
+          </div>
+        </Box>
+      ) : (
+        <p>
+          {getBikeResponse.message
+            ? getBikeResponse.message
+            : "読み込みに失敗しました。"}
+        </p>
+      )}
+    </>
   );
 }

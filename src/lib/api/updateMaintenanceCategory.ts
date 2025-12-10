@@ -3,10 +3,21 @@
 import type * as z from "zod";
 import { UpdateMaintenanceCategorySchema } from "@/validations";
 
-export async function updateMaintenanceCategory(
-  data: z.infer<typeof UpdateMaintenanceCategorySchema>,
-  id: string,
-): Promise<{
+type UpdateMaintenanceCategoryId = z.infer<
+  typeof UpdateMaintenanceCategorySchema.shape.id
+>;
+type UpdateMaintenanceCategoryOmitId = Omit<
+  z.infer<typeof UpdateMaintenanceCategorySchema>,
+  "id"
+>;
+
+export async function updateMaintenanceCategory({
+  id,
+  data,
+}: {
+  id: UpdateMaintenanceCategoryId;
+  data: UpdateMaintenanceCategoryOmitId;
+}): Promise<{
   success: boolean;
   message: string;
 }> {

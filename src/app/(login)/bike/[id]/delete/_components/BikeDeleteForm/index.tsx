@@ -4,7 +4,7 @@ import { Loading } from "@/components";
 import { useBikeDeleteFormStore } from "./stores";
 import BikeDeleteFormForm from "./BikeDeleteFormForm";
 
-export default function BikeDeleteForm({ bikeId }: { bikeId: string }) {
+export default function BikeDeleteForm() {
   const { isLoadingBikeDeleteForm } = useBikeDeleteFormStore();
 
   return (
@@ -14,7 +14,7 @@ export default function BikeDeleteForm({ bikeId }: { bikeId: string }) {
           <Loading size="36px" />
         </div>
       ) : (
-        <BikeDeleteFormForm bikeId={bikeId} />
+        <BikeDeleteFormForm />
       )}
     </>
   );

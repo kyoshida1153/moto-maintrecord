@@ -17,7 +17,7 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function BikeDeleteFormForm({ bikeId }: { bikeId: string }) {
+export default function BikeDeleteFormForm() {
   const { getBikeResponse } = useBikeDeleteFormStore();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -30,10 +30,24 @@ export default function BikeDeleteFormForm({ bikeId }: { bikeId: string }) {
 
   // フォームの送信開始～終了
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    setIsSubmitting(true);
     e.preventDefault();
+    setIsSubmitting(true);
 
-    const response = await deleteBike(bikeId);
+    const formData = new FormData(e.currentTarget);
+    const id = formData.get("id");
+
+    if (typeof id !== "string" || id === "") {
+      setSubmitResponse({
+        message: "送信できませんでした。",
+        status: "error",
+      });
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 300);
+      return;
+    }
+
+    const response = await deleteBike(id);
     setIsSubmitting(false);
     setSubmitResponse({
       message: response.message,
@@ -43,7 +57,8 @@ export default function BikeDeleteFormForm({ bikeId }: { bikeId: string }) {
     if (response.success === true) {
       setIsSubmitSuccessful(true);
       setTimeout(() => {
-        router.back();
+        // router.back();
+        router.push("/bike");
       }, 2000);
     }
   };
@@ -98,6 +113,11 @@ export default function BikeDeleteFormForm({ bikeId }: { bikeId: string }) {
                   className="flex justify-center gap-3"
                   onSubmit={handleSubmit}
                 >
+                  <input
+                    type="hidden"
+                    name="id"
+                    value={getBikeResponse.result?.id}
+                  />
                   <LinkButton
                     href="#"
                     variant="outlined"

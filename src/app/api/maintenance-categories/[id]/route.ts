@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/lib/auth";
-import { UpdateMaintenanceCategorySchema } from "@/validations";
+import {
+  UpdateMaintenanceCategorySchema,
+  DeleteMaintenanceCategorySchema,
+} from "@/validations";
 
 /* ###################################################################### */
 
@@ -18,8 +21,8 @@ export type MaintenanceCategoryUniqueSelect = Prisma.BikeGetPayload<{
 }>;
 
 export async function GET(
-  _request: NextRequest,
-  context: RouteContext<"/api/maintenance-categories/[id]">,
+  _req: NextRequest,
+  ctx: RouteContext<"/api/maintenance-categories/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -30,7 +33,7 @@ export async function GET(
 
   // ここからDB操作
   try {
-    const { id } = await context.params;
+    const { id } = await ctx.params;
 
     const result = await prisma.maintenanceCategory.findUnique({
       select: maintenanceCategoryUniqueSelect,
@@ -59,8 +62,8 @@ export async function GET(
 // 編集
 
 export async function PUT(
-  request: NextRequest,
-  context: RouteContext<"/api/maintenance-categories/[id]">,
+  req: NextRequest,
+  ctx: RouteContext<"/api/maintenance-categories/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -71,10 +74,12 @@ export async function PUT(
 
   // ここからDB操作
   try {
-    const { name } = await request.json();
+    const { id } = await ctx.params;
+    const { name } = await req.json();
 
     // バリデーションチェック
     const validated = UpdateMaintenanceCategorySchema.safeParse({
+      id,
       name,
     });
 
@@ -82,12 +87,11 @@ export async function PUT(
       return NextResponse.json({ message: "Bad Request" }, { status: 400 });
     }
 
-    const { id } = await context.params;
     const result = await prisma.maintenanceCategory.update({
       data: {
         name: validated.data.name,
       },
-      where: { id, userId, deletedAt: null },
+      where: { id: validated.data.id, userId, deletedAt: null },
     });
 
     if (result) {
@@ -112,8 +116,8 @@ export async function PUT(
 // 削除（論理削除）
 
 export async function DELETE(
-  _request: NextRequest,
-  context: RouteContext<"/api/maintenance-categories/[id]">,
+  _req: NextRequest,
+  ctx: RouteContext<"/api/maintenance-categories/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -124,12 +128,22 @@ export async function DELETE(
 
   // ここからDB操作
   try {
-    const { id } = await context.params;
+    const { id } = await ctx.params;
+
+    // バリデーションチェック
+    const validated = DeleteMaintenanceCategorySchema.safeParse({
+      id,
+    });
+
+    if (!validated.success) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
+
     const result = await prisma.maintenanceCategory.update({
       data: {
         deletedAt: new Date(),
       },
-      where: { id, userId, deletedAt: null },
+      where: { id: validated.data.id, userId, deletedAt: null },
     });
 
     if (result) {

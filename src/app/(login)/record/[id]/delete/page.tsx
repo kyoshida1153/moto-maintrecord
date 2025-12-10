@@ -23,7 +23,7 @@ export default async function MaintenanceRecordDeletePage({
       </div>
       <Heading level={1}>整備・出費記録の削除</Heading>
       <div className="max-w-xl">
-        <MaintenanceRecordDeleteForm maintenanceRecordId={id} />
+        <MaintenanceRecordDeleteForm />
       </div>
     </MaintenanceRecordDeletePageWrapper>
   );

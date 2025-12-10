@@ -3,12 +3,15 @@
 import type * as z from "zod";
 import { UpdateBikeSchema } from "@/validations";
 
+type UpdateBikeId = z.infer<typeof UpdateBikeSchema.shape.id>;
+type UpdateBikeOmitId = Omit<z.infer<typeof UpdateBikeSchema>, "id">;
+
 export async function updateBike({
   id,
   data,
 }: {
-  id: string;
-  data: z.infer<typeof UpdateBikeSchema>;
+  id: UpdateBikeId;
+  data: UpdateBikeOmitId;
 }): Promise<{
   success: boolean;
   message: string;

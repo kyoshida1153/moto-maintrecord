@@ -4,11 +4,7 @@ import { Loading } from "@/components";
 import MaintenanceCategoryEditFormForm from "./MaintenanceCategoryEditFormForm";
 import { useMaintenanceCategoryEditFormStore } from "./stores";
 
-export default function MaintenanceCategoryEditForm({
-  maintenanceCategoryId,
-}: {
-  maintenanceCategoryId: string;
-}) {
+export default function MaintenanceCategoryEditForm() {
   const { isLoadingMaintenanceCategoryEditForm } =
     useMaintenanceCategoryEditFormStore();
 
@@ -19,9 +15,7 @@ export default function MaintenanceCategoryEditForm({
           <Loading size="36px" />
         </div>
       ) : (
-        <MaintenanceCategoryEditFormForm
-          maintenanceCategoryId={maintenanceCategoryId}
-        />
+        <MaintenanceCategoryEditFormForm />
       )}
     </>
   );

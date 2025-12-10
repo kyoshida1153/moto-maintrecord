@@ -23,7 +23,7 @@ export default async function MaintenanceRecordEditPage({
       </div>
       <Heading level={1}>整備・出費記録の編集</Heading>
       <div className="max-w-lg">
-        <MaintenanceRecordEditForm maintenanceRecordId={id} />
+        <MaintenanceRecordEditForm />
       </div>
     </MaintenanceRecordEditPageWrapper>
   );

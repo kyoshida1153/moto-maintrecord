@@ -3,6 +3,7 @@ import { MaintenanceRecordSchemaBase } from "@/validations/base";
 import { FileImageSchema } from "@/validations";
 
 const {
+  id,
   bikeId,
   maintenanceCategoryId,
   calenderDate,
@@ -14,6 +15,7 @@ const {
 } = MaintenanceRecordSchemaBase.shape;
 
 export const MaintenanceRecordEditFormSchema = z.object({
+  id,
   bikeId,
   maintenanceCategoryId,
   calenderDate,

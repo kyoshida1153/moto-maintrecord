@@ -1,7 +1,7 @@
 "use client";
 
 import type * as z from "zod";
-import { CreateMaintenanceRecordSchema } from "@/validations/CreateMaintenanceRecordSchema";
+import { CreateMaintenanceRecordSchema } from "@/validations";
 
 export async function createMaintenanceRecord(
   data: z.infer<typeof CreateMaintenanceRecordSchema>,

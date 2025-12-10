@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/lib/auth";
-import { UpdateBikeSchema } from "@/validations";
+import { UpdateBikeSchema, DeleteBikeSchema } from "@/validations";
 
 /* ###################################################################### */
 
@@ -21,8 +21,8 @@ export type BikeUniqueSelect = Prisma.BikeGetPayload<{
 }>;
 
 export async function GET(
-  _request: NextRequest,
-  context: RouteContext<"/api/bikes/[id]">,
+  _req: NextRequest,
+  ctx: RouteContext<"/api/bikes/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -33,7 +33,7 @@ export async function GET(
 
   // ここからDB操作
   try {
-    const { id } = await context.params;
+    const { id } = await ctx.params;
 
     const result = await prisma.bike.findUnique({
       select: bikeUniqueSelect,
@@ -62,8 +62,8 @@ export async function GET(
 // 編集
 
 export async function PUT(
-  request: NextRequest,
-  context: RouteContext<"/api/bikes/[id]">,
+  req: NextRequest,
+  ctx: RouteContext<"/api/bikes/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -74,10 +74,12 @@ export async function PUT(
 
   // ここからDB操作
   try {
-    const { name, mileage, memo, imageUrl } = await request.json();
+    const { id } = await ctx.params;
+    const { name, mileage, memo, imageUrl } = await req.json();
 
     // バリデーションチェック
     const validated = UpdateBikeSchema.safeParse({
+      id,
       name,
       mileage,
       memo,
@@ -88,7 +90,6 @@ export async function PUT(
       return NextResponse.json({ message: "Bad Request" }, { status: 400 });
     }
 
-    const { id } = await context.params;
     const result = await prisma.bike.update({
       data: {
         name: validated.data.name,
@@ -96,7 +97,7 @@ export async function PUT(
         memo: validated.data.memo,
         imageUrl: validated.data.imageUrl,
       },
-      where: { id, userId, deletedAt: null },
+      where: { id: validated.data.id, userId, deletedAt: null },
     });
 
     if (result) {
@@ -121,8 +122,8 @@ export async function PUT(
 // 削除（論理削除）
 
 export async function DELETE(
-  _request: NextRequest,
-  context: RouteContext<"/api/bikes/[id]">,
+  _req: NextRequest,
+  ctx: RouteContext<"/api/bikes/[id]">,
 ) {
   // 認証チェック
   const currentUser = await getCurrentUser();
@@ -133,12 +134,22 @@ export async function DELETE(
 
   // ここからDB操作
   try {
-    const { id } = await context.params;
+    const { id } = await ctx.params;
+
+    // バリデーションチェック
+    const validated = DeleteBikeSchema.safeParse({
+      id,
+    });
+
+    if (!validated.success) {
+      return NextResponse.json({ message: "Bad Request" }, { status: 400 });
+    }
+
     const result = await prisma.bike.update({
       data: {
         deletedAt: new Date(),
       },
-      where: { id, userId, deletedAt: null },
+      where: { id: validated.data.id, userId, deletedAt: null },
     });
 
     if (result) {

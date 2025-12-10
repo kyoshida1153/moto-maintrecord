@@ -4,11 +4,7 @@ import { Loading } from "@/components";
 import { useMaintenanceRecordEditFormState } from "./stores";
 import MaintenanceRecordEditFormForm from "./MaintenanceRecordEditFormForm";
 
-export default function MaintenanceRecordEditForm({
-  maintenanceRecordId,
-}: {
-  maintenanceRecordId: string;
-}) {
+export default function MaintenanceRecordEditForm() {
   const { isLoadingMaintenanceRecordEditForm } =
     useMaintenanceRecordEditFormState();
 
@@ -19,9 +15,7 @@ export default function MaintenanceRecordEditForm({
           <Loading size="36px" />
         </div>
       ) : (
-        <MaintenanceRecordEditFormForm
-          maintenanceRecordId={maintenanceRecordId}
-        />
+        <MaintenanceRecordEditFormForm />
       )}
     </>
   );

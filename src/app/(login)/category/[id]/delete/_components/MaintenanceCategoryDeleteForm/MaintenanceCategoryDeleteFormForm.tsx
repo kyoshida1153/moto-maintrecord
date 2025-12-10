@@ -16,11 +16,7 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function MaintenanceCategoryDeleteFormForm({
-  maintenanceCategoryId,
-}: {
-  maintenanceCategoryId: string;
-}) {
+export default function MaintenanceCategoryDeleteFormForm() {
   const { getMaintenanceCategoryResponse } =
     useMaintenanceRecordCategoryDeleteFormStore();
 
@@ -37,7 +33,21 @@ export default function MaintenanceCategoryDeleteFormForm({
     e.preventDefault();
     setIsSubmitting(true);
 
-    const response = await deleteMaintenanceCategory(maintenanceCategoryId);
+    const formData = new FormData(e.currentTarget);
+    const id = formData.get("id");
+
+    if (typeof id !== "string" || id === "") {
+      setSubmitResponse({
+        message: "送信できませんでした。",
+        status: "error",
+      });
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 300);
+      return;
+    }
+
+    const response = await deleteMaintenanceCategory(id);
     setIsSubmitting(false);
     setSubmitResponse({
       message: response.message,
@@ -47,7 +57,8 @@ export default function MaintenanceCategoryDeleteFormForm({
     if (response.success === true) {
       setIsSubmitSuccessful(true);
       setTimeout(() => {
-        router.back();
+        // router.back();
+        router.push("/category");
       }, 2000);
     }
   };
@@ -89,6 +100,11 @@ export default function MaintenanceCategoryDeleteFormForm({
                   className="flex justify-center gap-3"
                   onSubmit={handleSubmit}
                 >
+                  <input
+                    type="hidden"
+                    name="id"
+                    value={getMaintenanceCategoryResponse.result?.id}
+                  />
                   <LinkButton
                     href="#"
                     variant="outlined"

@@ -4,6 +4,8 @@ import { ErrorMap } from "./ErrorMap";
 z.setErrorMap(ErrorMap);
 
 export const MaintenanceRecordSchemaBase = z.object({
+  id: z.string().uuid(),
+
   bikeId: z.preprocess((value) => {
     if (value === "") return null;
     return value;

@@ -31,11 +31,7 @@ type SubmitResponse = {
   message: string;
 };
 
-export default function MaintenanceRecordEditFormForm({
-  maintenanceRecordId,
-}: {
-  maintenanceRecordId: string;
-}) {
+export default function MaintenanceRecordEditFormForm() {
   const {
     getBikesResponse,
     getMaintenanceCategoriesResponse,
@@ -62,9 +58,6 @@ export default function MaintenanceRecordEditFormForm({
         })
       : [];
 
-  // フォームのデフォルト値
-  const defaultValues = getMaintenanceRecordResponse.result;
-
   // フォームの送信開始～終了で使うもの
   const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
     status: undefined,
@@ -81,16 +74,18 @@ export default function MaintenanceRecordEditFormForm({
   } = useForm<z.infer<typeof MaintenanceRecordEditFormSchema>>({
     resolver: zodResolver(MaintenanceRecordEditFormSchema),
     defaultValues: {
-      bikeId: defaultValues?.bike?.id ?? "",
-      maintenanceCategoryId: defaultValues?.maintenanceCategory?.id ?? "",
-      calenderDate: defaultValues?.calenderDate
-        ? new Date(defaultValues.calenderDate)
+      id: getMaintenanceRecordResponse.result?.id ?? "",
+      bikeId: getMaintenanceRecordResponse.result?.bike?.id ?? "",
+      maintenanceCategoryId:
+        getMaintenanceRecordResponse.result?.maintenanceCategory?.id ?? "",
+      calenderDate: getMaintenanceRecordResponse.result?.calenderDate
+        ? new Date(getMaintenanceRecordResponse.result.calenderDate)
         : undefined,
-      isDone: defaultValues?.isDone ?? false,
-      title: defaultValues?.title ?? "",
-      cost: defaultValues?.cost ?? undefined,
-      memo: defaultValues?.memo ?? undefined,
-      mileage: defaultValues?.mileage ?? undefined,
+      isDone: getMaintenanceRecordResponse.result?.isDone ?? false,
+      title: getMaintenanceRecordResponse.result?.title ?? "",
+      cost: getMaintenanceRecordResponse.result?.cost ?? undefined,
+      memo: getMaintenanceRecordResponse.result?.memo ?? undefined,
+      mileage: getMaintenanceRecordResponse.result?.mileage ?? undefined,
       imageFiles: undefined,
     },
     mode: "onChange",
@@ -124,12 +119,12 @@ export default function MaintenanceRecordEditFormForm({
       }
     }
 
-    if (isChangedInputFileImage === false) {
-      setSubmitResponse({
-        message: "画像の更新無し。",
-        status: "info",
-      });
-    }
+    // if (isChangedInputFileImage === false) {
+    //   setSubmitResponse({
+    //     message: "画像の更新無し。",
+    //     status: "info",
+    //   });
+    // }
 
     // ここからAPIでDB操作
     const data = {
@@ -161,7 +156,7 @@ export default function MaintenanceRecordEditFormForm({
     }
 
     const updateMaintenanceRecordResponse = await updateMaintenanceRecord({
-      id: maintenanceRecordId,
+      id: values.id,
       data,
     });
 
@@ -193,6 +188,18 @@ export default function MaintenanceRecordEditFormForm({
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-4 md:gap-6">
+            <Controller
+              name="id"
+              control={control}
+              render={({ field }) => (
+                <input
+                  type="hidden"
+                  name={field.name}
+                  ref={field.ref}
+                  value={field.value}
+                />
+              )}
+            />
             <div className="relative">
               <Controller
                 name="calenderDate"
@@ -349,8 +356,9 @@ export default function MaintenanceRecordEditFormForm({
               render={({ field }) => (
                 <InputFileImage
                   defaultValue={
-                    defaultValues?.maintenanceRecordImages
-                      ? defaultValues.maintenanceRecordImages
+                    getMaintenanceRecordResponse.result?.maintenanceRecordImages
+                      ? getMaintenanceRecordResponse.result
+                          .maintenanceRecordImages
                       : undefined
                   }
                   disabled={isSubmitting || isSubmitSuccessful}

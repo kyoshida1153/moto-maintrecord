@@ -4,11 +4,7 @@ import { Loading } from "@/components";
 import MaintenanceRecordDeleteFormForm from "./MaintenanceRecordDeleteFormForm";
 import { useMaintenanceRecordDeleteFormStore } from "./stores";
 
-export default function MaintenanceRecordDeleteForm({
-  maintenanceRecordId,
-}: {
-  maintenanceRecordId: string;
-}) {
+export default function MaintenanceRecordDeleteForm() {
   const { isLoadingMaintenanceRecordDeleteForm } =
     useMaintenanceRecordDeleteFormStore();
 
@@ -19,9 +15,7 @@ export default function MaintenanceRecordDeleteForm({
           <Loading size="36px" />
         </div>
       ) : (
-        <MaintenanceRecordDeleteFormForm
-          maintenanceRecordId={maintenanceRecordId}
-        />
+        <MaintenanceRecordDeleteFormForm />
       )}
     </>
   );
