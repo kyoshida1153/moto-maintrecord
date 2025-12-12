@@ -1,65 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
 import { Box } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import WarningIcon from "@mui/icons-material/Warning";
 
 import { LinkButton, Loading, SubmitButton } from "@/components";
-import { deleteUser } from "@/lib/api";
 import { useUserDeleteFormStore } from "./stores";
-
-type SubmitResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-};
+import { useUserDeleteForm } from "./hooks";
 
 export default function UserDeleteForm() {
+  const { handleSubmit, isSubmitting, isSubmitSuccessful, submitResponse } =
+    useUserDeleteForm();
   const { getUserResponse, isLoadingUserDeleteForm } = useUserDeleteFormStore();
 
-  // フォームの送信開始～終了で使うもの
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
-  const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
-    status: undefined,
-    message: "",
-  });
   const router = useRouter();
-
-  // フォームの送信開始～終了
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitResponse({
-      status: undefined,
-      message: "",
-    });
-
-    try {
-      const deleteUserResponse = await deleteUser();
-      setIsSubmitting(false);
-      setSubmitResponse({
-        message: deleteUserResponse.message,
-        status: deleteUserResponse.success === true ? "success" : "error",
-      });
-
-      if (deleteUserResponse.success === true) {
-        setIsSubmitSuccessful(true);
-        setTimeout(() => {
-          signOut({ callbackUrl: "/" });
-        }, 2000);
-      }
-    } catch {
-      setIsSubmitting(false);
-      setSubmitResponse({
-        message: "変更に失敗しました。",
-        status: "error",
-      });
-    }
-  };
 
   return (
     <>

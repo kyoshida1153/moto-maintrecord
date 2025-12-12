@@ -1,6 +1,5 @@
 "use client";
 
-import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Image from "next/image";
@@ -8,60 +7,16 @@ import { Box } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import { deleteBike } from "@/lib/api";
 import { useBikeDeleteFormStore } from "./stores";
 import { LinkButton, SubmitButton } from "@/components";
-
-type SubmitResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-};
+import { useBikeDeleteForm } from "./hooks";
 
 export default function BikeDeleteFormForm() {
+  const { handleSubmit, isSubmitting, isSubmitSuccessful, submitResponse } =
+    useBikeDeleteForm();
   const { getBikeResponse } = useBikeDeleteFormStore();
 
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>(false);
-  const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
-    status: undefined,
-    message: "",
-  });
   const router = useRouter();
-
-  // フォームの送信開始～終了
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    const formData = new FormData(e.currentTarget);
-    const id = formData.get("id");
-
-    if (typeof id !== "string" || id === "") {
-      setSubmitResponse({
-        message: "送信できませんでした。",
-        status: "error",
-      });
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 300);
-      return;
-    }
-
-    const response = await deleteBike(id);
-    setIsSubmitting(false);
-    setSubmitResponse({
-      message: response.message,
-      status: response.success === true ? "success" : "error",
-    });
-
-    if (response.success === true) {
-      setIsSubmitSuccessful(true);
-      setTimeout(() => {
-        // router.back();
-        router.push("/bike");
-      }, 2000);
-    }
-  };
 
   return (
     <>

@@ -1,74 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
+import { Controller } from "react-hook-form";
 import { TextField, SubmitButton } from "@/components";
-import { createMaintenanceCategory } from "@/lib/api";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { MaintenanceCategoryCreateFormSchema } from "./validations";
-import type * as z from "zod";
-
-type SubmitResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-};
+import { useMaintenanceCategoryCreateForm } from "./hooks";
 
 export default function MaintenanceCategoryCreateForm() {
-  const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
-    status: undefined,
-    message: "",
-  });
-  const router = useRouter();
-
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isSubmitSuccessful, errors },
-    reset,
-  } = useForm<z.infer<typeof MaintenanceCategoryCreateFormSchema>>({
-    resolver: zodResolver(MaintenanceCategoryCreateFormSchema),
-    defaultValues: {
-      name: "",
-    },
-    mode: "onChange",
-  });
-
-  const onSubmit = async (
-    values: z.infer<typeof MaintenanceCategoryCreateFormSchema>,
-  ) => {
-    setSubmitResponse({
-      status: undefined,
-      message: "",
-    });
-
-    // ここからAPIでDB操作
-    const response = await createMaintenanceCategory({
-      name: values.name,
-    });
-
-    setSubmitResponse({
-      message: response.message,
-      status: response.success === true ? "success" : "error",
-    });
-
-    if (response.success === true) {
-      setTimeout(() => {
-        router.back();
-      }, 2000);
-      return;
-    } else {
-      setTimeout(() => {
-        reset(undefined, { keepValues: true });
-      }, 300);
-      return;
-    }
-  };
+    isSubmitting,
+    isSubmitSuccessful,
+    errors,
+    submitResponse,
+    onSubmit,
+  } = useMaintenanceCategoryCreateForm();
 
   return (
     <Box

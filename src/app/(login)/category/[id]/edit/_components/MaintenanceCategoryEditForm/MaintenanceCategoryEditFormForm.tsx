@@ -1,87 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 
+import { Controller } from "react-hook-form";
 import { TextField, SubmitButton } from "@/components";
 import { useMaintenanceCategoryEditFormStore } from "./stores";
-import { updateMaintenanceCategory } from "@/lib/api";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { MaintenanceCategoryEditFormSchema } from "./validations";
-import type * as z from "zod";
-
-type SubmitResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-};
+import { useMaintenanceCategoryCreateForm } from "./hooks";
 
 export default function MaintenanceCategoryEditFormForm() {
-  // フォームのデフォルト値
-  const { getMaintenanceCategoryResponse } =
-    useMaintenanceCategoryEditFormStore();
-
-  // フォームの送信開始～終了で使うもの
-  const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
-    status: undefined,
-    message: "",
-  });
-
-  const router = useRouter();
-
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isSubmitSuccessful, errors },
-    reset,
-  } = useForm<z.infer<typeof MaintenanceCategoryEditFormSchema>>({
-    resolver: zodResolver(MaintenanceCategoryEditFormSchema),
-    defaultValues: {
-      id: getMaintenanceCategoryResponse.result?.id ?? "",
-      name: getMaintenanceCategoryResponse.result?.name ?? "",
-    },
-    mode: "onChange",
-  });
+    isSubmitting,
+    isSubmitSuccessful,
+    errors,
+    submitResponse,
+    onSubmit,
+  } = useMaintenanceCategoryCreateForm();
 
-  // フォームの送信開始～終了
-  const onSubmit = async (
-    values: z.infer<typeof MaintenanceCategoryEditFormSchema>,
-  ) => {
-    setSubmitResponse({
-      status: undefined,
-      message: "",
-    });
-
-    // ここからAPIでDB操作
-    const maintenanceCategoryResponse = await updateMaintenanceCategory({
-      id: values.id,
-      data: { name: values.name },
-    });
-
-    setSubmitResponse({
-      message: maintenanceCategoryResponse.message,
-      status:
-        maintenanceCategoryResponse.success === true ? "success" : "error",
-    });
-
-    if (maintenanceCategoryResponse.success === true) {
-      setTimeout(() => {
-        router.back();
-      }, 2000);
-      return;
-    } else {
-      setTimeout(() => {
-        reset(undefined, { keepValues: true });
-      }, 300);
-      return;
-    }
-  };
+  const { getMaintenanceCategoryResponse } =
+    useMaintenanceCategoryEditFormStore();
 
   return (
     <>

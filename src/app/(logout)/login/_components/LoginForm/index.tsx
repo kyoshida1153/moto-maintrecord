@@ -1,98 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
+import { Controller } from "react-hook-form";
 import { TextField, SubmitButton, LoginButtonOAuth } from "@/components";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { LoginFormSchema } from "./validations";
-import type * as z from "zod";
-
-type SubmitResponse = {
-  status: "success" | "error" | undefined;
-  message: string;
-};
+import { useLoginForm } from "./hooks";
 
 export default function LoginForm() {
-  // フォームの送信開始～終了で使うもの
-  const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
-    status: undefined,
-    message: "",
-  });
-  const router = useRouter();
-
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isSubmitSuccessful, errors },
-    reset,
-  } = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-    mode: "onChange",
-  });
-
-  // ログイン
-  const login = async (values: z.infer<typeof LoginFormSchema>) => {
-    const signinResponse = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
-
-    if (signinResponse?.ok) {
-      return {
-        success: true,
-        message: "ログインに成功しました。",
-      };
-    } else {
-      return {
-        success: false,
-        message: "ログインに失敗しました。",
-      };
-    }
-  };
-
-  // フォームの送信開始～終了
-  const onSubmit = async (values: z.infer<typeof LoginFormSchema>) => {
-    setSubmitResponse({
-      status: undefined,
-      message: "",
-    });
-
-    const data = {
-      email: values.email,
-      password: values.password,
-    };
-
-    const loginResponse = await login(data);
-    setSubmitResponse({
-      message: loginResponse.message,
-      status: loginResponse.success === true ? "success" : "error",
-    });
-
-    if (loginResponse.success === true) {
-      setTimeout(() => {
-        router.push("/top");
-      }, 1500);
-    } else {
-      setTimeout(() => {
-        reset(undefined, { keepValues: true });
-      }, 300);
-      return false;
-    }
-  };
+    isSubmitting,
+    isSubmitSuccessful,
+    errors,
+    submitResponse,
+    onSubmit,
+  } = useLoginForm();
 
   return (
     <div className="w-full rounded bg-white p-6 shadow-md shadow-gray-300/50 md:p-8">

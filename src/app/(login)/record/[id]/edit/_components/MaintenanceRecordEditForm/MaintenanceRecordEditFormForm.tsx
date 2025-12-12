@@ -1,8 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -16,29 +13,28 @@ import {
   InputFileImage,
   Checkbox,
 } from "@/components";
-import { useInputFileImageStore } from "@/components/InputFileImage/stores";
-import { uploadMaintenanceRecordImageFiles } from "@/lib";
-import { updateMaintenanceRecord } from "@/lib/api";
+import { Controller } from "react-hook-form";
 import { useMaintenanceRecordEditFormState } from "./stores";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { MaintenanceRecordEditFormSchema } from "./validations";
-import type * as z from "zod";
-
-type SubmitResponse = {
-  status: "success" | "error" | "info" | undefined;
-  message: string;
-};
+import { useMaintenanceRecordEditForm } from "./hooks";
 
 export default function MaintenanceRecordEditFormForm() {
+  const {
+    control,
+    handleSubmit,
+    isSubmitting,
+    isSubmitSuccessful,
+    errors,
+    onSubmit,
+    submitResponse,
+  } = useMaintenanceRecordEditForm();
+
   const {
     getBikesResponse,
     getMaintenanceCategoriesResponse,
     getMaintenanceRecordResponse,
   } = useMaintenanceRecordEditFormState();
 
-  // セレクトボックスの項目
+  // セレクトボックスの項目: 所有バイク
   const selectBoxItemListBike = getBikesResponse.result
     ? getBikesResponse.result.map((item) => {
         return {
@@ -48,6 +44,7 @@ export default function MaintenanceRecordEditFormForm() {
       })
     : [];
 
+  // セレクトボックスの項目: カテゴリー
   const selectBoxItemListMaintenanceCategory =
     getMaintenanceCategoriesResponse.result
       ? getMaintenanceCategoriesResponse.result.map((item) => {
@@ -57,127 +54,6 @@ export default function MaintenanceRecordEditFormForm() {
           };
         })
       : [];
-
-  // フォームの送信開始～終了で使うもの
-  const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
-    status: undefined,
-    message: "",
-  });
-  const { isChangedInputFileImage } = useInputFileImageStore();
-  const router = useRouter();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting, isSubmitSuccessful, errors },
-    reset,
-  } = useForm<z.infer<typeof MaintenanceRecordEditFormSchema>>({
-    resolver: zodResolver(MaintenanceRecordEditFormSchema),
-    defaultValues: {
-      id: getMaintenanceRecordResponse.result?.id ?? "",
-      bikeId: getMaintenanceRecordResponse.result?.bike?.id ?? "",
-      maintenanceCategoryId:
-        getMaintenanceRecordResponse.result?.maintenanceCategory?.id ?? "",
-      calenderDate: getMaintenanceRecordResponse.result?.calenderDate
-        ? new Date(getMaintenanceRecordResponse.result.calenderDate)
-        : undefined,
-      isDone: getMaintenanceRecordResponse.result?.isDone ?? false,
-      title: getMaintenanceRecordResponse.result?.title ?? "",
-      cost: getMaintenanceRecordResponse.result?.cost ?? undefined,
-      memo: getMaintenanceRecordResponse.result?.memo ?? undefined,
-      mileage: getMaintenanceRecordResponse.result?.mileage ?? undefined,
-      imageFiles: undefined,
-    },
-    mode: "onChange",
-  });
-
-  // フォームの送信開始～終了
-  const onSubmit = async (
-    values: z.infer<typeof MaintenanceRecordEditFormSchema>,
-  ) => {
-    setSubmitResponse({
-      status: undefined,
-      message: "",
-    });
-
-    // ここから画像アップロード
-    const uploadResponse =
-      values.imageFiles && values.imageFiles.length > 0
-        ? await uploadMaintenanceRecordImageFiles(values.imageFiles)
-        : undefined;
-
-    if (uploadResponse) {
-      setSubmitResponse({
-        message: uploadResponse.message,
-        status: uploadResponse.success === true ? "success" : "error",
-      });
-      if (uploadResponse?.success === false) {
-        setTimeout(() => {
-          reset(undefined, { keepValues: true });
-        }, 300);
-        return;
-      }
-    }
-
-    // if (isChangedInputFileImage === false) {
-    //   setSubmitResponse({
-    //     message: "画像の更新無し。",
-    //     status: "info",
-    //   });
-    // }
-
-    // ここからAPIでDB操作
-    const data = {
-      bikeId: values.bikeId,
-      maintenanceCategoryId: values.maintenanceCategoryId,
-      calenderDate: values.calenderDate,
-      isDone: values.isDone,
-      title: values.title,
-      cost: values.cost,
-      memo: values.memo,
-      mileage: values.mileage,
-    };
-
-    if (
-      // 別の画像に変更した場合
-      uploadResponse &&
-      uploadResponse.success === true
-    ) {
-      Object.assign(data, {
-        maintenanceRecordImageUrls: uploadResponse.result,
-      });
-    } else if (
-      // 画像を無しにした場合
-      isChangedInputFileImage === true &&
-      Array.isArray(values.imageFiles) &&
-      values.imageFiles.length === 0
-    ) {
-      Object.assign(data, { maintenanceRecordImageUrls: null });
-    }
-
-    const updateMaintenanceRecordResponse = await updateMaintenanceRecord({
-      id: values.id,
-      data,
-    });
-
-    setSubmitResponse({
-      message: updateMaintenanceRecordResponse.message,
-      status:
-        updateMaintenanceRecordResponse.success === true ? "success" : "error",
-    });
-
-    if (updateMaintenanceRecordResponse.success === true) {
-      setTimeout(() => {
-        router.back();
-      }, 2000);
-      return;
-    } else {
-      setTimeout(() => {
-        reset(undefined, { keepValues: true });
-      }, 300);
-      return;
-    }
-  };
 
   return (
     <>

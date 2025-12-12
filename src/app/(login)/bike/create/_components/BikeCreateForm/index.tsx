@@ -1,100 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
+import { Controller } from "react-hook-form";
 import { TextField, SubmitButton, InputFileImage } from "@/components";
-import { uploadBikeImageFile } from "@/lib";
-import { createBike } from "@/lib/api";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { BikeCreateFormSchema } from "./validations";
-import type * as z from "zod";
-
-type SubmitResponse = {
-  status: "success" | "error" | "info" | undefined;
-  message: string;
-};
+import { useBikeCreateForm } from "./hooks";
 
 export default function BikeCreateForm() {
-  // フォームの送信開始～終了で使うもの
-  const [submitResponse, setSubmitResponse] = useState<SubmitResponse>({
-    status: undefined,
-    message: "",
-  });
-  const router = useRouter();
-
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isSubmitSuccessful, errors },
-    reset,
-  } = useForm<z.infer<typeof BikeCreateFormSchema>>({
-    resolver: zodResolver(BikeCreateFormSchema),
-    defaultValues: {
-      imageFile: undefined,
-      name: "",
-      mileage: undefined,
-      memo: "",
-    },
-    mode: "onChange",
-  });
-
-  // フォームの送信開始～終了
-  const onSubmit = async (values: z.infer<typeof BikeCreateFormSchema>) => {
-    setSubmitResponse({
-      status: undefined,
-      message: "",
-    });
-
-    // ここから画像アップロード
-    const uploadResponse =
-      values.imageFile && values.imageFile.length > 0
-        ? await uploadBikeImageFile(values.imageFile)
-        : undefined;
-
-    if (uploadResponse) {
-      setSubmitResponse({
-        message: uploadResponse.message,
-        status: uploadResponse.success === true ? "success" : "error",
-      });
-      if (uploadResponse?.success === false) {
-        setTimeout(() => {
-          reset(undefined, { keepValues: true });
-        }, 300);
-        return;
-      }
-    }
-
-    // ここからAPIでDB操作
-    const bikeResponse = await createBike({
-      name: values.name,
-      mileage: values.mileage,
-      memo: values.memo,
-      imageUrl: uploadResponse?.result ?? undefined,
-    });
-
-    setSubmitResponse({
-      message: bikeResponse.message,
-      status: bikeResponse.success === true ? "success" : "error",
-    });
-
-    if (bikeResponse.success === true) {
-      setTimeout(() => {
-        router.back();
-      }, 2000);
-      return;
-    } else {
-      setTimeout(() => {
-        reset(undefined, { keepValues: true });
-      }, 300);
-      return;
-    }
-  };
+    isSubmitting,
+    isSubmitSuccessful,
+    errors,
+    submitResponse,
+    onSubmit,
+  } = useBikeCreateForm();
 
   return (
     <Box
