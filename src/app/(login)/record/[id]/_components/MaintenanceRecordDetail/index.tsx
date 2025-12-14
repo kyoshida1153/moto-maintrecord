@@ -4,10 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
+import { tv } from "tailwind-variants";
 
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 import CheckIcon from "@mui/icons-material/Check";
-// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
+// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { Loading } from "@/components";
@@ -18,6 +21,18 @@ import { useMaintenanceRecordDetailStore } from "./stores";
 export default function MaintenanceRecordDetail() {
   const { getMaintenanceRecordResponse, isLoadingGetMaintenanceRecordDetail } =
     useMaintenanceRecordDetailStore();
+
+  // 実施済
+  const tvIsDone = tv({
+    base: "flex items-center gap-0.5 rounded px-0 py-0.5 text-sm whitespace-nowrap",
+    variants: {
+      isDone: {
+        initial: "",
+        true: "text-[var(--icon-color-success)]",
+        false: "text-[#808080]",
+      },
+    },
+  });
 
   return (
     <>
@@ -32,7 +47,7 @@ export default function MaintenanceRecordDetail() {
               <MaintenanceRecordDetailHeading>
                 日付
               </MaintenanceRecordDetailHeading>
-              <p>
+              <p className="flex gap-2">
                 {getMaintenanceRecordResponse.result?.calenderDate
                   ? format(
                       getMaintenanceRecordResponse.result.calenderDate,
@@ -41,12 +56,34 @@ export default function MaintenanceRecordDetail() {
                     )
                   : "-"}
 
-                {getMaintenanceRecordResponse.result?.isDone && (
-                  <span className="ml-2 inline-block -translate-y-0.5 rounded-full bg-[var(--icon-color-success)] px-2 py-0.5 text-xs text-white">
-                    <CheckIcon sx={{ color: "white", fontSize: "13px" }} />
-                    実施済
-                  </span>
-                )}
+                <div
+                  className={tvIsDone({
+                    isDone: getMaintenanceRecordResponse.result?.isDone,
+                  })}
+                >
+                  {getMaintenanceRecordResponse.result?.isDone ? (
+                    <>
+                      <CheckCircleIcon
+                        sx={{
+                          color: "var(--icon-color-success)",
+                          fontSize: "18px",
+                        }}
+                      />
+                      <span className="mb-[2px] leading-none">実施済</span>
+                    </>
+                  ) : (
+                    <>
+                      <ErrorIcon
+                        sx={{
+                          color: "#808080",
+                          fontSize: "18px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                      <span className="mb-[2px] leading-none">未実施</span>
+                    </>
+                  )}
+                </div>
               </p>
             </MaintenanceRecordDetailSection>
 
