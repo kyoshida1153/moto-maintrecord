@@ -37,6 +37,12 @@ export default function SidebarMainMenu() {
       href: "/report",
       iconName: "BarChartIcon",
     },
+    {
+      id: 6,
+      text: "アカウント管理",
+      href: "/account",
+      iconName: "AccountCircleIcon",
+    },
   ];
 
   const tvLink = tv({

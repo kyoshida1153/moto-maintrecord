@@ -1,3 +1,4 @@
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
@@ -13,6 +14,8 @@ export default function SidebarIcon({
   className?: string;
 }) {
   switch (iconName) {
+    case "AccountCircleIcon":
+      return <AccountCircleIcon className={className || ""} />;
     case "CalendarMonthIcon":
       return <CalendarMonthIcon className={className || ""} />;
     case "NoteAltIcon":
