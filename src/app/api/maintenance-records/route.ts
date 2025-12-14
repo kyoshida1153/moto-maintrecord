@@ -21,6 +21,7 @@ const maintenanceRecordSelect = {
   title: true,
   cost: true,
   calenderDate: true,
+  isDone: true,
   bike: {
     select: { name: true, imageUrl: true },
   },

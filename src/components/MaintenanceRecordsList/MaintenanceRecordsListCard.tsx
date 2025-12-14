@@ -3,9 +3,12 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { tv } from "tailwind-variants";
 
 import { Menu, MenuItem, IconButton } from "@mui/material";
 
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import BuildIcon from "@mui/icons-material/Build";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -20,6 +23,7 @@ export default function MaintenanceRecordsListCard({
   bikeName,
   bikeImageUrl,
   cost,
+  isDone,
 }: {
   id: string;
   title: string;
@@ -27,7 +31,9 @@ export default function MaintenanceRecordsListCard({
   bikeName: string;
   bikeImageUrl: string;
   cost: number;
+  isDone: boolean;
 }) {
+  // メニュー
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -37,8 +43,47 @@ export default function MaintenanceRecordsListCard({
     setAnchorEl(null);
   };
 
+  // 実施済
+  const tvIsDone = tv({
+    base: "flex items-center gap-0.5 rounded px-0 py-0.5 text-sm whitespace-nowrap",
+    variants: {
+      isDone: {
+        initial: "",
+        true: "text-[var(--icon-color-success)]",
+        false: "text-[#808080]",
+      },
+    },
+  });
+
   return (
-    <div className="flex w-full min-w-fit flex-row flex-wrap items-center gap-2 rounded border border-solid border-[var(--border-color-gray)] bg-white px-3 py-2 text-[#333] md:flex-nowrap md:gap-4 md:px-4 md:py-3">
+    <div className="relative mt-2 w-full min-w-fit rounded border border-solid border-[var(--border-color-gray)] bg-white px-3 py-2 text-[#333] md:flex-nowrap md:gap-4 md:px-4 md:py-3">
+      <div className="absolute top-0 left-1 -translate-y-3">
+        <div className={tvIsDone({ isDone })}>
+          {isDone ? (
+            <>
+              <CheckCircleIcon
+                sx={{
+                  color: "var(--icon-color-success)",
+                  fontSize: "18px",
+                }}
+              />
+              <span className="mb-[2px] leading-none">実施済</span>
+            </>
+          ) : (
+            <>
+              <ErrorIcon
+                sx={{
+                  color: "#808080",
+                  fontSize: "18px",
+                  borderRadius: "50%",
+                }}
+              />
+              <span className="mb-[2px] leading-none">未実施</span>
+            </>
+          )}
+        </div>
+      </div>
+
       <div className="flex w-full flex-row items-center gap-2 md:gap-4">
         <div className="flex flex-col gap-1">
           <h3 className="w-fit text-lg md:text-xl">
@@ -62,7 +107,8 @@ export default function MaintenanceRecordsListCard({
               </span>
             </Link>
           </h3>
-          <p className="mr-auto hidden w-full flex-row flex-nowrap items-center justify-end gap-2 text-sm text-[#808080] md:flex md:w-auto md:text-[15px]">
+
+          <p className="mr-auto hidden w-full flex-row flex-nowrap items-center justify-end gap-2 text-sm leading-none text-[#808080] md:flex md:w-auto md:text-[15px]">
             <span className="flex items-center gap-0.5 whitespace-nowrap">
               <TwoWheelerIcon sx={{ fontSize: "20px", mt: "1px" }} />
               {bikeName || "未選択"}

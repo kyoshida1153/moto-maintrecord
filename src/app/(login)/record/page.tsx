@@ -28,7 +28,7 @@ export default function MaintenanceRecordsPage() {
             startIcon={<AddIcon />}
             variant="contained"
           >
-            整備・出費記録の登録
+            新しい整備・出費記録
           </LinkButton>
         </div>
         <MaintenanceRecordsList />

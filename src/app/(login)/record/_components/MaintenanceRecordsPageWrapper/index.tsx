@@ -74,7 +74,7 @@ export default function MaintenanceRecordsPageWrapper({
           href: "/record",
         });
         breadcrumbItems.push({
-          text: `Page ${paramPage}/${count}`,
+          text: `${paramPage}/${count} ページ`,
         });
       } else {
         breadcrumbItems.push({

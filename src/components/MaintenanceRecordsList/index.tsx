@@ -10,11 +10,11 @@ import MaintenanceRecordsListPagination from "./MaintenanceRecordsListPagination
 import { useMaintenanceRecordsListStore } from "./stores";
 import type { MaintenanceRecordSelect } from "@/app/api/maintenance-records/route";
 
-type Props = {
+export function MaintenanceRecordsList({
+  pagination = true,
+}: {
   pagination?: boolean;
-};
-
-export function MaintenanceRecordsList({ pagination = true }: Props) {
+}) {
   const { getMaintenanceRecordsResponse, isLoadingGetMaintenanceRecords } =
     useMaintenanceRecordsListStore();
   const [maintenanceRecordGroups, setMaintenanceRecordGroups] =
@@ -45,11 +45,15 @@ export function MaintenanceRecordsList({ pagination = true }: Props) {
               {Object.entries(maintenanceRecordGroups).map(
                 ([date, records]) => (
                   <section key={date}>
-                    <div className="my-1 flex justify-between md:my-2">
-                      <h3 className="text-lg font-[500] md:text-xl">{date}</h3>
-                      <p className="_font-[500] mr-[3.9em] md:mr-[4.6em]">
-                        <span className="text-sm md:text-base">合計: </span>
-                        <span className="font-alphanumeric text-lg md:text-xl">
+                    <div className="my-1 flex items-end justify-between md:my-2">
+                      <h3 className="mb-[3px] text-lg leading-none font-[500] whitespace-nowrap md:text-xl">
+                        {date}
+                      </h3>
+                      <p className="mr-[3.9em] whitespace-nowrap md:mr-[4.6em]">
+                        <span className="text-sm leading-none md:text-base">
+                          合計:{" "}
+                        </span>
+                        <span className="font-alphanumeric text-lg leading-none md:text-xl">
                           {(records as MaintenanceRecordSelect[])
                             .reduce((sum, record) => sum + record.cost, 0)
                             .toLocaleString()}
@@ -67,6 +71,7 @@ export function MaintenanceRecordsList({ pagination = true }: Props) {
                           bikeName={record.bike?.name ?? ""}
                           cost={record.cost}
                           bikeImageUrl={record.bike?.imageUrl ?? ""}
+                          isDone={record?.isDone}
                         />
                       ))}
                     </div>
