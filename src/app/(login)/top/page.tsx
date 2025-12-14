@@ -1,4 +1,5 @@
-import { MaintenanceRecordsList } from "@/components";
+import AddIcon from "@mui/icons-material/Add";
+import { LinkButton, MaintenanceRecordsList } from "@/components";
 import MaintenanceRecordsCalendar from "./_components/MaintenanceRecordsCalendar";
 import TopPageWrapper from "./_components/TopPageWrapper";
 import MaintenanceRecordsTotalCost from "./_components/MaintenanceRecordsTotalCost";
@@ -13,6 +14,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function TopPage() {
   return (
     <TopPageWrapper>
+      <div className="mb-6 text-center md:mb-8 md:text-left">
+        <LinkButton
+          href="/record/create"
+          startIcon={<AddIcon />}
+          variant="contained"
+        >
+          新しい整備・出費記録
+        </LinkButton>
+      </div>
       <div className="mb-4 md:mb-6">
         <MaintenanceRecordsTotalCost />
       </div>

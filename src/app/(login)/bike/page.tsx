@@ -24,7 +24,7 @@ export default function BikePage() {
             startIcon={<AddIcon />}
             variant="contained"
           >
-            所有バイクの登録
+            新しい所有バイク
           </LinkButton>
         </div>
         <BikeList />

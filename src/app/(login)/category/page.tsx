@@ -24,7 +24,7 @@ export default function MaintenanceCategoryPage() {
             startIcon={<AddIcon />}
             variant="contained"
           >
-            カテゴリーの登録
+            新しいカテゴリー
           </LinkButton>
         </div>
         <MaintenanceCategoryCardList />
