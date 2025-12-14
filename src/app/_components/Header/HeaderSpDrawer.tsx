@@ -94,10 +94,9 @@ export default function HeaderSpDrawer() {
                     />
                   )}
                   <span className="flex flex-row flex-nowrap gap-1 text-[14px]">
-                    <span className="line-clamp-1 max-w-[8em]">
+                    <span className="line-clamp-1 max-w-[10em]">
                       {getLoginUserResponse.result?.name ?? "???"}
                     </span>
-                    さん
                   </span>
                 </>
               )}
