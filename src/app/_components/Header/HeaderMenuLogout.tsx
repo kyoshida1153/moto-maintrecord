@@ -7,10 +7,10 @@ export default function HeaderMenuLogout() {
   return (
     <nav>
       <ul className="flex gap-2 text-[14px] md:gap-4">
-        <li>
+        <li className="hidden sm:block">
           <Link
             href="/signup"
-            className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] text-[#333] duration-200 hover:bg-[#f6f7f9]"
+            className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] whitespace-nowrap text-[#333] duration-200 hover:bg-[#f6f7f9]"
           >
             <HeaderIcon
               iconName="AddIcon"
@@ -22,7 +22,7 @@ export default function HeaderMenuLogout() {
         <li>
           <Link
             href="/login"
-            className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] text-[#333] duration-200 hover:bg-[#f6f7f9]"
+            className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] whitespace-nowrap text-[#333] duration-200 hover:bg-[#f6f7f9]"
           >
             <HeaderIcon
               iconName="LoginIcon"
