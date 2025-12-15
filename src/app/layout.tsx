@@ -14,6 +14,11 @@ if (!appName) {
   throw new Error("NEXT_PUBLIC_APP_NAMEが設定されていません。");
 }
 
+const appNameSub = process.env.NEXT_PUBLIC_APP_NAME_SUB;
+if (!appNameSub) {
+  throw new Error("NEXT_PUBLIC_APP_NAME_SUBが設定されていません。");
+}
+
 const appDescription = process.env.NEXT_PUBLIC_APP_DESCRIPTION;
 if (!appDescription) {
   throw new Error("NEXT_PUBLIC_APP_DESCRIPTIONが設定されていません。");
@@ -21,8 +26,8 @@ if (!appDescription) {
 
 export const metadata: Metadata = {
   title: {
-    template: `%s | ${appName}`,
-    default: appName,
+    template: `%s | ${appName}: ${appNameSub}`,
+    default: `${appName}: ${appNameSub}`,
   },
   description: appDescription,
 };
