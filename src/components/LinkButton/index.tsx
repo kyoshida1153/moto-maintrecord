@@ -9,9 +9,10 @@ export function LinkButton({
   disabled,
   endIcon,
   href,
+  onClick,
   startIcon,
   variant = "text",
-  onClick,
+  sx,
 }: {
   children: string;
   disabled?: boolean;
@@ -20,6 +21,7 @@ export function LinkButton({
   startIcon?: ReactElement;
   variant: "text" | "contained" | "outlined";
   onClick?: () => void;
+  sx?: object;
 }) {
   return (
     <Button
@@ -32,12 +34,11 @@ export function LinkButton({
       startIcon={startIcon}
       sx={{
         fontSize: "16px",
-        // px: "1.5em",
         whiteSpace: "nowrap",
-
         "&.MuiButton-outlined": {
           backgroundColor: "#fff",
         },
+        ...sx,
       }}
       disabled={disabled}
       onClick={onClick}

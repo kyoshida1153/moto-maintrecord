@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.swiper-custom.swiper {
+  padding-bottom: 2em;
+}
+
+.swiper-custom .swiper-button-next,
+.swiper-custom .swiper-button-prev {
+  width: 2em;
+  height: 2em;
+}
