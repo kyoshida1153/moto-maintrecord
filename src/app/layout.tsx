@@ -39,6 +39,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <head>
+        <meta name="robots" content="noindex" />
+      </head>
       <body
         className={`${notoSansJp.variable} relative bg-[#f0f2f5] antialiased`}
       >
