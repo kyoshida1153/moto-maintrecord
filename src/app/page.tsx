@@ -10,6 +10,7 @@ import FeatureCard from "./(logout)/index/_components/FeatureCard";
 import { LinkButton } from "@/components";
 
 import type { Metadata } from "next";
+import Footer from "./(logout)/_components/Footer";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME;
 if (!appName) {
@@ -353,6 +354,7 @@ export default async function RootPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

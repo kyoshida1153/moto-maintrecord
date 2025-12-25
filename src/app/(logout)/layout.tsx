@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import Header from "../_components/Header";
+import Footer from "./_components/Footer";
 
 export default async function LogoutLayout({
   children,
@@ -16,6 +17,7 @@ export default async function LogoutLayout({
     <>
       <Header isLogin={false} />
       <main className="p-4 md:p-8">{children}</main>
+      <Footer />
     </>
   );
 }

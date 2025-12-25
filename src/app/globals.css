@@ -3,6 +3,7 @@
 :root {
   --header-height: 50px;
   --sidebar-width: 220px;
+  --footer-height: 100px;
   --border-color-gray: #e9ecef;
   --icon-color-success: #57bf9c;
   --icon-color-error: #de4c44;

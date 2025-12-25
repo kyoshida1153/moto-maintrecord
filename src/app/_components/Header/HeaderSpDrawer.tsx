@@ -8,12 +8,23 @@ import { tv } from "tailwind-variants";
 
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 import { Loading } from "@/components";
 import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
 import HeaderIcon from "./HeaderIcon";
 import { useWindowSize } from "./hooks";
 import { useHeaderStore } from "./stores";
+
+if (!process.env.NEXT_PUBLIC_AUTHER_NAME) {
+  throw new Error("NEXT_PUBLIC_AUTHER_NAMEが設定されていません。");
+}
+const autherName = process.env.NEXT_PUBLIC_AUTHER_NAME;
+
+if (!process.env.NEXT_PUBLIC_AUTHER_EMAIL) {
+  throw new Error("NEXT_PUBLIC_AUTHER_EMAILが設定されていません。");
+}
+const autherEmail = process.env.NEXT_PUBLIC_AUTHER_EMAIL;
 
 export default function HeaderSpDrawer() {
   const [drawerStatus, setDrawerStatus] = useState<
@@ -68,7 +79,7 @@ export default function HeaderSpDrawer() {
         onClick={handleDrawerClose}
       ></div>
       <div className={tvDrawer({ drawerStatus })}>
-        <div className="h-screen overflow-x-scroll p-2">
+        <div className="flex h-screen flex-col overflow-x-scroll p-2">
           <div className="mb-5 flex items-center justify-between gap-2.5 border-b border-gray-200 pb-2">
             <Link
               href="/account"
@@ -106,7 +117,7 @@ export default function HeaderSpDrawer() {
 
           <HeaderSpDrawerMainMenu handleDrawerClose={handleDrawerClose} />
 
-          <div className="mt-5 flex justify-center border-t border-gray-200 pt-5">
+          <div className="mt-5 flex justify-center border-t-1 border-solid border-gray-200 pt-5">
             <span
               className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] text-[#333] duration-200 hover:bg-[#f6f7f9]"
               onClick={() => {
@@ -119,6 +130,21 @@ export default function HeaderSpDrawer() {
               />
               ログアウト
             </span>
+          </div>
+
+          <div className="mt-auto border-t-1 border-solid border-gray-200 p-4">
+            <div className="flex flex-col gap-3">
+              <address className="flex flex-col gap-1 py-2 leading-none not-italic">
+                <span className="flex flex-row flex-nowrap items-center gap-0.5 text-sm">
+                  <MailOutlineIcon sx={{ fontSize: "16px", mt: "2px" }} />
+                  お問い合わせ:
+                </span>
+                <span className="text-[13px]">{autherEmail}</span>
+              </address>
+              <div className="text-[13px] text-gray-500">
+                &copy; {autherName}
+              </div>
+            </div>
           </div>
         </div>
       </div>
