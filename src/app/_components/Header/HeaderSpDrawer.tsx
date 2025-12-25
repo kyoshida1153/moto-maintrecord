@@ -6,15 +6,16 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { tv } from "tailwind-variants";
 
+import { Loading } from "@/components";
+import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
+import { useWindowSize } from "./hooks";
+import { useHeaderStore } from "./stores";
+
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
-
-import { Loading } from "@/components";
-import HeaderSpDrawerMainMenu from "./HeaderSpDrawerMainMenu";
-import HeaderIcon from "./HeaderIcon";
-import { useWindowSize } from "./hooks";
-import { useHeaderStore } from "./stores";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 if (!process.env.NEXT_PUBLIC_AUTHER_NAME) {
   throw new Error("NEXT_PUBLIC_AUTHER_NAMEが設定されていません。");
@@ -99,10 +100,7 @@ export default function HeaderSpDrawer() {
                       className="w-5 rounded-full object-cover"
                     />
                   ) : (
-                    <HeaderIcon
-                      iconName="AccountCircleIcon"
-                      className="aspect-square !text-[24px] text-[#333]"
-                    />
+                    <AccountCircleIcon className="aspect-square !text-[24px] text-[#333]" />
                   )}
                   <span className="flex flex-row flex-nowrap gap-1 text-[14px]">
                     <span className="line-clamp-1 max-w-[10em]">
@@ -124,10 +122,7 @@ export default function HeaderSpDrawer() {
                 signOut({ callbackUrl: "/" });
               }}
             >
-              <HeaderIcon
-                iconName="LogoutIcon"
-                className="aspect-square !text-[20px] text-[#333]"
-              />
+              <LogoutIcon className="aspect-square !text-[20px] text-[#333]" />
               ログアウト
             </span>
           </div>

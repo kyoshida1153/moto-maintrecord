@@ -3,9 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import HeaderIcon from "./HeaderIcon";
+
 import { Loading } from "@/components";
 import { useHeaderStore } from "./stores";
+
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function HeaderMenuLogin() {
   const { getLoginUserResponse, isLoadingGetLoginUser } = useHeaderStore();
@@ -31,10 +34,7 @@ export default function HeaderMenuLogin() {
                     className="w-5 rounded-full object-cover"
                   />
                 ) : (
-                  <HeaderIcon
-                    iconName="AccountCircleIcon"
-                    className="aspect-square !text-[20px] text-[#333]"
-                  />
+                  <AccountCircleIcon className="aspect-square !text-[20px] text-[#333]" />
                 )}
                 <span className="flex flex-row flex-nowrap gap-1">
                   <span className="line-clamp-1 max-w-[10em]">
@@ -52,10 +52,7 @@ export default function HeaderMenuLogin() {
               signOut({ callbackUrl: "/" });
             }}
           >
-            <HeaderIcon
-              iconName="LogoutIcon"
-              className="aspect-square !text-[20px] text-[#333]"
-            />
+            <LogoutIcon className="aspect-square !text-[20px] text-[#333]" />
             ログアウト
           </span>
         </li>

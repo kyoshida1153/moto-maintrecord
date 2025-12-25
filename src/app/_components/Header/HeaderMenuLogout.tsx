@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import HeaderIcon from "./HeaderIcon";
+import AddIcon from "@mui/icons-material/Add";
+import LoginIcon from "@mui/icons-material/Login";
 
 export default function HeaderMenuLogout() {
   return (
@@ -12,10 +13,7 @@ export default function HeaderMenuLogout() {
             href="/signup"
             className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] whitespace-nowrap text-[#333] duration-200 hover:bg-[#f6f7f9]"
           >
-            <HeaderIcon
-              iconName="AddIcon"
-              className="aspect-square !text-[20px] text-[#333]"
-            />
+            <AddIcon className="aspect-square !text-[20px] text-[#333]" />
             アカウント作成
           </Link>
         </li>
@@ -24,10 +22,7 @@ export default function HeaderMenuLogout() {
             href="/login"
             className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] whitespace-nowrap text-[#333] duration-200 hover:bg-[#f6f7f9]"
           >
-            <HeaderIcon
-              iconName="LoginIcon"
-              className="aspect-square !text-[20px] text-[#333]"
-            />
+            <LoginIcon className="aspect-square !text-[20px] text-[#333]" />
             ログイン
           </Link>
         </li>
