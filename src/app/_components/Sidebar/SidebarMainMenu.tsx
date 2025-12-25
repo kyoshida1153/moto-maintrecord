@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { tv } from "tailwind-variants";
-import SidebarIcon from "./SidebarIcon";
+
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import BuildIcon from "@mui/icons-material/Build";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import NoteAltIcon from "@mui/icons-material/NoteAlt";
+import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 
 export default function SidebarMainMenu() {
   const linkList = [
@@ -11,37 +17,37 @@ export default function SidebarMainMenu() {
       id: 1,
       text: "カレンダー",
       href: "/top",
-      iconName: "CalendarMonthIcon",
+      icon: (className?: string) => <CalendarMonthIcon className={className} />,
     },
     {
       id: 2,
       text: "整備・出費記録",
       href: "/record",
-      iconName: "NoteAltIcon",
+      icon: (className?: string) => <NoteAltIcon className={className} />,
     },
     {
       id: 3,
       text: "所有バイク",
       href: "/bike",
-      iconName: "TwoWheelerIcon",
+      icon: (className?: string) => <TwoWheelerIcon className={className} />,
     },
     {
       id: 4,
       text: "カテゴリー",
       href: "/category",
-      iconName: "BuildIcon",
+      icon: (className?: string) => <BuildIcon className={className} />,
     },
     {
       id: 5,
       text: "レポート",
       href: "/report",
-      iconName: "BarChartIcon",
+      icon: (className?: string) => <BarChartIcon className={className} />,
     },
     {
       id: 6,
       text: "アカウント管理",
       href: "/account",
-      iconName: "AccountCircleIcon",
+      icon: (className?: string) => <AccountCircleIcon className={className} />,
     },
   ];
 
@@ -84,10 +90,7 @@ export default function SidebarMainMenu() {
         return (
           <li key={item.id}>
             <Link href={item.href} className={tvLink({ currentFlag })}>
-              <SidebarIcon
-                iconName={item.iconName}
-                className={tvLinkIcon({ currentFlag })}
-              />
+              {item.icon(tvLinkIcon({ currentFlag }))}
               <span className={tvLinkText({ currentFlag })}>{item.text}</span>
             </Link>
           </li>
