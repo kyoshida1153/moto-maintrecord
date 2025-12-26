@@ -7,7 +7,7 @@ import LoginIcon from "@mui/icons-material/Login";
 
 import Header from "./_components/Header";
 import FeatureCard from "./(logout)/index/_components/FeatureCard";
-import { LinkButton } from "@/components";
+import { LinkButton, LoginButtonOAuth } from "@/components";
 
 import type { Metadata } from "next";
 import Footer from "./(logout)/_components/Footer";
@@ -94,7 +94,7 @@ export default async function RootPage() {
                         fontSize: "16px",
                         px: "1.5em",
                         "@media screen and (min-width:48rem)": {
-                          fontSize: "20px",
+                          fontSize: "18px",
                         },
                       }}
                       startIcon={<AddIcon />}
@@ -108,13 +108,14 @@ export default async function RootPage() {
                         fontSize: "16px",
                         px: "1.5em",
                         "@media screen and (min-width:48rem)": {
-                          fontSize: "20px",
+                          fontSize: "18px",
                         },
                       }}
                       startIcon={<LoginIcon />}
                     >
                       ログイン
                     </LinkButton>
+                    <LoginButtonOAuth provider="google" />
                   </div>
                 </div>
               </div>
@@ -123,7 +124,7 @@ export default async function RootPage() {
         </div>
         <div className="mx-auto max-w-[1200px] md:p-8">
           <section className="mx-4 flex max-w-[800px] flex-col gap-4 md:mx-auto">
-            <p className="md:text-xl">
+            <p className="text-justify text-lg md:text-2xl">
               <b>Moto MaintRecord</b>
               は、「バイクの維持費が毎月どれだけかかってるのか把握したい」「バイクの整備記録と出費記録をまとめて管理したい」といった方に向けたWebアプリです。
             </p>

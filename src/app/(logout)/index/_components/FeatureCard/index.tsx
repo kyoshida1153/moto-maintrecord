@@ -104,7 +104,7 @@ export default function FeatureCard({
         </div>
         <div className="w-full md:w-[50%]">
           <h3 className="mb-4 w-full text-xl font-[500]">{title}</h3>
-          <p>{children}</p>
+          <p className="text-justify">{children}</p>
         </div>
       </div>
     </section>
