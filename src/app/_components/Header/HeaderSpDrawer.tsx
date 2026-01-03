@@ -115,7 +115,7 @@ export default function HeaderSpDrawer() {
 
           <HeaderSpDrawerMainMenu handleDrawerClose={handleDrawerClose} />
 
-          <div className="mt-5 flex justify-center border-t-1 border-solid border-gray-200 pt-5">
+          <div className="mt-4 flex justify-center border-t-1 border-solid border-gray-200 pt-4">
             <span
               className="flex items-center gap-[2px] rounded-[4px] px-[6px] py-[4px] text-[#333] duration-200 hover:bg-[#f6f7f9]"
               onClick={() => {
@@ -127,7 +127,7 @@ export default function HeaderSpDrawer() {
             </span>
           </div>
 
-          <div className="mt-auto border-t-1 border-solid border-gray-200 p-4">
+          <div className="mt-4 border-t-1 border-solid border-gray-200 p-4">
             <div className="flex flex-col gap-3">
               <address className="flex flex-col gap-1 py-2 leading-none not-italic">
                 <span className="flex flex-row flex-nowrap items-center gap-0.5 text-sm">
